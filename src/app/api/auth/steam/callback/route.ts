@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
     throw new Error("User not found");
   }
 
-  const token = await generateUserAccessToken(tokenUser.id!);
+  const token = await generateUserAccessToken(tokenUser.id!, { steamId: tokenUser.steamId });
   
   const cookieStore = await cookies();
   cookieStore.set("access_token", token, {

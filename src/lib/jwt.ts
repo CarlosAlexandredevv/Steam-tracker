@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 export interface DecodedToken {
   userId: string;
+  steamId: string;
   iat: number;
   exp: number;
 }
@@ -63,11 +64,13 @@ export async function decodeToken(): Promise<DecodedToken> {
   
   if (
     typeof decodedPayload.userId === "string" &&
+    typeof decodedPayload.steamId === "string" &&
     typeof decodedPayload.iat === "number" &&
     typeof decodedPayload.exp === "number"
   ) {
     return {
       userId: decodedPayload.userId,
+      steamId: decodedPayload.steamId,
       iat: decodedPayload.iat,
       exp: decodedPayload.exp,
     };

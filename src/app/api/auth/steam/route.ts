@@ -1,13 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { randomBytes } from "crypto";
+import { NextResponse } from "next/server";
 import { env } from "@/env";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const baseUrl = env.NEXT_PUBLIC_API_URL;
   const returnTo = `${baseUrl}/api/auth/steam/callback`;
-  
-  const nonce = randomBytes(16).toString("hex");
-  
+    
   const params = new URLSearchParams({
     "openid.ns": "http://specs.openid.net/auth/2.0",
     "openid.mode": "checkid_setup",
