@@ -1,18 +1,46 @@
-import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-export async function proxy(request: NextRequest) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-    // THIS IS NOT SECURE!
-    // This is the recommended approach to optimistically redirect users
-    // We recommend handling auth checks in each page/route
-    if(!session) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
-    }
-    return NextResponse.next();
+import { NextRequest, NextResponse } from 'next/server';
+import { jwtVerify } from 'jose';
+
+async function isTokenValid(token: string | undefined): Promise<boolean> {
+  if (!token) return false;
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    return false;
+  }
+  try {
+    await jwtVerify(token, new TextEncoder().encode(secret));
+    return true;
+  } catch {
+    return false;
+  }
 }
+
+export default async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const isPublicRoute =  pathname.startsWith('/auth');
+  const token = request.cookies.get('access_token')?.value;
+  const valid = await isTokenValid(token);
+
+  if (!isPublicRoute) {
+    if (!valid) {
+      const res = NextResponse.redirect(new URL('/auth', request.url));
+      if (token) res.cookies.delete('access_token');
+      return res;
+    }
+  } else {
+    if (valid) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+    if (token && !valid) {
+      const res = NextResponse.next();
+      res.cookies.delete('access_token');
+      return res;
+    }
+  }
+
+  return NextResponse.next();
+}
+
 export const config = {
-  matcher: ["/dashboard"], // Specify the routes the middleware applies to
+  matcher: ['/((?!api|_next/static|_next/image|favicon\\.ico|.*\\..*).*)'],
 };
