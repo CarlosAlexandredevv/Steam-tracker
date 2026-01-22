@@ -17,9 +17,9 @@ export interface SteamOwnedGame {
   rtime_last_played: number;
   content_descriptorids?: number[];
   playtime_disconnected?: number;
-  imageSmall?: string;
-  imageMedium?: string;
-  imageHighResolution?: string;
+  banner?: string;
+  horizontal?: string;
+  vertical?: string;
 }
 
 export interface SteamOwnedGamesApiResponse {
@@ -41,9 +41,9 @@ export async function getAllGames() {
      const data: SteamOwnedGamesApiResponse = await response.json();
      const gamesWithImages: SteamOwnedGame[] = data.response.games.map((game) => ({
        ...game,
-       imageHighResolution: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-       imageMedium: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`,
-       imageSmall: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/capsule_184x69.jpg`,
+       banner: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+       horizontal: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`,
+       vertical: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_600x900.jpg`,
       }));
 
 
