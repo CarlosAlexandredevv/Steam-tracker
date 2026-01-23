@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { env } from "@/env";
 
 export async function GET() {
-  const baseUrl = env.NEXT_PUBLIC_API_URL;
+  const baseUrl = env.NEXT_PUBLIC_APP_URL;
   const returnTo = `${baseUrl}/api/auth/steam/callback`;
     
   const params = new URLSearchParams({
