@@ -87,5 +87,5 @@ export async function GET(request: NextRequest) {
     maxAge: 60 * 60 * 24 * 30, // 30 dias
   });
 
-  return NextResponse.redirect(new URL("/dashboard", env.NEXT_PUBLIC_API_URL));
+  return NextResponse.redirect(new URL("/dashboard", env.NEXT_PUBLIC_APP_URL));
 }
