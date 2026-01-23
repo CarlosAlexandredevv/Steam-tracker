@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   cookieStore.set("access_token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 30, // 30 dias
   });

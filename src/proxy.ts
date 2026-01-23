@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
+import { env } from '@/env';
 
 async function isTokenValid(token: string | undefined): Promise<boolean> {
   if (!token) return false;
-  const secret = process.env.JWT_SECRET;
+  const secret = env.JWT_SECRET;
   if (!secret) {
     return false;
   }

@@ -8,6 +8,7 @@ const clientEnvSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string().optional(),
   STEAM_API_KEY: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.url().optional(),
+  NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
 });
 
 export const env = clientEnvSchema.parse(process.env);
