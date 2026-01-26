@@ -36,7 +36,7 @@ export function PlayerPopoverContent({ player, notFound }: PlayerPopoverContentP
           <PopoverHeader>
             <div className="flex items-center gap-3">
               <Avatar size="lg">
-                <AvatarImage src={player.avatarmedium} alt={player.personaname} />
+                <AvatarImage src={player.avatarfull} alt={player.personaname} />
                 <AvatarFallback>
                   {player.personaname.charAt(0).toUpperCase()}
                 </AvatarFallback>
