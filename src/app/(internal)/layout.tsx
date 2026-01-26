@@ -3,12 +3,12 @@ import { AppSidebar } from "@/components/side-bar/app-sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { BreadcrumbList } from "@/components/ui/breadcrumb";
-import { BreadcrumbItem } from "@/components/ui/breadcrumb";
-import { BreadcrumbLink } from "@/components/ui/breadcrumb";
-import { BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { BreadcrumbPage } from "@/components/ui/breadcrumb";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { Search } from "lucide-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,19 +22,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             orientation="vertical"
             className="mr-2 data-[orientation=vertical]:h-4"
           />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Building Your Application
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+         <InputGroup className=" min-w-96 max-w-96">
+          <InputGroupInput placeholder="Steam ID" />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+      </InputGroup>
         </div>
       </header>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
