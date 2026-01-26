@@ -44,7 +44,7 @@ export function PlayerPopoverContent({ player, notFound }: PlayerPopoverContentP
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <PopoverTitle className="mb-0">{player.personaname}</PopoverTitle>
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
                 </div>
                 <PopoverDescription className="mt-1">
                   Steam ID: {player.steamid}
