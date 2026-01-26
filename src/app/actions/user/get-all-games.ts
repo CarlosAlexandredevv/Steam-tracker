@@ -1,7 +1,6 @@
 'use server';
 
 import { env } from "@/env";
-import { decodeToken } from "@/lib/jwt";
 
 export interface SteamOwnedGame {
   appid: number;
@@ -29,15 +28,9 @@ export interface SteamOwnedGamesApiResponse {
   };
 }
 
-export async function getAllGames() {
+export async function getAllGames(steamId: string): Promise<SteamOwnedGame[] | null> {
   try{
-     const decoded = await decodeToken();
-     
-     if (!decoded) {
-      return null;
-     }
-
-     const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${decoded.steamId}&include_appinfo=true`);
+     const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true`);
      const data: SteamOwnedGamesApiResponse = await response.json();
      const gamesWithImages: SteamOwnedGame[] = data.response.games.map((game) => ({
        ...game,
