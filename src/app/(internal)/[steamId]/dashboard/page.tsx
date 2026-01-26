@@ -1,16 +1,15 @@
 import { getAllGames } from "@/app/actions/user/get-all-games";
-import { getUserById } from "@/app/actions/user/get-user-by-id";
+import { getPlayerById } from "@/app/actions/user/get-player-by-id";
 import Image from "next/image";
+import { SteamIdRouteParams } from "@/types/route-params";
 
 interface DashboardProps {
-  params: Promise<{
-    steamId: string
-  }>
+  params: SteamIdRouteParams;
 }
 
 export default async function Dashboard({ params }: DashboardProps) {
   const { steamId } = await params;
-  const player = await getUserById(steamId)
+  const player = await getPlayerById(steamId)
   const games = await getAllGames(player?.steamid ?? "")
 
   return (

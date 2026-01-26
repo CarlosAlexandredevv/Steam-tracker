@@ -1,33 +1,10 @@
 import { env } from "@/env";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { randomUUID, createHmac } from "crypto";
+import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
 import { generateUserAccessToken } from "@/lib/jwt";
-
-interface SteamPlayer {
-  steamid: string;
-  communityvisibilitystate: number;
-  profilestate: number;
-  personaname: string;
-  commentpermission: number;
-  profileurl: string;
-  avatar: string;
-  avatarmedium: string;
-  avatarfull: string;
-  avatarhash: string;
-  lastlogoff: number;
-  personastate: number;
-  primaryclanid: string;
-  timecreated: number;
-  personastateflags: number;
-}
-
-interface SteamGetPlayerSummariesResponse {
-  response: {
-    players: SteamPlayer[];
-  };
-}
+import { SteamGetPlayerSummariesResponse } from "@/types/steam";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -87,5 +64,5 @@ export async function GET(request: NextRequest) {
     maxAge: 60 * 60 * 24 * 30, // 30 dias
   });
 
-  return NextResponse.redirect(new URL("/dashboard", env.NEXT_PUBLIC_APP_URL));
+  return NextResponse.redirect(new URL(`${steamId}/dashboard`, env.NEXT_PUBLIC_APP_URL));
 }
