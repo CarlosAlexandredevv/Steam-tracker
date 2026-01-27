@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { PlayerHeader } from '@/components/dashboard/player-header';
+import { PlayerHeader } from '@/components/dashboard/header/player-header';
 import { SteamPlayer } from '@/types/steam';
 import { SteamOwnedGame } from '@/types/steam';
 import { BackgroundHeader } from './background-header';

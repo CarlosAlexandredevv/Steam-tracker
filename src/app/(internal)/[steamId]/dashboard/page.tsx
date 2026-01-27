@@ -1,7 +1,7 @@
 import { getAllGames } from '@/app/actions/user/get-all-games';
 import { getPlayerById } from '@/app/actions/user/get-player-by-id';
 import { SteamIdRouteParams } from '@/types/route-params';
-import { DashboardHeader } from '@/components/dashboard/dashboard-header';
+import { DashboardHeader } from '@/components/dashboard/header/dashboard-header';
 
 interface DashboardProps {
   params: SteamIdRouteParams;

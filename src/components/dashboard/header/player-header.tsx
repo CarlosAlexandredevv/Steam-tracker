@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { SteamPlayer, SteamOwnedGame } from '@/types/steam';
-import { Badge } from '../ui/badge';
+import { Badge } from '@/components/ui/badge';
 import {
   Gamepad2,
   Star,
