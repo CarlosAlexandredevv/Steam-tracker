@@ -7,7 +7,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Plus } from 'lucide-react';
+import { ExternalLink, Plus } from 'lucide-react';
+import Link from 'next/link';
 
 interface GameDetailsViewProps {
   game: SteamGameData;
@@ -18,7 +19,7 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
   const remainingCategories = game.categories.slice(4);
 
   return (
-    <div className="min-h-screen bg-[#0b0e14] text-slate-200 pb-20">
+    <div className="h-auto bg-[#0b0e14] text-slate-200">
       <header className="relative min-h-[450px] w-full flex flex-col justify-end overflow-hidden">
         <BackgroundHeader heroUrl={game.imgHero} alt={game.name} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-[#0b0e14]/40 to-transparent" />
@@ -26,7 +27,7 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
         <div className="relative z-50 px-6 md:px-12 py-12 w-full max-w-7xl mx-auto">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <Badge className="bg-emerald-500 text-black font-bold uppercase tracking-widest text-[10px]">
+              <Badge className="bg-primary text-black font-bold uppercase tracking-widest text-[10px]">
                 Lançamento
               </Badge>
               <span className="text-white/60 text-sm font-bold">
@@ -34,8 +35,18 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none italic">
-              {game.name}
+            <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none italic flex gap-2">
+              <span>{game.name}</span>
+              {game.website && (
+                <Link
+                  href={game.website}
+                  target="_blank"
+                  className="opacity-50 hover:opacity-100 transition-opacity text-white"
+                  title="Ver site oficial do jogo"
+                >
+                  <ExternalLink className="size-5 md:size-6 mt-1 mx-2" />
+                </Link>
+              )}
             </h1>
 
             <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -65,7 +76,7 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
                     <TooltipContent className="bg-zinc-900 border-zinc-800 p-3 max-w-xs">
                       <div className="flex flex-wrap gap-1">
                         {remainingCategories.map((c) => (
-                          <Badge key={c.id} className="text-[10px] bg-white/5">
+                          <Badge key={c.id} className="text-xs bg-white/5">
                             {c.description}
                           </Badge>
                         ))}
