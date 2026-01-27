@@ -18,7 +18,7 @@ export default async function Dashboard({ params }: DashboardProps) {
       <DashboardHeader player={player ?? null} games={games ?? []} />
       <div className="w-full px-4 space-y-4">
         <h2 className="text-4xl font-bold">Seus Jogos</h2>
-        <CarrouselSection games={games ?? []} />
+        <CarrouselSection player={player ?? null} games={games ?? []} />
       </div>
     </main>
   );
