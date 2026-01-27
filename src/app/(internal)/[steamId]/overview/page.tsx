@@ -1,15 +1,15 @@
 import { getAllGames } from '@/app/actions/user/get-all-games';
 import { getPlayerById } from '@/app/actions/user/get-player-by-id';
-import { DashboardHeader } from '@/components/dashboard/header/dashboard-header';
-import { GamesSection } from '@/components/dashboard/games-section/games-section';
-import { NotFoundPlayer } from '@/components/dashboard/not-founds/not-found-player';
+import { OverviewHeader } from '@/components/overview/header/overview-header';
+import { GamesSection } from '@/components/overview/games-section/games-section';
+import { NotFoundPlayer } from '@/components/overview/not-founds/not-found-player';
 import { SteamIdRouteParams } from '@/types/route-params';
 
-interface DashboardProps {
+interface OverviewProps {
   params: SteamIdRouteParams;
 }
 
-export default async function Dashboard({ params }: DashboardProps) {
+export default async function Overview({ params }: OverviewProps) {
   const { steamId } = await params;
   const player = await getPlayerById(steamId);
 
@@ -25,7 +25,7 @@ export default async function Dashboard({ params }: DashboardProps) {
 
   return (
     <main className="flex w-full flex-col bg-background text-foreground gap-4">
-      <DashboardHeader player={player} games={games ?? []} />
+      <OverviewHeader player={player} games={games ?? []} />
       <GamesSection games={games ?? []} player={player} />
     </main>
   );

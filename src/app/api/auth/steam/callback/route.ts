@@ -1,24 +1,24 @@
-import { env } from "@/env";
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { randomUUID } from "crypto";
-import { cookies } from "next/headers";
-import { generateUserAccessToken } from "@/lib/jwt";
-import { SteamGetPlayerSummariesResponse } from "@/types/steam";
+import { env } from '@/env';
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { randomUUID } from 'crypto';
+import { cookies } from 'next/headers';
+import { generateUserAccessToken } from '@/lib/jwt';
+import { SteamGetPlayerSummariesResponse } from '@/types/steam';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const claimedId = searchParams.get("openid.claimed_id");
-  const urlBase= `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=`
-  
-  if(!claimedId) {
-    throw new Error("Claimed ID is required");
+  const claimedId = searchParams.get('openid.claimed_id');
+  const urlBase = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=`;
+
+  if (!claimedId) {
+    throw new Error('Claimed ID is required');
   }
 
   const steamIdMatch = claimedId.match(/\/id\/(\d+)$/);
-  
+
   if (!steamIdMatch) {
-   throw new Error("Steam ID is required");
+    throw new Error('Steam ID is required');
   }
 
   const steamId = steamIdMatch[1];
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
   const player = data.response.players[0];
 
   if (!user) {
-      await prisma.user.create({
+    await prisma.user.create({
       data: {
         id: randomUUID(),
         steamId: steamId,
@@ -51,18 +51,22 @@ export async function GET(request: NextRequest) {
   });
 
   if (!tokenUser) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 
-  const token = await generateUserAccessToken(tokenUser.id!, { steamId: tokenUser.steamId });
-  
+  const token = await generateUserAccessToken(tokenUser.id!, {
+    steamId: tokenUser.steamId,
+  });
+
   const cookieStore = await cookies();
-  cookieStore.set("access_token", token, {
+  cookieStore.set('access_token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 30, // 30 dias
   });
 
-  return NextResponse.redirect(new URL(`${steamId}/dashboard`, env.NEXT_PUBLIC_APP_URL));
+  return NextResponse.redirect(
+    new URL(`${steamId}/overview`, env.NEXT_PUBLIC_APP_URL),
+  );
 }

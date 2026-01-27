@@ -17,7 +17,7 @@ async function isTokenValid(token: string | undefined): Promise<boolean> {
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isPublicRoute =  pathname.startsWith('/auth');
+  const isPublicRoute = pathname.startsWith('/auth');
   const token = request.cookies.get('access_token')?.value;
   const valid = await isTokenValid(token);
 
@@ -29,7 +29,7 @@ export default async function proxy(request: NextRequest) {
     }
   } else {
     if (valid) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      return NextResponse.redirect(new URL('/overview', request.url));
     }
     if (token && !valid) {
       const res = NextResponse.next();

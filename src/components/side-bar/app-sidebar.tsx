@@ -56,8 +56,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
     navMain: [
       {
-        title: 'Dashboard',
-        url: `/${steamId}/dashboard`,
+        title: 'Overview',
+        url: `/${steamId}/overview`,
         icon: Gamepad,
         isActive: true,
       },
@@ -129,9 +129,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
     projects: [
       {
-        name: 'Design Engineering',
-        url: '#',
-        icon: Frame,
+        name: 'Overview',
+        url: `/${steamId}/overview`,
+        icon: Gamepad,
       },
       {
         name: 'Sales & Marketing',
@@ -151,8 +151,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
+        <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
