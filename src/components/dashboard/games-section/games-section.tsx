@@ -1,6 +1,7 @@
 import { Gamepad2 } from 'lucide-react';
 
 import { CarrouselGames } from '@/components/dashboard/games-section/carrousel-games';
+import { NotFoundGames } from '@/components/dashboard/not-founds/not-found-games';
 import { SteamOwnedGame, SteamPlayer } from '@/types/steam';
 import { Badge } from '../../ui/badge';
 
@@ -10,6 +11,8 @@ interface GamesSectionProps {
 }
 
 export function GamesSection({ games, player }: GamesSectionProps) {
+  const hasGames = games && games.length > 0;
+
   return (
     <section className="w-full px-4">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-4">
@@ -29,7 +32,13 @@ export function GamesSection({ games, player }: GamesSectionProps) {
       </div>
 
       <div className="w-full mt-4">
-        <CarrouselGames games={games ?? []} player={player ?? null} />
+        {hasGames ? (
+          <CarrouselGames games={games} player={player ?? null} />
+        ) : (
+          <div className="flex items-center justify-center py-10">
+            <NotFoundGames />
+          </div>
+        )}
       </div>
     </section>
   );
