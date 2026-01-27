@@ -2,7 +2,7 @@ import { getAllGames } from '@/app/actions/user/get-all-games';
 import { getPlayerById } from '@/app/actions/user/get-player-by-id';
 import { OverviewHeader } from '@/components/overview/header/overview-header';
 import { GamesSection } from '@/components/overview/games-section/games-section';
-import { NotFoundPlayer } from '@/components/overview/not-founds/not-found-player';
+import { NotFoundPlayer } from '@/components/shared/not-found-player';
 import { SteamIdRouteParams } from '@/types/route-params';
 
 interface OverviewProps {

@@ -1,7 +1,7 @@
 import { Gamepad2 } from 'lucide-react';
 
 import { CarrouselGames } from '@/components/overview/games-section/carrousel-games';
-import { NotFoundGames } from '@/components/overview/not-founds/not-found-games';
+import { NotFoundGames } from '@/components/shared/not-found-games';
 import { SteamOwnedGame, SteamPlayer } from '@/types/steam';
 import { Badge } from '../../ui/badge';
 

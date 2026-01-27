@@ -16,12 +16,12 @@ interface CarrouselGamesProps {
 
 export function CarrouselGames({ games, player }: CarrouselGamesProps) {
   return (
-    <Carousel className="w-full max-w-full overflow-hidden">
-      <CarouselContent className="-ml-2 md:-ml-4">
+    <Carousel className="w-full">
+      <CarouselContent>
         {games.map((game) => (
           <CarouselItem
             key={game.appid}
-            className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.28%] pl-2 md:pl-4"
+            className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.28%] pl-4"
           >
             {player?.steamid && (
               <GameCard
