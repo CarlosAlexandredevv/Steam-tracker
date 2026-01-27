@@ -1,6 +1,6 @@
 import { getGameById } from '@/app/actions/player/get-game-by-id';
-import { BackgroundHeader } from '@/components/shared/background-header';
 import { NotFoundGames } from '@/components/shared/not-found-games';
+import GameDetailsView from '@/components/library/game-id/game-header';
 
 interface GamePageProps {
   params: Promise<{
@@ -24,9 +24,7 @@ export default async function GamePage({ params }: GamePageProps) {
 
   return (
     <main className="flex w-full flex-col bg-background text-foreground min-h-screen">
-      <header className="relative min-h-96 w-full flex flex-col overflow-hidden">
-        <BackgroundHeader heroUrl={game.imgHero} alt={game.name} />
-      </header>
+      <GameDetailsView game={game} />
       <div className="p-4 md:p-8 gap-8"></div>
     </main>
   );
