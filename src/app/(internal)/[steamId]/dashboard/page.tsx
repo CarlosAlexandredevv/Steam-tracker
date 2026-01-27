@@ -1,7 +1,7 @@
-import { getAllGames } from "@/app/actions/user/get-all-games";
-import { getPlayerById } from "@/app/actions/user/get-player-by-id";
-import Image from "next/image";
-import { SteamIdRouteParams } from "@/types/route-params";
+import { getAllGames } from '@/app/actions/user/get-all-games';
+import { getPlayerById } from '@/app/actions/user/get-player-by-id';
+import Image from 'next/image';
+import { SteamIdRouteParams } from '@/types/route-params';
 
 interface DashboardProps {
   params: SteamIdRouteParams;
@@ -9,8 +9,8 @@ interface DashboardProps {
 
 export default async function Dashboard({ params }: DashboardProps) {
   const { steamId } = await params;
-  const player = await getPlayerById(steamId)
-  const games = await getAllGames(player?.steamid ?? "")
+  const player = await getPlayerById(steamId);
+  const games = await getAllGames(player?.steamid ?? '');
 
   return (
     <div>
@@ -19,9 +19,27 @@ export default async function Dashboard({ params }: DashboardProps) {
       <p>{player?.steamid}</p>
       {games?.map((game) => (
         <div key={game.appid}>
-          <Image src={game.banner ?? ""} alt={game.name} width={460} height={215} className="rounded-xl" />
-          <Image src={game.horizontal ?? ""} alt={game.name} width={460} height={215} className="rounded-xl" />
-          <Image src={game.vertical ?? ""} alt={game.name} width={460} height={215} className="rounded-xl" />
+          <Image
+            src={game.banner ?? ''}
+            alt={game.name}
+            width={460}
+            height={215}
+            className="rounded-xl"
+          />
+          <Image
+            src={game.horizontal ?? ''}
+            alt={game.name}
+            width={460}
+            height={215}
+            className="rounded-xl"
+          />
+          <Image
+            src={game.vertical ?? ''}
+            alt={game.name}
+            width={460}
+            height={215}
+            className="rounded-xl"
+          />
         </div>
       ))}
     </div>
