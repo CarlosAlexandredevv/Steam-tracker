@@ -2,7 +2,7 @@ import { getAllGames } from '@/app/actions/user/get-all-games';
 import { getPlayerById } from '@/app/actions/user/get-player-by-id';
 import { SteamIdRouteParams } from '@/types/route-params';
 import { DashboardHeader } from '@/components/dashboard/header/dashboard-header';
-import { GamesSection } from '@/components/dashboard/games-section';
+import { GamesSection } from '@/components/dashboard/games-section/games-section';
 
 interface DashboardProps {
   params: SteamIdRouteParams;

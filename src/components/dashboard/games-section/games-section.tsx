@@ -1,8 +1,8 @@
 import { Gamepad2 } from 'lucide-react';
 
-import { CarrouselSection } from '@/components/dashboard/carrousel-section/carrousel-section';
+import { CarrouselGames } from '@/components/dashboard/games-section/carrousel-games';
 import { SteamOwnedGame, SteamPlayer } from '@/types/steam';
-import { Badge } from '../ui/badge';
+import { Badge } from '../../ui/badge';
 
 interface GamesSectionProps {
   games: SteamOwnedGame[];
@@ -29,7 +29,7 @@ export function GamesSection({ games, player }: GamesSectionProps) {
       </div>
 
       <div className="w-full mt-4">
-        <CarrouselSection games={games ?? []} player={player ?? null} />
+        <CarrouselGames games={games ?? []} player={player ?? null} />
       </div>
     </section>
   );

@@ -10,12 +10,12 @@ import Image from 'next/image';
 import { SteamPlayer } from '@/types/steam';
 import Link from 'next/link';
 
-interface CarrouselSectionProps {
+interface CarrouselGamesProps {
   games: SteamOwnedGame[];
   player: SteamPlayer | null;
 }
 
-export function CarrouselSection({ games, player }: CarrouselSectionProps) {
+export function CarrouselGames({ games, player }: CarrouselGamesProps) {
   return (
     <Carousel className="w-full">
       <CarouselContent>
