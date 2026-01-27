@@ -15,12 +15,15 @@ export function OverviewHeader({ player, games }: OverviewHeaderProps) {
     .sort((a, b) => b.playtime_forever - a.playtime_forever)[0];
 
   return (
-    <header className={cn('relative h-96 w-full overflow-hidden')}>
+    <header
+      className={cn('relative min-h-96 w-full flex flex-col overflow-hidden')}
+    >
       <BackgroundHeader game={gameBiggerplaytime} />
 
       <div className="pointer-events-none absolute inset-0 bg-black/40" />
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
+      {/* O PlayerHeader agora vai empurrar o tamanho do header se precisar */}
       <PlayerHeader player={player as SteamPlayer} games={games} />
     </header>
   );

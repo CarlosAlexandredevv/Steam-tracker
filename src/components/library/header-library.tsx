@@ -1,10 +1,16 @@
+import { SteamOwnedGame } from '@/types/steam';
 import { LayoutGrid, Search } from 'lucide-react';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '../ui/input-group';
 
 interface HeaderLibraryProps {
-  totalGames: number;
+  games: SteamOwnedGame[] | null;
 }
 
-export function HeaderLibrary({ totalGames }: HeaderLibraryProps) {
+export function HeaderLibrary({ games }: HeaderLibraryProps) {
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
       <div className="space-y-1">
@@ -13,19 +19,18 @@ export function HeaderLibrary({ totalGames }: HeaderLibraryProps) {
           Biblioteca de Jogos
         </h1>
         <p className="text-muted-foreground text-sm">
-          Explorar todos os {totalGames} jogos da sua coleção.
+          Explorar todos os {games?.length} jogos da sua coleção.
         </p>
       </div>
 
-      <div className="relative w-full md:w-72">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Buscar jogo..."
-          className="w-full h-10 rounded-md border border-input bg-secondary/50 pl-10 pr-4 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        />
+      <div>
+        <InputGroup>
+          <InputGroupInput placeholder="Buscar jogo..." />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
       </div>
     </div>
   );
 }
-

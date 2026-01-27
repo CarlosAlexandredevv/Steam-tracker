@@ -63,7 +63,7 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
     : 0;
 
   return (
-    <div className="relative z-10 flex h-full items-end px-4 py-6 max-w-full overflow-hidden">
+    <div className="relative z-10 flex h-full items-end px-4 py-6 max-w-full">
       <div className="flex w-full flex-col items-start gap-6 md:flex-row md:items-end max-w-full">
         <div className="relative shrink-0">
           <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-white/10 bg-black shadow-2xl md:h-36 md:w-36">
@@ -160,7 +160,7 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
           </div>
         </div>
         {totalFriendsCount > 0 && (
-          <div className="flex flex-col items-end gap-2 group cursor-pointer">
+          <div className="flex flex-col md:items-end gap-2 group cursor-pointer">
             <Link
               href={`/${player.steamid}/friends`}
               className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-white transition-colors"
@@ -169,7 +169,7 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
               <span className="font-medium">Amigos ({totalFriendsCount})</span>
             </Link>
 
-            <div className="flex items-center pl-2">
+            <div className="flex items-center md:pl-2">
               <div className="flex items-center -space-x-3 hover:space-x-1 transition-all duration-300 ease-out py-1">
                 <TooltipProvider delayDuration={100}>
                   {displayFriends.map((friend, index) => (

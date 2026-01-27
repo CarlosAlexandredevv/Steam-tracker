@@ -27,7 +27,7 @@ export default async function Library({ params }: LibraryProps) {
   return (
     <main className="flex w-full flex-col bg-background text-foreground min-h-screen p-4 md:p-8 gap-8">
       {games ? (
-        <HeaderLibrary totalGames={games?.length ?? 0} />
+        <HeaderLibrary games={games ?? []} />
       ) : (
         <div className="flex h-full items-center justify-center py-10 px-4">
           <NotFoundGames />
