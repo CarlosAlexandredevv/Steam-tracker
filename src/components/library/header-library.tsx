@@ -1,3 +1,5 @@
+'use client';
+
 import { SteamOwnedGame } from '@/types/steam';
 import { LayoutGrid, Search } from 'lucide-react';
 import {
@@ -5,12 +7,27 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '../ui/input-group';
+import { debounce, parseAsString, useQueryState } from 'nuqs';
 
 interface HeaderLibraryProps {
   games: SteamOwnedGame[] | null;
 }
 
 export function HeaderLibrary({ games }: HeaderLibraryProps) {
+  const [search, setSearch] = useQueryState(
+    'q',
+    parseAsString.withDefault('').withOptions({
+      shallow: false,
+    }),
+  );
+
+  function handleSearchUpdate(event: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value, {
+      limitUrlUpdates:
+        event.target.value.length !== 0 ? debounce(500) : undefined,
+    });
+  }
+
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
       <div className="space-y-1">
@@ -25,7 +42,11 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
 
       <div>
         <InputGroup>
-          <InputGroupInput placeholder="Buscar jogo..." />
+          <InputGroupInput
+            placeholder="Buscar jogo..."
+            value={search ?? ''}
+            onChange={handleSearchUpdate}
+          />
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
