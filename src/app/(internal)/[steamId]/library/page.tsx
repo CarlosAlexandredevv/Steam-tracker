@@ -1,6 +1,6 @@
 import { SteamIdRouteParams } from '@/types/route-params';
-import { getPlayerById } from '@/app/actions/user/get-player-by-id';
-import { getAllGames } from '@/app/actions/user/get-all-games';
+import { getPlayerById } from '@/app/actions/player/get-player-by-id';
+import { getAllGames } from '@/app/actions/player/get-all-games';
 import { NotFoundPlayer } from '@/components/shared/not-found-player';
 import { GameCard } from '@/components/shared/game-card';
 import { HeaderLibrary } from '@/components/library/header-library';

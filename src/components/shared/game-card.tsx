@@ -20,7 +20,7 @@ export function GameCard({
 
   return (
     <Link
-      href={`/${steamId}/game/${game.appid}`}
+      href={`/${steamId}/library/${game.appid}`}
       className={`group relative flex flex-col gap-2 ${className}`}
     >
       <div className="relative overflow-hidden rounded-xl aspect-[2/3] w-full bg-gray-900 shadow-sm border border-white/5 transition-all duration-300 group-hover:ring-2 group-hover:ring-primary/50 group-hover:shadow-lg group-hover:-translate-y-1">

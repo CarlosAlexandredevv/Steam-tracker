@@ -1,5 +1,5 @@
-import { getAllGames } from '@/app/actions/user/get-all-games';
-import { getPlayerById } from '@/app/actions/user/get-player-by-id';
+import { getAllGames } from '@/app/actions/player/get-all-games';
+import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { OverviewHeader } from '@/components/overview/header/overview-header';
 import { GamesSection } from '@/components/overview/games-section/games-section';
 import { NotFoundPlayer } from '@/components/shared/not-found-player';

@@ -18,7 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { getAllFriendsPlayer } from '@/app/actions/user/get-all-friends-player';
+import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player';
 
 interface PlayerHeaderProps {
   player: SteamPlayer;

@@ -7,7 +7,7 @@ import {
   InputGroupAddon,
 } from '../ui/input-group';
 import { Search } from 'lucide-react';
-import { getPlayerById } from '@/app/actions/user/get-player-by-id';
+import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { SteamPlayer } from '@/types/steam';
 import { Popover, PopoverAnchor } from '@/components/ui/popover';
 import { PlayerPopoverContent } from './player-popover-content';

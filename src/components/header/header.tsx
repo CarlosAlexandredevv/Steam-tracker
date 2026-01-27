@@ -1,6 +1,6 @@
-import { SidebarTrigger } from "../ui/sidebar";
-import { Separator } from "../ui/separator";
-import { SearchPlayer } from "./search-player";
+import { SidebarTrigger } from '../ui/sidebar';
+import { Separator } from '../ui/separator';
+import { SearchPlayer } from './search-player';
 
 export async function Header() {
   return (
@@ -13,7 +13,7 @@ export async function Header() {
         />
         <div className="w-full lg:w-96 max-w-full">
           <SearchPlayer />
-       </div>
+        </div>
       </div>
     </header>
   );

@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { PlayerHeader } from '@/components/overview/header/player-header';
 import { SteamPlayer } from '@/types/steam';
 import { SteamOwnedGame } from '@/types/steam';
-import { BackgroundHeader } from './background-header';
+import { BackgroundHeader } from '@/components/shared/background-header';
 
 interface OverviewHeaderProps {
   player: SteamPlayer | null;
@@ -18,12 +18,11 @@ export function OverviewHeader({ player, games }: OverviewHeaderProps) {
     <header
       className={cn('relative min-h-96 w-full flex flex-col overflow-hidden')}
     >
-      <BackgroundHeader game={gameBiggerplaytime} />
+      <BackgroundHeader
+        heroUrl={gameBiggerplaytime?.hero}
+        alt={gameBiggerplaytime?.name ?? 'Game banner'}
+      />
 
-      <div className="pointer-events-none absolute inset-0 bg-black/40" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-
-      {/* O PlayerHeader agora vai empurrar o tamanho do header se precisar */}
       <PlayerHeader player={player as SteamPlayer} games={games} />
     </header>
   );
