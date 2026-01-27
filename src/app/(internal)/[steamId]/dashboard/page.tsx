@@ -15,7 +15,7 @@ export default async function Dashboard({ params }: DashboardProps) {
 
   if (!player) {
     return (
-      <main className="flex items-center justify-center h-full">
+      <main className="flex items-center justify-center h-full px-4">
         <NotFoundPlayer />
       </main>
     );

@@ -35,7 +35,7 @@ export function GamesSection({ games, player }: GamesSectionProps) {
         {hasGames ? (
           <CarrouselGames games={games} player={player ?? null} />
         ) : (
-          <div className="flex items-center justify-center py-10">
+          <div className="flex items-center justify-center py-10 px-4">
             <NotFoundGames />
           </div>
         )}
