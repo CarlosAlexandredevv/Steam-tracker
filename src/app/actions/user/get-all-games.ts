@@ -15,7 +15,7 @@ export async function getAllGames(
 ): Promise<SteamOwnedGame[] | null> {
   try {
     const response = await fetch(
-      `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true`,
+      `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&include_played_free_games=1`,
     );
     const data: SteamOwnedGamesApiResponse = await response?.json();
     const gamesWithImages: SteamOwnedGame[] = data?.response?.games?.map(

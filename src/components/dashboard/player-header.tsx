@@ -17,7 +17,7 @@ interface PlayerHeaderProps {
 }
 
 export function PlayerHeader({ player, games }: PlayerHeaderProps) {
-  const gameBiggerplaytime = games?.sort(
+  const gameBiggerplaytime = [...games].sort(
     (a, b) => b.playtime_forever - a.playtime_forever,
   )[0];
 
@@ -34,7 +34,9 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
 
   const recentPlaytimeMinutes =
     games?.reduce((acc, curr) => acc + (curr.playtime_2weeks || 0), 0) ?? 0;
-  const recentHours = (recentPlaytimeMinutes / 60).toFixed(1);
+
+  const recentHours = Math.round((recentPlaytimeMinutes / 60) * 10) / 10;
+
   const hasRecentActivity = recentPlaytimeMinutes > 0;
 
   const accountCreationDate = player?.timecreated
