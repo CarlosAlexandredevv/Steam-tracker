@@ -6,7 +6,7 @@ import {
   BookOpen,
   Bot,
   Command,
-  Frame,
+  LayoutGrid,
   GalleryVerticalEnd,
   Gamepad,
   Map,
@@ -134,9 +134,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: Gamepad,
       },
       {
-        name: 'Sales & Marketing',
-        url: '#',
-        icon: PieChart,
+        name: 'Biblioteca',
+        url: `/${steamId}/library`,
+        icon: LayoutGrid,
       },
       {
         name: 'Travel',
