@@ -24,7 +24,7 @@ export default async function Overview({ params }: OverviewProps) {
   const games = await getAllGames(player.steamid);
 
   return (
-    <main className="flex w-full flex-col bg-background text-foreground gap-4">
+    <main className="flex w-full flex-col bg-background text-foreground gap-4 overflow-x-hidden max-w-full">
       <OverviewHeader player={player} games={games ?? []} />
       <GamesSection games={games ?? []} player={player} />
     </main>

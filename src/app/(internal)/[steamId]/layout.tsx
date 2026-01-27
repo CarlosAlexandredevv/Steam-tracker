@@ -11,9 +11,9 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-hidden max-w-full">
         <Header />
-        <div className="flex flex-1 flex-col gap-4 pt-0">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 pt-0 overflow-x-hidden max-w-full">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

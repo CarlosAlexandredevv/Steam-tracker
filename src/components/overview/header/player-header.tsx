@@ -48,8 +48,8 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
     : 0;
 
   return (
-    <div className="relative z-10 flex h-full items-end px-4 py-6">
-      <div className="flex w-full flex-col items-start gap-6 md:flex-row md:items-end">
+    <div className="relative z-10 flex h-full items-end px-4 py-6 max-w-full overflow-hidden">
+      <div className="flex w-full flex-col items-start gap-6 md:flex-row md:items-end max-w-full">
         <div className="relative shrink-0">
           <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-white/10 bg-black shadow-2xl md:h-36 md:w-36">
             {player?.avatarfull && (
@@ -63,9 +63,9 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col justify-end gap-3 pb-1">
-          <div className="flex items-center gap-3">
-            <h1 className="text-4xl font-bold text-white drop-shadow-md md:text-6xl text-left">
+        <div className="flex flex-1 flex-col justify-end gap-3 pb-1 min-w-0 max-w-full">
+          <div className="flex items-center gap-3 min-w-0 max-w-full">
+            <h1 className="text-4xl font-bold text-white drop-shadow-md md:text-6xl text-left break-words overflow-hidden max-w-full">
               {player?.personaname ?? 'Desconhecido'}
             </h1>
             {player?.profileurl && (

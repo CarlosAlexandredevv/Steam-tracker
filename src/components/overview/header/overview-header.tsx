@@ -15,7 +15,7 @@ export function OverviewHeader({ player, games }: OverviewHeaderProps) {
     .sort((a, b) => b.playtime_forever - a.playtime_forever)[0];
 
   return (
-    <header className={cn('relative h-96 w-full')}>
+    <header className={cn('relative h-96 w-full overflow-hidden')}>
       <BackgroundHeader game={gameBiggerplaytime} />
 
       <div className="pointer-events-none absolute inset-0 bg-black/40" />

@@ -120,7 +120,7 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn('relative flex items-center gap-3', className)}
+        className={cn('relative flex items-center gap-3 max-w-full overflow-hidden', className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
@@ -138,7 +138,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden order-2 flex-1"
+      className="overflow-hidden order-2 flex-1 max-w-full"
       data-slot="carousel-content"
     >
       <div
