@@ -2,7 +2,7 @@ import { getAllGames } from '@/app/actions/user/get-all-games';
 import { getPlayerById } from '@/app/actions/user/get-player-by-id';
 import { SteamIdRouteParams } from '@/types/route-params';
 import { DashboardHeader } from '@/components/dashboard/header/dashboard-header';
-import { CarrouselSection } from '@/components/dashboard/carrousel-section/carrousel-section';
+import { GamesSection } from '@/components/dashboard/games-section';
 
 interface DashboardProps {
   params: SteamIdRouteParams;
@@ -14,12 +14,9 @@ export default async function Dashboard({ params }: DashboardProps) {
   const games = await getAllGames(player?.steamid ?? '');
 
   return (
-    <main className="flex w-full flex-col gap-8 items-center">
+    <main className="flex  w-full flex-col bg-background text-foreground  gap-4">
       <DashboardHeader player={player ?? null} games={games ?? []} />
-      <div className="w-full px-4 space-y-4">
-        <h2 className="text-4xl font-bold">Seus Jogos</h2>
-        <CarrouselSection player={player ?? null} games={games ?? []} />
-      </div>
+      <GamesSection games={games ?? []} player={player ?? null} />
     </main>
   );
 }

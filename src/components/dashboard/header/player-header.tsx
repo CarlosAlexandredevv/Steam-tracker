@@ -86,7 +86,7 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
                 className="bg-black/40 px-3 py-2 text-white flex items-center gap-2"
                 variant="outline"
               >
-                <Gamepad2 className="size-4 text-blue-400" />
+                <Gamepad2 className="size-4 text-primary" />
                 <span>
                   {games?.length ?? 0} {games?.length === 1 ? 'Jogo' : 'Jogos'}
                 </span>
