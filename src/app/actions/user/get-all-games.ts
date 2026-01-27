@@ -1,25 +1,7 @@
 'use server';
 
-import { env } from "@/env";
-
-export interface SteamOwnedGame {
-  appid: number;
-  name: string;
-  playtime_2weeks?: number;
-  playtime_forever: number;
-  img_icon_url: string;
-  has_community_visible_stats?: boolean;
-  playtime_windows_forever: number;
-  playtime_mac_forever: number;
-  playtime_linux_forever: number;
-  playtime_deck_forever: number;
-  rtime_last_played: number;
-  content_descriptorids?: number[];
-  playtime_disconnected?: number;
-  banner?: string;
-  horizontal?: string;
-  vertical?: string;
-}
+import { env } from '@/env';
+import { SteamOwnedGame } from '@/types/steam';
 
 export interface SteamOwnedGamesApiResponse {
   response: {
@@ -28,21 +10,27 @@ export interface SteamOwnedGamesApiResponse {
   };
 }
 
-export async function getAllGames(steamId: string): Promise<SteamOwnedGame[] | null> {
-  try{
-     const response = await fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true`);
-     const data: SteamOwnedGamesApiResponse = await response.json();
-     const gamesWithImages: SteamOwnedGame[] = data.response.games.map((game) => ({
-       ...game,
-       banner: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-       horizontal: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`,
-       vertical: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_600x900.jpg`,
-      }));
+export async function getAllGames(
+  steamId: string,
+): Promise<SteamOwnedGame[] | null> {
+  try {
+    const response = await fetch(
+      `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true`,
+    );
+    const data: SteamOwnedGamesApiResponse = await response?.json();
+    const gamesWithImages: SteamOwnedGame[] = data?.response?.games?.map(
+      (game) => ({
+        ...game,
+        hero: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_hero.jpg`,
+        banner: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+        horizontal: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`,
+        vertical: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_600x900.jpg`,
+      }),
+    );
 
-
-     return gamesWithImages;
+    return gamesWithImages;
   } catch (error: unknown) {
     console.error(error);
     return null;
-  } 
+  }
 }
