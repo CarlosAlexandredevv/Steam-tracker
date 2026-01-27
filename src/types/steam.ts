@@ -41,3 +41,17 @@ export interface SteamGetPlayerSummariesResponse {
     players: SteamPlayer[];
   };
 }
+
+export interface SteamFriend {
+  steamid: string;
+  relationship: string;
+  friend_since: number;
+}
+
+export interface SteamFriendsList {
+  friends: SteamFriend[];
+}
+
+export interface SteamGetFriendsListResponse {
+  friendslist: SteamFriendsList;
+}

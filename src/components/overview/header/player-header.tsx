@@ -9,14 +9,29 @@ import {
   CalendarDays,
   Activity,
   ExternalLink,
+  Users,
 } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { getAllFriendsPlayer } from '@/app/actions/user/get-all-friends-player';
 
 interface PlayerHeaderProps {
   player: SteamPlayer;
   games: SteamOwnedGame[];
 }
 
-export function PlayerHeader({ player, games }: PlayerHeaderProps) {
+export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
+  const friends = await getAllFriendsPlayer(player.steamid);
+  const totalFriendsCount = friends?.length ?? 0;
+
+  const displayFriends = friends?.slice(0, 5);
+  const remainingCount = totalFriendsCount - (displayFriends?.length ?? 0);
+
   const gameBiggerplaytime = [...games].sort(
     (a, b) => b.playtime_forever - a.playtime_forever,
   )[0];
@@ -144,6 +159,61 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
             )}
           </div>
         </div>
+        {totalFriendsCount > 0 && (
+          <div className="flex flex-col items-end gap-2 group cursor-pointer">
+            <Link
+              href={`/${player.steamid}/friends`}
+              className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-white transition-colors"
+            >
+              <Users className="size-4" />
+              <span className="font-medium">Amigos ({totalFriendsCount})</span>
+            </Link>
+
+            <div className="flex items-center pl-2">
+              <div className="flex items-center -space-x-3 hover:space-x-1 transition-all duration-300 ease-out py-1">
+                <TooltipProvider delayDuration={100}>
+                  {displayFriends.map((friend, index) => (
+                    <Tooltip key={index}>
+                      <TooltipTrigger asChild>
+                        <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-transform hover:scale-110 hover:z-20 hover:border-primary/50">
+                          <Link href={`/${friend?.steamid}/overview`}>
+                            <Avatar className="h-full w-full">
+                              <AvatarImage
+                                src={friend?.avatarfull}
+                                alt={friend?.personaname}
+                              />
+                              <AvatarFallback className="bg-zinc-700 text-[10px] text-zinc-300">
+                                {friend?.personaname
+                                  .substring(0, 2)
+                                  .toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                          </Link>
+                          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-green-500 shadow-sm" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side="bottom"
+                        className="text-xs font-bold"
+                      >
+                        <p>{friend?.personaname}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </TooltipProvider>
+
+                {remainingCount > 0 && (
+                  <Link
+                    href={`/${player.steamid}/friends`}
+                    className="relative z-0 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border-2 border-background bg-zinc-800 text-xs font-bold text-zinc-300 transition-transform hover:scale-110 hover:z-20 hover:bg-zinc-700 hover:text-white"
+                  >
+                    +{remainingCount}
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
