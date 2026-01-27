@@ -29,8 +29,8 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
   const friends = await getAllFriendsPlayer(player.steamid);
   const totalFriendsCount = friends?.length ?? 0;
 
-  const displayFriends = friends?.slice(0, 5);
-  const remainingCount = totalFriendsCount - (displayFriends?.length ?? 0);
+  const displayFriends = friends?.slice(0, 5) ?? [];
+  const remainingCount = totalFriendsCount - displayFriends.length;
 
   const gameBiggerplaytime = [...games].sort(
     (a, b) => b.playtime_forever - a.playtime_forever,
@@ -189,7 +189,6 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
                               </AvatarFallback>
                             </Avatar>
                           </Link>
-                          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-green-500 shadow-sm" />
                         </div>
                       </TooltipTrigger>
                       <TooltipContent

@@ -10,16 +10,18 @@ export async function getAllFriendsPlayer(steamId: string) {
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&relationship=friend`,
     );
 
-    const data: SteamGetFriendsListResponse = await response.json();
+    const data: SteamGetFriendsListResponse | null = await response?.json();
 
-    const playersData = data.friendslist.friends.map(async (friend) => {
+    const friends = data?.friendslist?.friends ?? [];
+
+    const playersData = friends.map(async (friend) => {
       const player = await getPlayerById(friend.steamid);
       return player;
     });
 
     const players: (SteamPlayer | null)[] = await Promise.all(playersData);
 
-    return players;
+    return players.filter((player): player is SteamPlayer => player !== null);
   } catch (error: unknown) {
     console.error(error);
     return [];
