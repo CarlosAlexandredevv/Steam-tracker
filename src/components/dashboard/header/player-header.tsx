@@ -48,7 +48,7 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
     : 0;
 
   return (
-    <div className="relative z-10 flex h-full items-end p-6 md:p-10">
+    <div className="relative z-10 flex h-full items-end px-4 py-6">
       <div className="flex w-full flex-col items-start gap-6 md:flex-row md:items-end">
         <div className="relative shrink-0">
           <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-white/10 bg-black shadow-2xl md:h-36 md:w-36">
@@ -87,7 +87,9 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
                 variant="outline"
               >
                 <Gamepad2 className="size-4 text-blue-400" />
-                <span>{games?.length ?? 0} Jogos</span>
+                <span>
+                  {games?.length ?? 0} {games?.length === 1 ? 'Jogo' : 'Jogos'}
+                </span>
               </Badge>
             )}
 
@@ -107,7 +109,9 @@ export function PlayerHeader({ player, games }: PlayerHeaderProps) {
                 variant="outline"
               >
                 <CalendarDays className="size-4 text-orange-400" />
-                <span>{accountYears} Anos</span>
+                <span>
+                  {accountYears} {accountYears === 1 ? 'Ano' : 'Anos'}
+                </span>
               </Badge>
             )}
 
