@@ -5,6 +5,7 @@ import GameDetailsView from '@/components/library/game-id/game-header';
 import { NotFoundGames } from '@/components/shared/not-found-games';
 import { Star } from 'lucide-react';
 import { SystemRequirements } from '@/components/library/game-id/system-requirements';
+import { GameDescription } from '@/components/library/game-id/game-description';
 
 export default async function GamePage({
   params,
@@ -26,6 +27,8 @@ export default async function GamePage({
       <GameDetailsView game={game} />
 
       <div className="z-50 px-6 md:px-12 py-12 w-full max-w-7xl mx-auto space-y-12">
+        <GameDescription game={game} />
+
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
           <div className="md:col-span-7 flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
