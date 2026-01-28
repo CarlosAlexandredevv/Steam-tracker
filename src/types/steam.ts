@@ -100,6 +100,7 @@ export interface SteamGameData {
 
 export interface Requirements {
   minimum: string;
+  recommended: string;
 }
 
 export interface PackageGroup {

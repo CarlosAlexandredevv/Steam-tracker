@@ -19,7 +19,7 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
   const remainingCategories = game.categories.slice(4);
 
   return (
-    <div className="h-auto bg-[#0b0e14] text-slate-200">
+    <div className="h-auto  text-slate-200">
       <header className="relative min-h-[450px] w-full flex flex-col justify-end overflow-hidden">
         <BackgroundHeader heroUrl={game.imgHero} alt={game.name} />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-[#0b0e14]/40 to-transparent" />
