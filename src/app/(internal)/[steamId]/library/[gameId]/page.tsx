@@ -8,6 +8,7 @@ import { SystemRequirements } from '@/components/library/game-id/system-requirem
 import { GameDescription } from '@/components/library/game-id/game-description';
 import { getGameBySteamIdAppId } from '@/app/actions/player/get-game-by-steam-id-app-id';
 import { StatisticUser } from '@/components/library/game-id/statistic-user';
+import { getAchivementsById } from '@/app/actions/player/get-achivements-by-id';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -18,6 +19,7 @@ export default async function GamePage({ params }: GamePageProps) {
   const game = await getGameById(gameId);
 
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
+  const achievements = await getAchivementsById(steamId, gameId);
 
   if (!game)
     return (
@@ -69,7 +71,10 @@ export default async function GamePage({ params }: GamePageProps) {
               <ChartColumnIncreasing className="text-primary w-5 h-5 " />
               Estatísticas do Jogador
             </h2>
-            <StatisticUser game={gameBySteamIdAppId} />
+            <StatisticUser
+              game={gameBySteamIdAppId}
+              achievements={achievements ?? []}
+            />
           </div>
         </div>
       </div>

@@ -1,13 +1,14 @@
-import { SteamOwnedGame } from '@/types/steam';
+import { SteamOwnedGame, SteamPlayerAchievement } from '@/types/steam';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Clock, Calendar, Trophy, Activity } from 'lucide-react';
 
 interface StatisticUserProps {
   game: SteamOwnedGame;
+  achievements: SteamPlayerAchievement[];
 }
 
-export function StatisticUser({ game }: StatisticUserProps) {
+export function StatisticUser({ game, achievements }: StatisticUserProps) {
   const hoursTotal = Math.floor(game.playtime_forever / 60);
   const minutesTotal = game.playtime_forever % 60;
   const hoursTwoWeeks = game.playtime_2weeks
@@ -31,7 +32,15 @@ export function StatisticUser({ game }: StatisticUserProps) {
     game.rtime_last_played > 0 && lastPlayedDate < threeMonthsAgo;
   const isRecentlyPlayed = (game.playtime_2weeks || 0) > 0;
 
-  const progressPercentage = 10 > 0 ? (10 / 10) * 100 : 0;
+  const totalAchievements = achievements?.length || 0;
+  const achievedAchievements =
+    achievements?.filter((achievement) => achievement.achieved === 1).length ||
+    0;
+
+  const progressPercentage =
+    totalAchievements > 0
+      ? (achievedAchievements / totalAchievements) * 100
+      : 0;
 
   return (
     <Card>
@@ -66,7 +75,6 @@ export function StatisticUser({ game }: StatisticUserProps) {
         </div>
 
         <div className="flex flex-col gap-6">
-          {/* BLOCO CONQUISTAS */}
           <div className="flex items-start gap-4">
             <Trophy className="text-primary mt-1 shrink-0" size={20} />
             <div className="flex-1 space-y-2">
@@ -75,7 +83,8 @@ export function StatisticUser({ game }: StatisticUserProps) {
                   Conquistas desbloqueadas
                 </p>
                 <span className="text-sm font-black text-white italic">
-                  10 / 10 ({progressPercentage.toFixed(0)}%)
+                  {achievedAchievements} / {totalAchievements} (
+                  {progressPercentage.toFixed(0)}%)
                 </span>
               </div>
               <Progress

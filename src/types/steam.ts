@@ -186,6 +186,54 @@ export interface ContentDescriptors {
   notes: string | null;
 }
 
+// Schema de conquistas do jogo (GetSchemaForGame)
+export interface SteamSchemaAchievement {
+  name: string;
+  defaultvalue: number;
+  displayName: string;
+  hidden: number;
+  icon: string;
+  icongray: string;
+}
+
+export interface SteamAvailableGameStats {
+  // A API real retorna um array de stats; aqui mantemos como unknown,
+  // pois o console do React truncou o valor no log.
+  stats?: unknown;
+  achievements: SteamSchemaAchievement[];
+}
+
+export interface SteamGameSchema {
+  gameName: string;
+  gameVersion: string;
+  availableGameStats: SteamAvailableGameStats;
+}
+
+export interface SteamGetSchemaForGameResponse {
+  game: SteamGameSchema;
+}
+
+export interface SteamPlayerAchievement {
+  apiname: string;
+  achieved: number; // 0 ou 1
+  unlocktime: number;
+  name: string;
+  description: string;
+  icon?: string;
+  icongray?: string;
+}
+
+export interface SteamPlayerStats {
+  steamID: string;
+  gameName: string;
+  achievements: SteamPlayerAchievement[];
+  success: boolean;
+}
+
+export interface SteamGetPlayerAchievementsResponse {
+  playerstats: SteamPlayerStats;
+}
+
 export interface SteamGameData {
   type: string;
   name: string;
