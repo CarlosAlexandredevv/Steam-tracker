@@ -14,7 +14,7 @@ export function GameDescription({ game }: GameDescriptionProps) {
         <div className="flex flex-col gap-4">
           <p
             className="text-white/80 text-base leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: game.detailed_description }}
+            dangerouslySetInnerHTML={{ __html: game.short_description }}
           />
         </div>
       </CardContent>

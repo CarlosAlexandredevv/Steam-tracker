@@ -67,7 +67,7 @@ export default async function GamePage({ params }: GamePageProps) {
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
               <ChartColumnIncreasing className="text-primary w-5 h-5 " />
-              Estatísticas do Jogo
+              Estatísticas do Jogador
             </h2>
             <StatisticUser game={gameBySteamIdAppId} />
           </div>
