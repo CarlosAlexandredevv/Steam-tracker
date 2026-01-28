@@ -3,17 +3,21 @@ import { GalleryCards } from '@/components/library/game-id/gallery-cards';
 import { PlayerCard } from '@/components/library/game-id/player-card';
 import GameDetailsView from '@/components/library/game-id/game-header';
 import { NotFoundGames } from '@/components/shared/not-found-games';
-import { Info, Images, Play, Cpu, Gamepad2 } from 'lucide-react';
+import { Info, Images, Play, Cpu, ChartColumnIncreasing } from 'lucide-react';
 import { SystemRequirements } from '@/components/library/game-id/system-requirements';
 import { GameDescription } from '@/components/library/game-id/game-description';
+import { getGameBySteamIdAppId } from '@/app/actions/player/get-game-by-steam-id-app-id';
+import { StatisticUser } from '@/components/library/game-id/statistic-user';
 
-export default async function GamePage({
-  params,
-}: {
-  params: Promise<{ gameId: string }>;
-}) {
-  const { gameId } = await params;
+interface GamePageProps {
+  params: Promise<{ steamId: string; gameId: string }>;
+}
+
+export default async function GamePage({ params }: GamePageProps) {
+  const { steamId, gameId } = await params;
   const game = await getGameById(gameId);
+
+  const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
 
   if (!game)
     return (
@@ -60,11 +64,12 @@ export default async function GamePage({
         </h2>
         <SystemRequirements game={game} />
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div>
+          <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <Gamepad2 className="text-primary w-5 h-5 " />
-              Jogar Agora
+              <ChartColumnIncreasing className="text-primary w-5 h-5 " />
+              Estatísticas do Jogo
             </h2>
+            <StatisticUser game={gameBySteamIdAppId} />
           </div>
         </div>
       </div>
