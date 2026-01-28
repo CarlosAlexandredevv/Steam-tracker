@@ -62,23 +62,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: true,
       },
       {
-        title: 'Models',
-        url: '#',
+        title: 'Biblioteca',
+        url: `/${steamId}/library`,
         icon: Bot,
-        items: [
-          {
-            title: 'Genesis',
-            url: '#',
-          },
-          {
-            title: 'Explorer',
-            url: '#',
-          },
-          {
-            title: 'Quantum',
-            url: '#',
-          },
-        ],
       },
       {
         title: 'Documentation',

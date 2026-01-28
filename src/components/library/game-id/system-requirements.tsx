@@ -1,7 +1,6 @@
 import { SteamGameData } from '@/types/steam';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Monitor } from 'lucide-react';
 
 export function SystemRequirements({ game }: { game: SteamGameData }) {
   const renderReq = (html?: string) => {
@@ -17,13 +16,6 @@ export function SystemRequirements({ game }: { game: SteamGameData }) {
 
   return (
     <Card className="border-none rounded-[2.5rem] p-8 shadow-2xl w-full mt-12">
-      <CardHeader className="p-0 mb-8">
-        <CardTitle className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-          <Monitor className="text-primary w-6 h-6" />
-          Requisitos do Sistema
-        </CardTitle>
-      </CardHeader>
-
       <CardContent className="p-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative">
           <div className="space-y-4">

@@ -3,7 +3,7 @@ import { GalleryCards } from '@/components/library/game-id/gallery-cards';
 import { PlayerCard } from '@/components/library/game-id/player-card';
 import GameDetailsView from '@/components/library/game-id/game-header';
 import { NotFoundGames } from '@/components/shared/not-found-games';
-import { Star } from 'lucide-react';
+import { Info, Images, Play, Cpu, Gamepad2 } from 'lucide-react';
 import { SystemRequirements } from '@/components/library/game-id/system-requirements';
 import { GameDescription } from '@/components/library/game-id/game-description';
 
@@ -27,13 +27,16 @@ export default async function GamePage({
       <GameDetailsView game={game} />
 
       <div className="z-50 px-6 md:px-12 py-12 w-full max-w-7xl mx-auto space-y-12">
+        <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+          <Info className="text-primary w-5 h-5 " />
+          Sobre o Jogo
+        </h2>
         <GameDescription game={game} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-          {/* Coluna da Esquerda: Galeria */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
           <div className="lg:col-span-2 flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <Star className="text-primary w-5 h-5 fill-current" />
+              <Images className="text-primary w-5 h-5 " />
               Galeria de Imagens
             </h2>
             <div className="flex-1">
@@ -43,7 +46,7 @@ export default async function GamePage({
 
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <Star className="text-primary w-5 h-5 fill-current" />
+              <Play className="text-primary w-5 h-5 " />
               Jogar Agora
             </h2>
             <div className="flex-1">
@@ -51,8 +54,19 @@ export default async function GamePage({
             </div>
           </div>
         </div>
-
+        <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+          <Cpu className="text-primary w-5 h-5 " />
+          Requisitos do Sistema
+        </h2>
         <SystemRequirements game={game} />
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          <div>
+            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+              <Gamepad2 className="text-primary w-5 h-5 " />
+              Jogar Agora
+            </h2>
+          </div>
+        </div>
       </div>
     </main>
   );
