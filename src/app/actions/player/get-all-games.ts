@@ -5,7 +5,6 @@ import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 export interface SteamOwnedGamesApiResponse {
   response: {
@@ -50,8 +49,7 @@ async function fetchAllGames(
     });
 
     return gamesWithUrls;
-  } catch (error: unknown) {
-    logActionFailure('getAllGames', { steamId }, error);
+  } catch {
     return null;
   }
 }
@@ -67,7 +65,5 @@ function getCachedAllGames(steamId: string) {
 export async function getAllGames(
   steamId: string,
 ): Promise<SteamOwnedGame[] | null> {
-  return withActionLog('getAllGames', { steamId }, () =>
-    getCachedAllGames(steamId),
-  );
+  return getCachedAllGames(steamId);
 }

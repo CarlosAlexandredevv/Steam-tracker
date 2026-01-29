@@ -6,7 +6,6 @@ import { SteamGetFriendsListResponse, SteamPlayer } from '@/types/steam';
 import { getPlayersByIds } from './get-player-by-id';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchAllFriendsPlayer(steamId: string): Promise<SteamPlayer[]> {
   try {
@@ -20,8 +19,7 @@ async function fetchAllFriendsPlayer(steamId: string): Promise<SteamPlayer[]> {
     const steamIds = friends.map((f) => f.steamid);
     const players = await getPlayersByIds(steamIds);
     return players;
-  } catch (error: unknown) {
-    logActionFailure('getAllFriendsPlayer', { steamId }, error);
+  } catch {
     return [];
   }
 }
@@ -35,7 +33,5 @@ function getCachedAllFriendsPlayer(steamId: string) {
 }
 
 export async function getAllFriendsPlayer(steamId: string) {
-  return withActionLog('getAllFriendsPlayer', { steamId }, () =>
-    getCachedAllFriendsPlayer(steamId),
-  );
+  return getCachedAllFriendsPlayer(steamId);
 }

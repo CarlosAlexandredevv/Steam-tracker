@@ -5,7 +5,6 @@ import { env } from '@/env';
 import { SteamPlayer } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 function isRetriableNetworkError(error: unknown): boolean {
   if (error instanceof Error) {
@@ -77,9 +76,6 @@ async function fetchPlayerById(
     if (retry && isRetriableNetworkError(error)) {
       return fetchPlayerById(id, false);
     }
-    if (!isRetriableNetworkError(error)) {
-      logActionFailure('getPlayerById', { id }, error);
-    }
     return null;
   }
 }
@@ -112,12 +108,8 @@ async function fetchPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
     try {
       const players = await fetchOneBatchOfPlayers(chunk);
       allPlayers.push(...players);
-    } catch (error) {
-      logActionFailure(
-        'getPlayersByIds',
-        { chunkSize: chunk.length, offset: i },
-        error,
-      );
+    } catch {
+      // chunk falhou; continuar com os demais
     }
   }
 
@@ -130,7 +122,7 @@ const getPlayerByIdCached = cache(
 );
 
 export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
-  return withActionLog('getPlayerById', { id }, () => getPlayerByIdCached(id));
+  return getPlayerByIdCached(id);
 }
 
 /**
@@ -139,7 +131,5 @@ export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
  */
 export async function getPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
   if (ids.length === 0) return [];
-  return withActionLog('getPlayersByIds', { count: ids.length }, () =>
-    fetchPlayersByIds(ids),
-  );
+  return fetchPlayersByIds(ids);
 }

@@ -12,7 +12,6 @@ import {
 import { getGameBySteamIdAppId } from './get-game-by-steam-id-app-id';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function chunkedMap<T, R>(
   items: readonly T[],
@@ -115,8 +114,7 @@ async function fetchPlayedFriends(
       .sort((a, b) => b.playtime_forever - a.playtime_forever);
 
     return { count: friendsPlayed.length, friends: friendsPlayed };
-  } catch (error: unknown) {
-    logActionFailure('getPlayedFriends', { steamId, appId }, error);
+  } catch {
     return null;
   }
 }
@@ -125,7 +123,5 @@ export async function getPlayedFriends(
   steamId: string,
   appId: string,
 ): Promise<GetPlayedFriendsResponse | null> {
-  return withActionLog('getPlayedFriends', { steamId, appId }, () =>
-    fetchPlayedFriends(steamId, appId),
-  );
+  return fetchPlayedFriends(steamId, appId);
 }

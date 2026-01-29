@@ -10,7 +10,6 @@ import {
 } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchAchivementsById(
   id: string,
@@ -66,8 +65,7 @@ async function fetchAchivementsById(
       }) ?? [];
 
     return withImages;
-  } catch (error) {
-    logActionFailure('getAchivementsById', { id, appId }, error);
+  } catch {
     return null;
   }
 }
@@ -84,7 +82,5 @@ export async function getAchivementsById(
   id: string,
   appId: string,
 ): Promise<SteamPlayerAchievement[] | null> {
-  return withActionLog('getAchivementsById', { id, appId }, () =>
-    getCachedAchivementsById(id, appId),
-  );
+  return getCachedAchivementsById(id, appId);
 }

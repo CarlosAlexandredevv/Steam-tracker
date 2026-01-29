@@ -1,8 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { logLoading } from '@/lib/action-logger';
 
 export default function Loading() {
-  logLoading('[steamId]');
   return (
     <div className="flex w-full flex-col bg-background text-foreground gap-6 md:gap-8 overflow-x-hidden max-w-full">
       {/* Header skeleton - igual ao overview (avatar, nome, badges, amigos) */}

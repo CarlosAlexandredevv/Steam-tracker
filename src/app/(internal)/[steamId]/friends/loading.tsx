@@ -1,8 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import { logLoading } from '@/lib/action-logger';
 
 export default function FriendsLoading() {
-  logLoading('friends');
   return (
     <main className="flex w-full flex-col bg-background text-foreground min-h-screen">
       <div className="px-4 md:px-6 w-full max-w-7xl mx-auto py-6 md:py-10 space-y-6 md:space-y-10">

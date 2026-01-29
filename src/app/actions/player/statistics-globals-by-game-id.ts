@@ -7,7 +7,6 @@ import type {
 } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchStatisticsGlobalsByGameId(appId: string) {
   try {
@@ -35,8 +34,7 @@ async function fetchStatisticsGlobalsByGameId(appId: string) {
       playersNowData,
       achivementsGlobalData,
     };
-  } catch (error) {
-    logActionFailure('statisticsGlobalsByGameId', { appId }, error);
+  } catch {
     return null;
   }
 }
@@ -50,7 +48,5 @@ function getCachedStatisticsGlobalsByGameId(appId: string) {
 }
 
 export async function statisticsGlobalsByGameId(appId: string) {
-  return withActionLog('statisticsGlobalsByGameId', { appId }, () =>
-    getCachedStatisticsGlobalsByGameId(appId),
-  );
+  return getCachedStatisticsGlobalsByGameId(appId);
 }

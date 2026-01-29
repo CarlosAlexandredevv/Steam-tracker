@@ -4,7 +4,6 @@ import { unstable_cache } from 'next/cache';
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 const getHeroUrl = (gameId: string) =>
   `https://cdn.akamai.steamstatic.com/steam/apps/${gameId}/library_hero.jpg`;
@@ -40,8 +39,7 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
     };
 
     return removeImagesContainsHtml;
-  } catch (error) {
-    logActionFailure('getGameById', { gameId }, error);
+  } catch {
     return null;
   }
 }
@@ -55,7 +53,5 @@ function getCachedGameById(gameId: string) {
 export async function getGameById(
   gameId: string,
 ): Promise<SteamGameData | null> {
-  return withActionLog('getGameById', { gameId }, () =>
-    getCachedGameById(gameId),
-  );
+  return getCachedGameById(gameId);
 }

@@ -5,7 +5,6 @@ import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
-import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
   try {
@@ -25,8 +24,7 @@ async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
     );
 
     return gameFiltered;
-  } catch (error) {
-    logActionFailure('getGameBySteamIdAppId', { steamId, appId }, error);
+  } catch {
     return null;
   }
 }
@@ -40,7 +38,5 @@ function getCachedGameBySteamIdAppId(steamId: string, appId: string) {
 }
 
 export async function getGameBySteamIdAppId(steamId: string, appId: string) {
-  return withActionLog('getGameBySteamIdAppId', { steamId, appId }, () =>
-    getCachedGameBySteamIdAppId(steamId, appId),
-  );
+  return getCachedGameBySteamIdAppId(steamId, appId);
 }

@@ -23,7 +23,10 @@ export async function generateMetadata({
   const { steamId } = await params;
   const player = await getPlayerById(steamId);
   if (!player)
-    return { title: buildTitle('Perfil não encontrado'), robots: { index: false } };
+    return {
+      title: buildTitle('Perfil não encontrado'),
+      robots: { index: false },
+    };
   return {
     title: buildTitle(`Biblioteca - ${player.personaname}`),
     description: `Biblioteca de jogos Steam de ${player.personaname}. Busque e filtre jogos da coleção.`,
