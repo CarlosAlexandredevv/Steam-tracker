@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CarrouselGames } from '@/components/overview/games-section/carrousel-games';
 
 const PREVIEW_VANITY = '76561199441912879';
-const PREVIEW_GAMES_SHOW = 3;
 
 const HIGHLIGHTS = [
   {
@@ -44,7 +43,6 @@ function PreviewCardSkeleton() {
 export async function LandingPreview() {
   const player = await getPlayerById(PREVIEW_VANITY);
   const games = player ? await getAllGames(player.steamid) : null;
-  const previewGames = (games ?? []).slice(0, PREVIEW_GAMES_SHOW);
   const gamesCount = games?.length ?? 0;
   const totalHours =
     games?.reduce((acc, g) => acc + (g.playtime_forever ?? 0), 0) ?? 0;
