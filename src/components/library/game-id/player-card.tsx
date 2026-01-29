@@ -7,13 +7,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 
 export function PlayerCard({ game }: { game: SteamGameData }) {
-  const mainPackage = game?.package_groups[0]?.subs[0];
-  const price = mainPackage
-    ? (mainPackage.price_in_cents_with_discount / 100).toLocaleString('pt-BR', {
+  const price = game?.price_overview?.final
+    ? (game.price_overview.final / 100).toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       })
     : 'N/A';
+  console.log(game);
 
   return (
     <Card className="border-none rounded-[2.5rem] p-6 shadow-2xl w-full h-full bg-card/50 backdrop-blur-sm">

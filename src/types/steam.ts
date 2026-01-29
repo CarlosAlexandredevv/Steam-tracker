@@ -96,6 +96,11 @@ export interface SteamGameDataResponse {
 }
 
 export interface SteamGameData {
+  price_overview: {
+    final: number;
+    currency: string;
+    initial: number;
+  };
   type: string;
   name: string;
   steam_appid: number;
