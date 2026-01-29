@@ -20,6 +20,7 @@ import { getAchivementsById } from '@/app/actions/player/get-achivements-by-id';
 import { statisticsGlobalsByGameId } from '@/app/actions/player/statistics-globals-by-game-id';
 import { StatisticGlobal } from '@/components/library/game-id/statistic-global';
 import { AchivementsList } from '@/components/library/game-id/achivements-list';
+import { getPlayedFriends } from '@/app/actions/player/get-played-friends';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -33,6 +34,8 @@ export default async function GamePage({ params }: GamePageProps) {
   const achievements = await getAchivementsById(steamId, gameId);
   const globalAchievements = await statisticsGlobalsByGameId(gameId);
 
+  const playedFriends = await getPlayedFriends(steamId, gameId);
+
   if (!game)
     return (
       <div className="flex h-screen items-center justify-center text-white">
@@ -42,7 +45,11 @@ export default async function GamePage({ params }: GamePageProps) {
 
   return (
     <main className="flex w-full flex-col text-foreground min-h-screen">
-      <GameDetailsView game={game} />
+      <GameDetailsView
+        game={game}
+        steamId={steamId}
+        playedFriends={playedFriends}
+      />
 
       <div className="z-50 px-6 md:px-12 py-12 w-full max-w-7xl mx-auto space-y-12">
         <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">

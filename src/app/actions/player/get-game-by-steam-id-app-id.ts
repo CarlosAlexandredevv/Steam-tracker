@@ -11,7 +11,7 @@ export async function getGameBySteamIdAppId(steamId: string, appId: string) {
     );
     const data = await response.json();
 
-    const gameFiltered = data.response.games.find(
+    const gameFiltered = data.response?.games?.find(
       (game: SteamOwnedGame) => game.appid === Number(appId),
     );
 

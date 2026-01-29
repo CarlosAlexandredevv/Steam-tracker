@@ -1,4 +1,4 @@
-import { SteamGameData } from '@/types/steam';
+import { GetPlayedFriendsResponse, SteamGameData } from '@/types/steam';
 import { BackgroundHeader } from '@/components/shared/background-header';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -7,22 +7,33 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ExternalLink, Plus } from 'lucide-react';
+import { ExternalLink, Plus, Users } from 'lucide-react';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface GameDetailsViewProps {
   game: SteamGameData;
+  steamId: string;
+  playedFriends: GetPlayedFriendsResponse | null;
 }
 
-export default function GameDetailsView({ game }: GameDetailsViewProps) {
+export default function GameDetailsView({
+  game,
+  steamId,
+  playedFriends,
+}: GameDetailsViewProps) {
   const visibleCategories = game.categories.slice(0, 4);
   const remainingCategories = game.categories.slice(4);
+
+  const totalFriendsCount = playedFriends?.count ?? 0;
+  const displayFriends = playedFriends?.friends?.slice(0, 5) ?? [];
+  const remainingCount = totalFriendsCount - displayFriends.length;
 
   return (
     <div className="h-auto text-slate-200">
       <header className="relative min-h-[450px] w-full flex flex-col justify-end overflow-hidden">
         <BackgroundHeader heroUrl={game.imgHero} alt={game.name} />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-[#0b0e14]/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#0b0e14] via-[#0b0e14]/40 to-transparent" />
 
         <div className="relative z-50 px-6 md:px-12 py-12 w-full max-w-7xl mx-auto">
           <div className="flex flex-col gap-4">
@@ -35,12 +46,9 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
               </span>
             </div>
 
-            {/* --- CORREÇÃO AQUI --- */}
-            {/* 1. Removido 'flex' e 'gap-2'. Agora é bloco padrão. */}
             <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none italic">
               <span className="mr-2">{game.name}</span>
 
-              {/* 2. Links agora são 'inline-flex' com 'align-middle' para ficarem na linha do texto */}
               {game.website && (
                 <Link
                   href={game.website}
@@ -69,41 +77,99 @@ export default function GameDetailsView({ game }: GameDetailsViewProps) {
               </Link>
             </h1>
 
-            <div className="flex flex-wrap items-center gap-2 mt-2">
-              <span className="text-white/50 text-xs font-bold uppercase tracking-widest mr-2">
-                Tags:
-              </span>
-              {visibleCategories.map((category) => (
-                <Badge
-                  key={category.id}
-                  variant="outline"
-                  className="bg-black/40 border-white/10 px-3 py-1.5 text-white text-xs"
-                >
-                  {category.description}
-                </Badge>
-              ))}
-              {remainingCategories.length > 0 && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Badge
-                        variant="outline"
-                        className="bg-black/40 border-white/10 px-3 py-1.5 text-white cursor-pointer hover:bg-white/10"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-zinc-900 border-zinc-800 p-3 max-w-xs">
-                      <div className="flex flex-wrap gap-1">
-                        {remainingCategories.map((c) => (
-                          <Badge key={c.id} className="text-xs bg-white/5">
-                            {c.description}
-                          </Badge>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <span className="text-white/50 text-xs font-bold uppercase tracking-widest mr-2">
+                  Tags:
+                </span>
+                {visibleCategories.map((category) => (
+                  <Badge
+                    key={category.id}
+                    variant="outline"
+                    className="bg-black/40 border-white/10 px-3 py-1.5 text-white text-xs"
+                  >
+                    {category.description}
+                  </Badge>
+                ))}
+                {remainingCategories.length > 0 && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Badge
+                          variant="outline"
+                          className="bg-black/40 border-white/10 px-3 py-1.5 text-white cursor-pointer hover:bg-white/10"
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-zinc-900 border-zinc-800 p-3 max-w-xs">
+                        <div className="flex flex-wrap gap-1">
+                          {remainingCategories.map((c) => (
+                            <Badge key={c.id} className="text-xs bg-white/5">
+                              {c.description}
+                            </Badge>
+                          ))}
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+              {totalFriendsCount > 0 && (
+                <div className="flex flex-col md:items-end gap-2 group cursor-pointer mt-2 md:mt-0">
+                  <Link
+                    href={`/${steamId}/friends`}
+                    className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-white transition-colors"
+                  >
+                    <Users className="size-4" />
+                    <span className="font-medium">
+                      Jogado também por: ({totalFriendsCount})
+                    </span>
+                  </Link>
+
+                  <div className="flex items-center md:pl-2">
+                    <div className="flex items-center -space-x-3 hover:space-x-1 transition-all duration-300 ease-out py-1">
+                      <TooltipProvider delayDuration={100}>
+                        {displayFriends.map((friend) => (
+                          <Tooltip key={friend.steamid}>
+                            <TooltipTrigger asChild>
+                              <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-transform hover:scale-110 hover:z-20 hover:border-primary/50">
+                                <Link href={`/${friend.steamid}/overview`}>
+                                  <Avatar className="h-full w-full">
+                                    <AvatarImage
+                                      src={friend.avatarfull}
+                                      alt={friend.personaname}
+                                    />
+                                    <AvatarFallback className="bg-zinc-700 text-[10px] text-zinc-300">
+                                      {friend.personaname
+                                        .substring(0, 2)
+                                        .toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </Link>
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent
+                              side="bottom"
+                              className="text-xs font-bold"
+                            >
+                              <p>{friend.personaname}</p>
+                            </TooltipContent>
+                          </Tooltip>
                         ))}
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                      </TooltipProvider>
+
+                      {remainingCount > 0 && (
+                        <Link
+                          href={`/${steamId}/friends`}
+                          className="relative z-0 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border-2 border-background bg-zinc-800 text-xs font-bold text-zinc-300 transition-transform hover:scale-110 hover:z-20 hover:bg-zinc-700 hover:text-white"
+                        >
+                          +{remainingCount}
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
