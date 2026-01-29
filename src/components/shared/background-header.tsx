@@ -1,28 +1,25 @@
-import Image from 'next/image';
+import { ImageWithFallback } from './image-with-fallback';
 
 interface BackgroundHeaderProps {
   heroUrl?: string;
   alt?: string;
 }
 
+const DEFAULT_HERO =
+  'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=90';
+
 export function BackgroundHeader({
   heroUrl,
   alt = 'Game banner',
 }: BackgroundHeaderProps) {
-  const defaultHeroUrl =
-    'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=90';
-
-  const finalHeroUrl = heroUrl ?? defaultHeroUrl;
+  const finalHeroUrl = heroUrl ?? DEFAULT_HERO;
 
   if (!finalHeroUrl) return null;
 
   return (
     <>
-      <Image
-        src={
-          finalHeroUrl ??
-          'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=90'
-        }
+      <ImageWithFallback
+        src={finalHeroUrl}
         alt={alt}
         fill
         priority

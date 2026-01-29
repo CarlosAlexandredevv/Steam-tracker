@@ -4,21 +4,8 @@ import { cache } from 'react';
 import { env } from '@/env';
 import { SteamPlayer } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
+import { fetchSteamApi } from '@/lib/steam-api';
 import { withActionLog, logActionFailure } from '@/lib/action-logger';
-
-const FETCH_TIMEOUT_MS = 15_000;
-
-function fetchWithTimeout(
-  url: string,
-  timeoutMs = FETCH_TIMEOUT_MS,
-): Promise<Response> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  return fetch(url, {
-    cache: 'no-store',
-    signal: controller.signal,
-  }).finally(() => clearTimeout(timeoutId));
-}
 
 function isRetriableNetworkError(error: unknown): boolean {
   if (error instanceof Error) {
@@ -44,10 +31,10 @@ async function fetchPlayerById(
 ): Promise<SteamPlayer | null> {
   try {
     const [directUserRes, vanityRes] = await Promise.all([
-      fetchWithTimeout(
+      fetchSteamApi(
         `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=${id}`,
       ),
-      fetchWithTimeout(
+      fetchSteamApi(
         `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${env.STEAM_API_KEY}&vanityurl=${id}`,
       ),
     ]);
@@ -69,7 +56,7 @@ async function fetchPlayerById(
       const resolvedId = vanityData?.response?.steamid as string | undefined;
 
       if (resolvedId) {
-        const resolvedUserRes = await fetchWithTimeout(
+        const resolvedUserRes = await fetchSteamApi(
           `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=${resolvedId}`,
         );
 
@@ -106,7 +93,7 @@ async function fetchPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
     const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
       env.STEAM_API_KEY
     }&steamids=${unique.join(',')}`;
-    const res = await fetchWithTimeout(url);
+    const res = await fetchSteamApi(url);
     if (!res.ok) return [];
     const data = await safeJsonParse<{
       response: { players?: SteamPlayer[] };

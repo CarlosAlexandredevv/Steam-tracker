@@ -4,15 +4,13 @@ import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
+import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
 import { withActionLog, logActionFailure } from '@/lib/action-logger';
-
-const CACHE_TTL_SECONDS = 300; // 5 min — reduz chamadas repetidas ao abrir a mesma página
 
 async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
   try {
-    const response = await fetch(
+    const response = await fetchSteamApi(
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&appids=${appId}&include_played_free_games=1`,
-      { cache: 'no-store' },
     );
     const data = await safeJsonParse<{
       response?: { games?: SteamOwnedGame[] };
@@ -36,8 +34,8 @@ async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
 function getCachedGameBySteamIdAppId(steamId: string, appId: string) {
   return unstable_cache(
     () => fetchGameBySteamIdAppId(steamId, appId),
-    [`game-by-steam-app`, steamId, appId],
-    { revalidate: CACHE_TTL_SECONDS },
+    ['game-by-steam-app', steamId, appId],
+    { revalidate: CACHE_REVALIDATE.games },
   )();
 }
 
