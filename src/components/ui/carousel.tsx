@@ -120,7 +120,10 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn('relative flex items-center gap-3 max-w-full overflow-hidden', className)}
+        className={cn(
+          'relative max-w-full overflow-hidden flex items-center gap-2',
+          className,
+        )}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
@@ -138,7 +141,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden order-2 flex-1 max-w-full"
+      className="overflow-hidden flex-1 max-w-full order-2"
       data-slot="carousel-content"
     >
       <div
@@ -185,7 +188,7 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        'size-8 rounded-full transition-colors duration-200',
+        'size-8 rounded-full transition-colors duration-200 shrink-0',
         canScrollPrev ? 'cursor-pointer' : 'cursor-default',
         orientation === 'horizontal'
           ? 'order-1'
@@ -216,7 +219,7 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        'size-8 rounded-full transition-colors duration-200',
+        'size-8 rounded-full transition-colors duration-200 shrink-0',
         canScrollNext ? 'cursor-pointer' : 'cursor-default',
         orientation === 'horizontal'
           ? 'order-3'

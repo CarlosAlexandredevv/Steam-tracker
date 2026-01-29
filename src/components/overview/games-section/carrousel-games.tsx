@@ -16,25 +16,27 @@ interface CarrouselGamesProps {
 
 export function CarrouselGames({ games, player }: CarrouselGamesProps) {
   return (
-    <Carousel className="w-full">
-      <CarouselContent>
-        {games.map((game) => (
-          <CarouselItem
-            key={game.appid}
-            className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.28%] pl-4"
-          >
-            {player?.steamid && (
-              <GameCard
-                game={game}
-                steamId={player.steamid}
-                showFallback={false}
-              />
-            )}
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+    <div className="px-4 md:px-6 w-full">
+      <Carousel className="w-full">
+        <CarouselContent>
+          {games.map((game) => (
+            <CarouselItem
+              key={game.appid}
+              className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.28%] pl-4"
+            >
+              {player?.steamid && (
+                <GameCard
+                  game={game}
+                  steamId={player.steamid}
+                  showFallback={false}
+                />
+              )}
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
   );
 }

@@ -33,7 +33,7 @@ export function GamesSection({ games, player }: GamesSectionProps) {
         </div>
       </div>
 
-      <div className="w-full mt-4 -mx-4 md:-mx-6 px-4 md:px-6">
+      <div className="w-full mt-4">
         {hasGames ? (
           <div className="max-w-7xl mx-auto">
             <CarrouselGames games={games} player={player ?? null} />

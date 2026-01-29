@@ -128,9 +128,7 @@ export function SearchPlayer() {
       )}
 
       {/* Input para desktop - sempre visível no desktop */}
-      <div className="hidden sm:block w-full max-w-[300px]">
-        {searchInput}
-      </div>
+      <div className="hidden sm:block w-full max-w-[300px]">{searchInput}</div>
     </>
   );
 }
