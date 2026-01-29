@@ -28,6 +28,7 @@ export default function GameDetailsView({
   const totalFriendsCount = playedFriends?.count ?? 0;
   const displayFriends = playedFriends?.friends?.slice(0, 5) ?? [];
   const remainingCount = totalFriendsCount - displayFriends.length;
+  const gameId = game.steam_appid;
 
   return (
     <div className="h-auto text-slate-200">
@@ -134,7 +135,9 @@ export default function GameDetailsView({
                           <Tooltip key={friend.steamid}>
                             <TooltipTrigger asChild>
                               <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-transform hover:scale-110 hover:z-20 hover:border-primary/50">
-                                <Link href={`/${friend.steamid}/overview`}>
+                                <Link
+                                  href={`/${friend.steamid}/library/${gameId}`}
+                                >
                                   <Avatar className="h-full w-full">
                                     <AvatarImage
                                       src={friend.avatarfull}
@@ -161,7 +164,7 @@ export default function GameDetailsView({
 
                       {remainingCount > 0 && (
                         <Link
-                          href={`/${steamId}/friends`}
+                          href={`/${steamId}/friends/${gameId}`}
                           className="relative z-0 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border-2 border-background bg-zinc-800 text-xs font-bold text-zinc-300 transition-transform hover:scale-110 hover:z-20 hover:bg-zinc-700 hover:text-white"
                         >
                           +{remainingCount}
