@@ -1,14 +1,18 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
-import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
+import { safeJsonParse } from '@/lib/utils';
+import { fetchSteamApi, CACHE_REVALIDATE } from '@/lib/steam-api';
 import { withActionLog, logActionFailure } from '@/lib/action-logger';
+
+const getHeroUrl = (gameId: string) =>
+  `https://cdn.akamai.steamstatic.com/steam/apps/${gameId}/library_hero.jpg`;
 
 async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   try {
-    const response = await fetch(
+    const response = await fetchSteamApi(
       `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese`,
-      { cache: 'no-store' },
     );
 
     const jsonData = await safeJsonParse<Record<string, SteamGameDataResponse>>(
@@ -25,12 +29,9 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
       return null;
     }
 
-    const heroUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${gameId}/library_hero.jpg`;
-    const verifiedHeroUrl = await getImageUrlWithFallback(heroUrl);
-
     const gameWithHero = {
       ...gameData.data,
-      imgHero: verifiedHeroUrl,
+      imgHero: getHeroUrl(gameId),
     };
 
     const removeImagesContainsHtml = {
@@ -45,8 +46,16 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   }
 }
 
+function getCachedGameById(gameId: string) {
+  return unstable_cache(() => fetchGameById(gameId), ['getGameById', gameId], {
+    revalidate: CACHE_REVALIDATE.gameDetails,
+  })();
+}
+
 export async function getGameById(
   gameId: string,
 ): Promise<SteamGameData | null> {
-  return withActionLog('getGameById', { gameId }, () => fetchGameById(gameId));
+  return withActionLog('getGameById', { gameId }, () =>
+    getCachedGameById(gameId),
+  );
 }

@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Gamepad2 } from 'lucide-react';
 import { SteamOwnedGame } from '@/types/steam';
+import { ImageWithFallback } from './image-with-fallback';
 
 interface GameCardProps {
   game: SteamOwnedGame;
@@ -26,8 +26,8 @@ export function GameCard({
       <div className="relative overflow-hidden rounded-xl aspect-[2/3] w-full bg-gray-900 shadow-sm border border-white/5 transition-all duration-300 group-hover:ring-2 group-hover:ring-primary/50 group-hover:shadow-lg group-hover:-translate-y-1">
         {hasImage ? (
           <>
-            <Image
-              src={game.vertical! ?? ''}
+            <ImageWithFallback
+              src={game.vertical!}
               alt={game.name}
               fill
               loading="lazy"
