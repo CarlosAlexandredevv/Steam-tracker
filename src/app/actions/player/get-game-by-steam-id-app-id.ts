@@ -1,9 +1,12 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
 import { withActionLog, logActionFailure } from '@/lib/action-logger';
+
+const CACHE_TTL_SECONDS = 300; // 5 min — reduz chamadas repetidas ao abrir a mesma página
 
 async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
   try {
@@ -30,8 +33,16 @@ async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
   }
 }
 
+function getCachedGameBySteamIdAppId(steamId: string, appId: string) {
+  return unstable_cache(
+    () => fetchGameBySteamIdAppId(steamId, appId),
+    [`game-by-steam-app`, steamId, appId],
+    { revalidate: CACHE_TTL_SECONDS },
+  )();
+}
+
 export async function getGameBySteamIdAppId(steamId: string, appId: string) {
   return withActionLog('getGameBySteamIdAppId', { steamId, appId }, () =>
-    fetchGameBySteamIdAppId(steamId, appId),
+    getCachedGameBySteamIdAppId(steamId, appId),
   );
 }
