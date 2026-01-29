@@ -27,7 +27,7 @@ export function GameCard({
         {hasImage ? (
           <>
             <Image
-              src={game.vertical!}
+              src={game.vertical! ?? ''}
               alt={game.name}
               fill
               loading="lazy"

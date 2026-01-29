@@ -22,7 +22,7 @@ export function CarrouselGames({ games, player }: CarrouselGamesProps) {
           {games.map((game) => (
             <CarouselItem
               key={game.appid}
-              className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.28%] pl-4"
+              className="m-2 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-[14.28%] pl-4"
             >
               {player?.steamid && (
                 <GameCard

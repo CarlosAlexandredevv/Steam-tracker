@@ -2,6 +2,7 @@
 
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
+import { getImageUrlWithFallback } from '@/lib/utils';
 
 export interface SteamOwnedGamesApiResponse {
   response: {
@@ -18,17 +19,40 @@ export async function getAllGames(
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&include_played_free_games=1`,
     );
     const data: SteamOwnedGamesApiResponse = await response?.json();
-    const gamesWithImages: SteamOwnedGame[] = data?.response?.games?.map(
-      (game) => ({
-        ...game,
-        hero: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_hero.jpg`,
-        banner: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-        horizontal: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`,
-        vertical: `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_600x900.jpg`,
-      }),
+
+    const gamesWithVerifiedImages = await Promise.all(
+      data?.response?.games?.map(async (game) => {
+        const heroUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_hero.jpg`;
+        const bannerUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`;
+        const horizontalUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`;
+        const verticalUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_600x900.jpg`;
+
+        const [hero, banner, horizontal, vertical] = await Promise.all([
+          getImageUrlWithFallback(heroUrl),
+          getImageUrlWithFallback(bannerUrl),
+          getImageUrlWithFallback(horizontalUrl),
+          getImageUrlWithFallback(verticalUrl),
+        ]);
+
+        return {
+          ...game,
+          hero,
+          banner,
+          horizontal,
+          vertical,
+        };
+      }) ?? [],
     );
 
-    return gamesWithImages;
+    const removeImagesContainsHtml = gamesWithVerifiedImages.map((game) => ({
+      ...game,
+      hero: game.hero?.replace(/<[^>]*>?/g, ''),
+      banner: game.banner?.replace(/<[^>]*>?/g, ''),
+      horizontal: game.horizontal?.replace(/<[^>]*>?/g, ''),
+      vertical: game.vertical?.replace(/<[^>]*>?/g, ''),
+    }));
+
+    return removeImagesContainsHtml;
   } catch (error: unknown) {
     console.error(error);
     return null;
