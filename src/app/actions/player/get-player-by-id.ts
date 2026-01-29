@@ -19,6 +19,24 @@ function fetchWithTimeout(
   }).finally(() => clearTimeout(timeoutId));
 }
 
+function isRetriableNetworkError(error: unknown): boolean {
+  if (error instanceof Error) {
+    if (error.name === 'AbortError' || error.name === 'TypeError') {
+      return true;
+    }
+    const cause = (error as { cause?: { code?: string } }).cause;
+    const code = (error as { code?: string }).code ?? cause?.code;
+    return (
+      code === 'ECONNRESET' ||
+      code === 'ETIMEDOUT' ||
+      code === 'ECONNREFUSED' ||
+      code === 'ENOTFOUND' ||
+      code === 'UND_ERR_CONNECT_TIMEOUT'
+    );
+  }
+  return false;
+}
+
 async function fetchPlayerById(
   id: string,
   retry = true,
@@ -68,14 +86,12 @@ async function fetchPlayerById(
 
     return null;
   } catch (error: unknown) {
-    const isTimeout =
-      error instanceof Error &&
-      (error.name === 'AbortError' ||
-        (error as { code?: string }).code === 'UND_ERR_CONNECT_TIMEOUT');
-    if (isTimeout && retry) {
+    if (retry && isRetriableNetworkError(error)) {
       return fetchPlayerById(id, false);
     }
-    console.error('[getPlayerById]', id, error);
+    if (!isRetriableNetworkError(error)) {
+      console.error('[getPlayerById]', id, error);
+    }
     return null;
   }
 }

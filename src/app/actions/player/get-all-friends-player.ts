@@ -17,8 +17,12 @@ async function fetchAllFriendsPlayer(steamId: string) {
     const friends = data?.friendslist?.friends ?? [];
 
     const playersData = friends.map(async (friend) => {
-      const player = await getPlayerById(friend.steamid);
-      return player;
+      try {
+        const player = await getPlayerById(friend.steamid);
+        return player;
+      } catch {
+        return null;
+      }
     });
 
     const players: (SteamPlayer | null)[] = await Promise.all(playersData);

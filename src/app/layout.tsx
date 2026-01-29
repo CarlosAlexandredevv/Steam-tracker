@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
   },
   icons: {
-    icon: '/logo.png',
+    icon: '/logo2.png',
   },
 };
 

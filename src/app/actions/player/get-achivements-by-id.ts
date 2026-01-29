@@ -28,8 +28,13 @@ async function fetchAchivementsById(
     );
 
     const data2 = await safeJsonParse<SteamGetSchemaForGameResponse>(response2);
-    const data3 = await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(response3);
-    const data = await safeJsonParse<SteamGetPlayerAchievementsResponse>(response);
+    const data3 =
+      await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(
+        response3,
+      );
+    const data = await safeJsonParse<SteamGetPlayerAchievementsResponse>(
+      response,
+    );
 
     if (!data || !data2) {
       return null;
@@ -38,7 +43,7 @@ async function fetchAchivementsById(
       data2.game.availableGameStats?.achievements ?? [];
 
     const percentByApiName = new Map(
-      (data3.achievementpercentages?.achievements ?? []).map((a) => [
+      (data3?.achievementpercentages?.achievements ?? []).map((a) => [
         a.name,
         a.percent,
       ]),

@@ -9,12 +9,14 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
       `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese`,
     );
 
-    const jsonData = await safeJsonParse<Record<string, SteamGameDataResponse>>(response);
-    
+    const jsonData = await safeJsonParse<Record<string, SteamGameDataResponse>>(
+      response,
+    );
+
     if (!jsonData) {
       return null;
     }
-    
+
     const gameData = jsonData[gameId];
 
     if (!gameData?.success || !gameData?.data) {

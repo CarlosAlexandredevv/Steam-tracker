@@ -159,7 +159,7 @@ export default async function GamePage({
               </h2>
               <div className="flex-1">
                 <StatisticUser
-                  game={gameBySteamIdAppId}
+                  game={gameBySteamIdAppId ?? null}
                   achievements={PlayerAchievements ?? []}
                 />
               </div>

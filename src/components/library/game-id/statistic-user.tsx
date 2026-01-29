@@ -4,11 +4,15 @@ import { Progress } from '@/components/ui/progress';
 import { Clock, Calendar, Trophy, Activity } from 'lucide-react';
 
 interface StatisticUserProps {
-  game: SteamOwnedGame;
+  game: SteamOwnedGame | null;
   achievements: SteamPlayerAchievement[];
 }
 
 export function StatisticUser({ game, achievements }: StatisticUserProps) {
+  if (!game) {
+    return null;
+  }
+
   const hoursTotal = Math.floor(game?.playtime_forever / 60);
   const minutesTotal = game?.playtime_forever % 60;
   const hoursTwoWeeks = game?.playtime_2weeks
