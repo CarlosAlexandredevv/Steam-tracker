@@ -171,11 +171,11 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
 
             <div className="flex items-center md:pl-2">
               <div className="flex items-center -space-x-3 hover:space-x-1 transition-all duration-300 ease-out py-1">
-                <TooltipProvider delayDuration={100}>
+                <TooltipProvider delayDuration={400}>
                   {displayFriends.map((friend, index) => (
                     <Tooltip key={index}>
                       <TooltipTrigger asChild>
-                        <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-transform hover:scale-110 hover:z-20 hover:border-primary/50">
+                        <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-all duration-300 ease-out hover:scale-110 hover:z-20 hover:border-primary/50">
                           <Link href={`/${friend?.steamid}/overview`}>
                             <Avatar className="h-full w-full">
                               <AvatarImage
