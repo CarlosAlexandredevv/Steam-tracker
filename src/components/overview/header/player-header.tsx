@@ -63,8 +63,8 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
     : 0;
 
   return (
-    <div className="relative z-10 flex items-end px-4 md:px-6 py-6 w-full max-w-7xl mx-auto">
-      <div className="flex w-full flex-col items-start gap-6 md:flex-row md:items-end">
+    <div className="relative z-10 flex items-end px-4 md:px-6 py-6 md:py-8 w-full max-w-7xl mx-auto">
+      <div className="flex w-full flex-col items-start gap-5 md:gap-6 md:flex-row md:items-end">
         <div className="relative shrink-0">
           <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-white/10 bg-black shadow-2xl md:h-36 md:w-36">
             {player?.avatarfull && (

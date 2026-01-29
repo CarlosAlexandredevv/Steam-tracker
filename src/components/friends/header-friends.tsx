@@ -46,8 +46,8 @@ export function HeaderFriends({ friends }: HeaderFriendsProps) {
   const isFiltering = (search && search.trim()) || (gameId && gameId.trim());
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
-      <div className="space-y-1">
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 border-b border-white/10 pb-5 md:pb-8">
+      <div className="space-y-1.5">
         <h1 className="text-3xl font-bold flex items-center gap-3">
           <Users className="w-8 h-8 text-primary" />
           Amigos Steam
@@ -80,7 +80,7 @@ export function HeaderFriends({ friends }: HeaderFriendsProps) {
         </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-center gap-2 md:gap-3">
         <InputGroup className="w-full sm:w-64">
           <InputGroupInput
             placeholder="Nome do amigo..."

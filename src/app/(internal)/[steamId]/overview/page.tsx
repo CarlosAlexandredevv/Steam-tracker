@@ -35,7 +35,7 @@ export default async function Overview({
   );
 
   return (
-    <main className="flex w-full flex-col bg-background text-foreground gap-4 overflow-x-hidden max-w-full">
+    <main className="flex w-full flex-col bg-background text-foreground gap-6 md:gap-8 overflow-x-hidden max-w-full">
       <OverviewHeader player={player} games={games ?? []} />
       <GamesSection
         games={gamesFiltered ?? []}

@@ -41,12 +41,12 @@ export default async function Library({ params, searchParams }: LibraryProps) {
   }
 
   return (
-    <main className="flex w-full flex-col bg-background text-foreground min-h-screen gap-8">
-      <div className="px-4 md:px-6 w-full max-w-7xl mx-auto space-y-8 pt-4 md:pt-8">
+    <main className="flex w-full flex-col bg-background text-foreground min-h-screen">
+      <div className="px-4 md:px-6 w-full max-w-7xl mx-auto py-6 md:py-10 space-y-6 md:space-y-10">
         <HeaderLibrary games={gamesFiltered ?? []} />
 
         {gamesFiltered && gamesFiltered.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5">
             {gamesFiltered.map((game) => (
               <GameCard
                 key={game.appid}
@@ -57,7 +57,7 @@ export default async function Library({ params, searchParams }: LibraryProps) {
             ))}
           </div>
         ) : (
-          <div className="flex min-h-[calc(100vh-4rem-200px)] items-center justify-center">
+          <div className="flex min-h-[calc(100vh-4rem-200px)] items-center justify-center py-12 md:py-16">
             <NotFoundGames />
           </div>
         )}

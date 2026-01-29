@@ -30,8 +30,8 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
   }
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
-      <div className="space-y-1">
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 border-b border-white/10 pb-5 md:pb-8">
+      <div className="space-y-1.5">
         <h1 className="text-3xl font-bold flex items-center gap-3">
           <LayoutGrid className="w-8 h-8 text-primary" />
           Biblioteca de Jogos
@@ -53,7 +53,7 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
         </p>
       </div>
 
-      <div className="flex items-center gap-2 min-w-[300px]">
+      <div className="flex items-center gap-2 md:gap-3 min-w-0 md:min-w-[300px]">
         <InputGroup className="flex-1">
           <InputGroupInput
             placeholder="Buscar jogo..."

@@ -20,9 +20,9 @@ export function GamesSection({
   const isFiltering = searchQuery && searchQuery.trim();
 
   return (
-    <section className="w-full overflow-x-hidden">
+    <section className="w-full overflow-x-hidden py-6 md:py-8">
       <div className="px-4 md:px-6 w-full max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 md:gap-6 border-b border-white/10 pb-5 md:pb-6">
           <div className="space-y-1 min-w-0">
             <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
               <Gamepad2 className="w-8 h-8 text-primary shrink-0" /> Biblioteca
@@ -52,14 +52,14 @@ export function GamesSection({
         </div>
       </div>
 
-      <div className="w-full mt-4">
+      <div className="w-full mt-5 md:mt-6">
         {hasGames ? (
           <div className="max-w-7xl mx-auto">
             <CarrouselGames games={games} player={player ?? null} />
           </div>
         ) : (
           <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-center py-10">
+            <div className="flex items-center justify-center py-12 md:py-16">
               <NotFoundGames />
             </div>
           </div>
