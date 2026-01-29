@@ -43,8 +43,8 @@ export function StatisticUser({ game, achievements }: StatisticUserProps) {
       : 0;
 
   return (
-    <Card>
-      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+    <Card className="h-full">
+      <CardContent className="h-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
         <div className="flex flex-col gap-6">
           <div className="flex items-start gap-4">
             <Clock className="text-primary mt-1 shrink-0" size={20} />

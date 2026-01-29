@@ -84,34 +84,38 @@ export default async function GamePage({ params }: GamePageProps) {
           Requisitos do Sistema
         </h2>
         <SystemRequirements game={game} />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
               <ChartColumnIncreasing className="text-primary w-5 h-5 " />
               Estatísticas do Jogador
             </h2>
-            <StatisticUser
-              game={gameBySteamIdAppId}
-              achievements={achievements ?? []}
-            />
+            <div className="flex-1">
+              <StatisticUser
+                game={gameBySteamIdAppId}
+                achievements={achievements ?? []}
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
               <Globe className="text-primary w-5 h-5 " />
               Estatísticas Globais
             </h2>
-            <StatisticGlobal
-              globalAchievements={
-                globalAchievements?.achivementsGlobalData ?? {
-                  achievementpercentages: { achievements: [] },
+            <div className="flex-1">
+              <StatisticGlobal
+                globalAchievements={
+                  globalAchievements?.achivementsGlobalData ?? {
+                    achievementpercentages: { achievements: [] },
+                  }
                 }
-              }
-              playerCount={
-                globalAchievements?.playersNowData ?? {
-                  response: { player_count: 0, result: 0 },
+                playerCount={
+                  globalAchievements?.playersNowData ?? {
+                    response: { player_count: 0, result: 0 },
+                  }
                 }
-              }
-            />
+              />
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-6">

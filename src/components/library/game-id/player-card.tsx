@@ -13,7 +13,6 @@ export function PlayerCard({ game }: { game: SteamGameData }) {
         currency: 'BRL',
       })
     : 'N/A';
-  console.log(game);
 
   return (
     <Card className="border-none rounded-[2.5rem] p-6 shadow-2xl w-full h-full bg-card/50 backdrop-blur-sm">
