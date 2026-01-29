@@ -36,13 +36,18 @@ interface GamePageProps {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ steamId: string; gameId: string }>;
+  searchParams: Promise<{ playerId?: string }>;
 }): Promise<Metadata> {
   const { steamId, gameId } = await params;
-  const [game, player] = await Promise.all([
+  const { playerId } = await searchParams;
+
+  const [game, player, secondPlayer] = await Promise.all([
     getGameById(gameId),
     getPlayerById(steamId),
+    playerId ? getPlayerById(playerId) : Promise.resolve(null),
   ]);
 
   if (!game)
@@ -53,17 +58,25 @@ export async function generateMetadata({
 
   const gameName = game.name;
   const playerName = player?.personaname ?? 'Perfil';
+  const secondPlayerName = secondPlayer?.personaname ?? 'Perfil';
+  const titleText = playerId
+    ? `${gameName} - ${playerName} Vs ${secondPlayerName}`
+    : `${gameName} - ${playerName}`;
   const description =
     game.short_description?.replace(/<[^>]*>/g, '').slice(0, 160) ??
     `Detalhes do jogo ${gameName} na biblioteca Steam de ${playerName}. Conquistas, estatísticas e requisitos.`;
 
   return {
-    title: buildTitle(`${gameName} - ${playerName}`),
+    title: buildTitle(titleText),
     description,
     openGraph: {
-      title: `${gameName} | Steam Track`,
+      title: playerId
+        ? `${titleText} | Steam Track`
+        : `${gameName} | Steam Track`,
       description: description.slice(0, 200),
-      url: `${SITE_URL}/${steamId}/library/${gameId}`,
+      url: `${SITE_URL}/${steamId}/library/${gameId}${
+        playerId ? `?playerId=${playerId}` : ''
+      }`,
       type: 'website',
       images: game.header_image
         ? [{ url: game.header_image, width: 460, height: 215, alt: gameName }]
@@ -71,7 +84,9 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${gameName} | Steam Track`,
+      title: playerId
+        ? `${titleText} | Steam Track`
+        : `${gameName} | Steam Track`,
       description: description.slice(0, 200),
       images: game.header_image ? [game.header_image] : undefined,
     },
@@ -115,6 +130,8 @@ export default async function GamePage({
         steamId={steamId}
         playedFriends={playedFriends}
         playerId={playerId}
+        playerName={player?.personaname}
+        secondPlayerName={secondPlayer?.personaname}
       />
 
       {showAllContent && (
