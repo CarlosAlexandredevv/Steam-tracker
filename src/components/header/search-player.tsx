@@ -1,22 +1,33 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import {
   InputGroup,
   InputGroupInput,
   InputGroupAddon,
 } from '../ui/input-group';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { SteamPlayer } from '@/types/steam';
 import { Popover, PopoverAnchor } from '@/components/ui/popover';
 import { PlayerPopoverContent } from './player-popover-content';
+import { Button } from '../ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function SearchPlayer() {
   const [player, setPlayer] = useState<SteamPlayer | null>(null);
   const [open, setOpen] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isMobile = useIsMobile();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (mobileSearchOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [mobileSearchOpen]);
 
   function handleSearchPlayer(value: string) {
     if (timeoutRef.current) {
@@ -45,22 +56,81 @@ export function SearchPlayer() {
     }, 500);
   }
 
+  const searchInput = (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverAnchor asChild>
+        <InputGroup className="w-full lg:max-w-96">
+          <InputGroupInput
+            placeholder="Steam ID"
+            onChange={(e) => handleSearchPlayer(e.target.value)}
+          />
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+        </InputGroup>
+      </PopoverAnchor>
+      <PlayerPopoverContent player={player} notFound={notFound} />
+    </Popover>
+  );
+
   return (
-    <div className="flex flex-col gap-2">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverAnchor asChild>
-          <InputGroup className="w-full lg:max-w-96">
-            <InputGroupInput
-              placeholder="Steam ID"
-              onChange={(e) => handleSearchPlayer(e.target.value)}
-            />
-            <InputGroupAddon>
-              <Search />
-            </InputGroupAddon>
-          </InputGroup>
-        </PopoverAnchor>
-        <PlayerPopoverContent player={player} notFound={notFound} />
-      </Popover>
-    </div>
+    <>
+      {/* Botão de busca para mobile - sempre visível no mobile */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+        className="sm:hidden shrink-0"
+        aria-label="Buscar jogador"
+      >
+        <Search className="size-5" />
+      </Button>
+
+      {/* Input expandido no mobile */}
+      {mobileSearchOpen && (
+        <div className="fixed top-16 left-0 right-0 z-50 bg-background/95 backdrop-blur border-b border-white/10 p-4 sm:hidden">
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverAnchor asChild>
+                  <InputGroup className="w-full">
+                    <InputGroupInput
+                      ref={inputRef}
+                      placeholder="Steam ID"
+                      onChange={(e) => handleSearchPlayer(e.target.value)}
+                    />
+                    <InputGroupAddon>
+                      <Search />
+                    </InputGroupAddon>
+                  </InputGroup>
+                </PopoverAnchor>
+                <PlayerPopoverContent player={player} notFound={notFound} />
+              </Popover>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                setMobileSearchOpen(false);
+                setOpen(false);
+                setPlayer(null);
+                setNotFound(false);
+                if (inputRef.current) {
+                  inputRef.current.value = '';
+                }
+              }}
+              aria-label="Fechar busca"
+            >
+              <X className="size-5" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Input para desktop - sempre visível no desktop */}
+      <div className="hidden sm:block w-full max-w-[300px]">
+        {searchInput}
+      </div>
+    </>
   );
 }
