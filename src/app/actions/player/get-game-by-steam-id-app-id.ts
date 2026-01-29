@@ -3,6 +3,7 @@
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
   try {
@@ -10,8 +11,10 @@ async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&appids=${appId}&include_played_free_games=1`,
       { cache: 'no-store' },
     );
-    const data = await safeJsonParse<{ response?: { games?: SteamOwnedGame[] } }>(response);
-    
+    const data = await safeJsonParse<{
+      response?: { games?: SteamOwnedGame[] };
+    }>(response);
+
     if (!data) {
       return null;
     }
@@ -22,11 +25,13 @@ async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
 
     return gameFiltered;
   } catch (error) {
-    console.error(error);
+    logActionFailure('getGameBySteamIdAppId', { steamId, appId }, error);
     return null;
   }
 }
 
 export async function getGameBySteamIdAppId(steamId: string, appId: string) {
-  return fetchGameBySteamIdAppId(steamId, appId);
+  return withActionLog('getGameBySteamIdAppId', { steamId, appId }, () =>
+    fetchGameBySteamIdAppId(steamId, appId),
+  );
 }

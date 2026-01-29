@@ -1,8 +1,10 @@
 'use server';
 
+import { cache } from 'react';
 import { env } from '@/env';
 import { SteamPlayer } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 const FETCH_TIMEOUT_MS = 15_000;
 
@@ -89,12 +91,49 @@ async function fetchPlayerById(
       return fetchPlayerById(id, false);
     }
     if (!isRetriableNetworkError(error)) {
-      console.error('[getPlayerById]', id, error);
+      logActionFailure('getPlayerById', { id }, error);
     }
     return null;
   }
 }
 
+const STEAM_IDS_BATCH_SIZE = 100;
+
+async function fetchPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
+  if (ids.length === 0) return [];
+  const unique = [...new Set(ids)].slice(0, STEAM_IDS_BATCH_SIZE);
+  try {
+    const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
+      env.STEAM_API_KEY
+    }&steamids=${unique.join(',')}`;
+    const res = await fetchWithTimeout(url);
+    if (!res.ok) return [];
+    const data = await safeJsonParse<{
+      response: { players?: SteamPlayer[] };
+    }>(res);
+    return (data?.response?.players ?? []) as SteamPlayer[];
+  } catch (error) {
+    logActionFailure('getPlayersByIds', { count: unique.length }, error);
+    return [];
+  }
+}
+
+/** Deduplica por request: layout, header, page e metadata compartilham o mesmo fetch. */
+const getPlayerByIdCached = cache(
+  (id: string): Promise<SteamPlayer | null> => fetchPlayerById(id),
+);
+
 export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
-  return fetchPlayerById(id);
+  return withActionLog('getPlayerById', { id }, () => getPlayerByIdCached(id));
+}
+
+/**
+ * Busca vários jogadores em uma única chamada à API (até 100).
+ * Use em getAllFriendsPlayer para evitar N chamadas getPlayerById.
+ */
+export async function getPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
+  if (ids.length === 0) return [];
+  return withActionLog('getPlayersByIds', { count: ids.length }, () =>
+    fetchPlayersByIds(ids),
+  );
 }

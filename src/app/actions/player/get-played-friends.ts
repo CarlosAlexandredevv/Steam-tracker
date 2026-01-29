@@ -11,6 +11,7 @@ import {
 } from '@/types/steam';
 import { getGameBySteamIdAppId } from './get-game-by-steam-id-app-id';
 import { safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function chunkedMap<T, R>(
   items: readonly T[],
@@ -36,8 +37,10 @@ async function fetchPlayedFriends(
       { cache: 'no-store' },
     );
 
-    const friendsData = await safeJsonParse<SteamGetFriendsListResponse>(friends);
-    
+    const friendsData = await safeJsonParse<SteamGetFriendsListResponse>(
+      friends,
+    );
+
     if (!friendsData) {
       return null;
     }
@@ -75,8 +78,10 @@ async function fetchPlayedFriends(
       { cache: 'no-store' },
     );
 
-    const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(summariesRes);
-    
+    const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(
+      summariesRes,
+    );
+
     if (!summariesData) {
       return null;
     }
@@ -101,7 +106,7 @@ async function fetchPlayedFriends(
 
     return { count: friendsPlayed.length, friends: friendsPlayed };
   } catch (error: unknown) {
-    console.error(error);
+    logActionFailure('getPlayedFriends', { steamId, appId }, error);
     return null;
   }
 }
@@ -110,5 +115,7 @@ export async function getPlayedFriends(
   steamId: string,
   appId: string,
 ): Promise<GetPlayedFriendsResponse | null> {
-  return fetchPlayedFriends(steamId, appId);
+  return withActionLog('getPlayedFriends', { steamId, appId }, () =>
+    fetchPlayedFriends(steamId, appId),
+  );
 }

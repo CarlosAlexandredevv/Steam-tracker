@@ -3,6 +3,7 @@
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 export interface SteamOwnedGamesApiResponse {
   response: {
@@ -59,7 +60,7 @@ async function fetchAllGames(
 
     return removeImagesContainsHtml;
   } catch (error: unknown) {
-    console.error(error);
+    logActionFailure('getAllGames', { steamId }, error);
     return null;
   }
 }
@@ -67,5 +68,7 @@ async function fetchAllGames(
 export async function getAllGames(
   steamId: string,
 ): Promise<SteamOwnedGame[] | null> {
-  return fetchAllGames(steamId);
+  return withActionLog('getAllGames', { steamId }, () =>
+    fetchAllGames(steamId),
+  );
 }
