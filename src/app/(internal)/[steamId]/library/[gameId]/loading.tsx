@@ -14,7 +14,7 @@ export default function GamePageLoading() {
             </div>
             <Skeleton className="h-14 w-full max-w-2xl bg-white/10 rounded-lg md:h-20" />
             <div className="flex flex-wrap gap-2 mt-2">
-              {Array.from({ length: 4 }).map((i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <Skeleton key={i} className="h-7 w-20 bg-white/10 rounded-md" />
               ))}
             </div>
@@ -57,8 +57,11 @@ export default function GamePageLoading() {
         <div className="space-y-4">
           <Skeleton className="h-8 w-56 bg-white/10 rounded" />
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {Array.from({ length: 8 }).map((i) => (
-              <Skeleton key={i} className="h-24 w-full bg-white/10 rounded-lg" />
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton
+                key={i}
+                className="h-24 w-full bg-white/10 rounded-lg"
+              />
             ))}
           </div>
         </div>

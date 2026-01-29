@@ -12,9 +12,9 @@ export default function OverviewLoading() {
             <div className="space-y-3 flex-1">
               <Skeleton className="h-9 w-48 bg-white/10 rounded" />
               <div className="flex flex-wrap gap-2">
-                {Array.from({ length: 4 }).map((i) => (
+                {Array.from({ length: 4 }).map((_, i) => (
                   <Skeleton
-                    key={i as number}
+                    key={i}
                     className="h-8 w-24 bg-white/10 rounded-md"
                   />
                 ))}
@@ -31,9 +31,9 @@ export default function OverviewLoading() {
           <Skeleton className="h-10 w-64 bg-white/10 rounded-lg" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-          {Array.from({ length: 8 }).map((i) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton
-              key={i as number}
+              key={i}
               className="h-48 w-full bg-white/10 rounded-lg aspect-video"
             />
           ))}

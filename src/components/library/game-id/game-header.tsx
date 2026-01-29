@@ -53,13 +53,6 @@ export default function GameDetailsView({
               </span>
             </div>
 
-            {playerId && (
-              <p className="text-xl md:text-2xl font-bold text-white/90 tracking-tight mb-2">
-                <span className="text-primary">{playerName ?? 'Perfil'}</span>
-                <span className="mx-2 text-white/60">Vs</span>
-                <span className="text-primary">{secondPlayerName ?? 'Perfil'}</span>
-              </p>
-            )}
             <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none italic">
               <span className="mr-2">{game.name}</span>
 
