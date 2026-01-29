@@ -1,10 +1,8 @@
-'use client';
-
 import { SteamGameData } from '@/types/steam';
-import { Monitor, ShoppingCart, Trophy } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Monitor, Trophy } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
+import { PlayNowButton } from './play-now-button';
 
 export function PlayerCard({ game }: { game: SteamGameData }) {
   const price = game?.price_overview?.final
@@ -37,15 +35,10 @@ export function PlayerCard({ game }: { game: SteamGameData }) {
             </div>
           </div>
 
-          <Button
-            className="w-full bg-primary hover:bg-primary/90 text-black font-black py-6 rounded-2xl text-lg uppercase tracking-widest flex items-center justify-center gap-2 border-none cursor-pointer"
-            onClick={() =>
-              window.open(`steam://run/${game?.steam_appid}`, '_blank')
-            }
-          >
-            <ShoppingCart size={22} className="fill-current" />
-            Jogar Agora
-          </Button>
+          <PlayNowButton
+            appId={game?.steam_appid}
+            className="w-full bg-primary hover:bg-primary/90 text-black font-black py-6 rounded-2xl text-lg uppercase tracking-widest flex items-center justify-center gap-2 border-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          />
 
           <div className="space-y-3">
             <div className="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider">

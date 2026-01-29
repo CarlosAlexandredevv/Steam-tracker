@@ -5,8 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress'; // Assumindo que você tem o progresso do shadcn
-import { SteamPlayerAchievement } from '@/types/steam';
+import { Progress } from '@/components/ui/progress';
+import { SteamPlayer, SteamPlayerAchievement } from '@/types/steam';
 import Image from 'next/image';
 import {
   Tooltip,
@@ -16,12 +16,17 @@ import {
 } from '@/components/ui/tooltip';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { NotFoundAchievements } from '@/components/shared/not-found-achievements';
+import { VersusAchivements } from './versus-achivements';
 
 interface AchivementsListProps {
   achievements: SteamPlayerAchievement[];
+  friends: SteamPlayer[];
 }
 
-export function AchivementsList({ achievements }: AchivementsListProps) {
+export function AchivementsList({
+  achievements,
+  friends,
+}: AchivementsListProps) {
   const total = achievements.length;
   const completed = achievements.filter((a) => a.achieved === 1).length;
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -39,12 +44,15 @@ export function AchivementsList({ achievements }: AchivementsListProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <CardTitle className="text-2xl">Conquistas</CardTitle>
             <CardDescription>
               {completed} de {total} desbloqueadas ({percentage}%)
             </CardDescription>
+          </div>
+          <div className="w-full md:w-auto">
+            <VersusAchivements friends={friends} />
           </div>
         </div>
         <Progress value={percentage} className="h-2 mt-4" />

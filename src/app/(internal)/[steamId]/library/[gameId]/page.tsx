@@ -21,6 +21,7 @@ import { statisticsGlobalsByGameId } from '@/app/actions/player/statistics-globa
 import { StatisticGlobal } from '@/components/library/game-id/statistic-global';
 import { AchivementsList } from '@/components/library/game-id/achivements-list';
 import { getPlayedFriends } from '@/app/actions/player/get-played-friends';
+import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -35,6 +36,7 @@ export default async function GamePage({ params }: GamePageProps) {
   const globalAchievements = await statisticsGlobalsByGameId(gameId);
 
   const playedFriends = await getPlayedFriends(steamId, gameId);
+  const friends = await getAllFriendsPlayer(steamId);
 
   if (!game)
     return (
@@ -123,7 +125,10 @@ export default async function GamePage({ params }: GamePageProps) {
             <Trophy className="text-primary w-5 h-5 " />
             Conquistas do Jogador
           </h2>
-          <AchivementsList achievements={achievements ?? []} />
+          <AchivementsList
+            achievements={achievements ?? []}
+            friends={friends ?? []}
+          />
         </div>
       </div>
     </main>
