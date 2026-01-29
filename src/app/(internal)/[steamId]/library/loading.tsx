@@ -16,7 +16,7 @@ export default function LibraryLoading() {
         {/* Games grid skeleton */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {Array.from({ length: 12 }).map((i) => (
-            <div key={i} className="space-y-3">
+            <div key={i as number} className="space-y-3">
               <Skeleton className="h-40 w-full bg-white/10 rounded-lg aspect-video" />
               <Skeleton className="h-5 w-3/4 bg-white/10 rounded" />
               <Skeleton className="h-4 w-1/2 bg-white/10 rounded" />
