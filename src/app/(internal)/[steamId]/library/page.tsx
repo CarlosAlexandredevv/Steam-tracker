@@ -20,10 +20,8 @@ export default async function Library({ params, searchParams }: LibraryProps) {
 
   if (!player) {
     return (
-      <main className="flex items-center justify-center h-full">
-        <div className="px-4 md:px-6 w-full max-w-7xl mx-auto">
-          <NotFoundPlayer />
-        </div>
+      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-background px-4 md:px-6">
+        <NotFoundPlayer />
       </main>
     );
   }
@@ -34,29 +32,32 @@ export default async function Library({ params, searchParams }: LibraryProps) {
     game.name.toLowerCase().includes(q?.toLowerCase() ?? ''),
   );
 
+  if (!games) {
+    return (
+      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-background px-4 md:px-6">
+        <NotFoundGames />
+      </main>
+    );
+  }
+
   return (
     <main className="flex w-full flex-col bg-background text-foreground min-h-screen gap-8">
       <div className="px-4 md:px-6 w-full max-w-7xl mx-auto space-y-8 pt-4 md:pt-8">
-        {games ? (
-          <HeaderLibrary games={gamesFiltered ?? []} />
-        ) : (
-          <div className="flex h-full items-center justify-center py-10">
-            <NotFoundGames />
-          </div>
-        )}
+        <HeaderLibrary games={gamesFiltered ?? []} />
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {gamesFiltered?.map((game) => (
-            <GameCard
-              key={game.appid}
-              game={game}
-              steamId={player.steamid}
-              showFallback={true}
-            />
-          ))}
-        </div>
-        {gamesFiltered?.length === 0 && (
-          <div className="flex items-center justify-center py-10">
+        {gamesFiltered && gamesFiltered.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {gamesFiltered.map((game) => (
+              <GameCard
+                key={game.appid}
+                game={game}
+                steamId={player.steamid}
+                showFallback={true}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex min-h-[calc(100vh-4rem-200px)] items-center justify-center">
             <NotFoundGames />
           </div>
         )}
