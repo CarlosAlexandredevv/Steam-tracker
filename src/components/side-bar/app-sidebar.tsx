@@ -9,9 +9,8 @@ import {
   LayoutGrid,
   GalleryVerticalEnd,
   Gamepad,
-  Map,
-  PieChart,
   Settings2,
+  Users,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/side-bar/nav-main';
@@ -125,9 +124,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         icon: LayoutGrid,
       },
       {
-        name: 'Travel',
-        url: '#',
-        icon: Map,
+        name: 'Amigos',
+        url: `/${steamId}/friends`,
+        icon: Users,
       },
     ],
   };

@@ -29,7 +29,6 @@ interface GamePageProps {
 export default async function GamePage({ params }: GamePageProps) {
   const { steamId, gameId } = await params;
   const game = await getGameById(gameId);
-  console.log(game);
 
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
   const achievements = await getAchivementsById(steamId, gameId);
