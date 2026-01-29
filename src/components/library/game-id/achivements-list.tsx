@@ -17,15 +17,18 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { NotFoundAchievements } from '@/components/shared/not-found-achievements';
 import { VersusAchivements } from './versus-achivements';
+import { SteamGameData } from '@/types/steam';
 
 interface AchivementsListProps {
   achievements: SteamPlayerAchievement[];
   friends: SteamPlayer[];
+  game: SteamGameData;
 }
 
 export function AchivementsList({
   achievements,
   friends,
+  game,
 }: AchivementsListProps) {
   const total = achievements.length;
   const completed = achievements.filter((a) => a.achieved === 1).length;
@@ -52,7 +55,7 @@ export function AchivementsList({
             </CardDescription>
           </div>
           <div className="w-full md:w-auto">
-            <VersusAchivements friends={friends} />
+            <VersusAchivements friends={friends} game={game} />
           </div>
         </div>
         <Progress value={percentage} className="h-2 mt-4" />

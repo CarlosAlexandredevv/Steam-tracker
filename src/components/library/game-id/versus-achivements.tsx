@@ -10,16 +10,18 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Swords, Loader2 } from 'lucide-react';
-import { SteamPlayer } from '@/types/steam';
+import { SteamGameData, SteamPlayer } from '@/types/steam';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
+import Link from 'next/link';
 
 interface VersusAchivementsProps {
   friends: SteamPlayer[];
+  game: SteamGameData;
 }
 
-export function VersusAchivements({ friends }: VersusAchivementsProps) {
+export function VersusAchivements({ friends, game }: VersusAchivementsProps) {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [player, setPlayer] = useState<SteamPlayer | null>(null);
@@ -107,24 +109,29 @@ export function VersusAchivements({ friends }: VersusAchivementsProps) {
                         onSelect={() => handleSelectPlayer(friend.steamid)}
                         className="flex items-center gap-3 p-2 cursor-pointer"
                       >
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage
-                            src={friend.avatarfull}
-                            alt={friend.personaname}
-                          />
-                          <AvatarFallback>
-                            {friend.personaname.substring(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
+                        <Link
+                          href={`/${friend.steamid}/library/${game.steam_appid}?playerId=${friend.steamid}`}
+                          className="flex items-center gap-3  cursor-pointer"
+                        >
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage
+                              src={friend.avatarfull}
+                              alt={friend.personaname}
+                            />
+                            <AvatarFallback>
+                              {friend.personaname.substring(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
 
-                        <div className="flex flex-col">
-                          <span className="font-medium text-sm leading-none">
-                            {friend.personaname}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            ID: {friend.steamid}
-                          </span>
-                        </div>
+                          <div className="flex flex-col">
+                            <span className="font-medium text-sm leading-none">
+                              {friend.personaname}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              ID: {friend.steamid}
+                            </span>
+                          </div>
+                        </Link>
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -137,24 +144,29 @@ export function VersusAchivements({ friends }: VersusAchivementsProps) {
                       onSelect={() => handleSelectPlayer(player.steamid)}
                       className="flex items-center gap-3 p-2 cursor-pointer"
                     >
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage
-                          src={player?.avatarfull}
-                          alt={player?.personaname}
-                        />
-                        <AvatarFallback>
-                          {player?.personaname.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
+                      <Link
+                        href={`/${player?.steamid}/library/${game.steam_appid}?playerId=${player?.steamid}`}
+                        className="flex items-center gap-3  cursor-pointer"
+                      >
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage
+                            src={player?.avatarfull}
+                            alt={player?.personaname}
+                          />
+                          <AvatarFallback>
+                            {player?.personaname.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
 
-                      <div className="flex flex-col">
-                        <span className="font-medium text-sm leading-none">
-                          {player?.personaname}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          ID: {player?.steamid}
-                        </span>
-                      </div>
+                        <div className="flex flex-col">
+                          <span className="font-medium text-sm leading-none">
+                            {player?.personaname}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            ID: {player?.steamid}
+                          </span>
+                        </div>
+                      </Link>
                     </CommandItem>
                   </CommandGroup>
                 )}

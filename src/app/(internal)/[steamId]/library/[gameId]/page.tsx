@@ -25,18 +25,25 @@ import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
+  searchParams: Promise<{ playerId: string }>;
 }
 
-export default async function GamePage({ params }: GamePageProps) {
+export default async function GamePage({
+  params,
+  searchParams,
+}: GamePageProps) {
   const { steamId, gameId } = await params;
-  const game = await getGameById(gameId);
+  const { playerId } = await searchParams;
 
+  const game = await getGameById(gameId);
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
   const achievements = await getAchivementsById(steamId, gameId);
   const globalAchievements = await statisticsGlobalsByGameId(gameId);
 
   const playedFriends = await getPlayedFriends(steamId, gameId);
   const friends = await getAllFriendsPlayer(steamId);
+
+  const showAllContent = !playerId;
 
   if (!game)
     return (
@@ -51,86 +58,90 @@ export default async function GamePage({ params }: GamePageProps) {
         game={game}
         steamId={steamId}
         playedFriends={playedFriends}
+        playerId={playerId}
       />
 
-      <div className="z-50 px-4 md:px-6 py-8 w-full max-w-7xl mx-auto space-y-8">
-        <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-          <Info className="text-primary w-5 h-5 " />
-          Sobre o Jogo
-        </h2>
-        <GameDescription game={game} />
-
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
-          <div className="lg:col-span-2 flex flex-col gap-8">
-            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <Images className="text-primary w-5 h-5 " />
-              Galeria de Imagens
-            </h2>
-            <div className="flex-1">
-              <GalleryCards game={game} />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-8">
-            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <Play className="text-primary w-5 h-5 " />
-              Jogar Agora
-            </h2>
-            <div className="flex-1">
-              <PlayerCard game={game} />
-            </div>
-          </div>
-        </div>
-        <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-          <Cpu className="text-primary w-5 h-5 " />
-          Requisitos do Sistema
-        </h2>
-        <SystemRequirements game={game} />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          <div className="flex flex-col gap-8">
-            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <ChartColumnIncreasing className="text-primary w-5 h-5 " />
-              Estatísticas do Jogador
-            </h2>
-            <div className="flex-1">
-              <StatisticUser
-                game={gameBySteamIdAppId}
-                achievements={achievements ?? []}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-8">
-            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-              <Globe className="text-primary w-5 h-5 " />
-              Estatísticas Globais
-            </h2>
-            <div className="flex-1">
-              <StatisticGlobal
-                globalAchievements={
-                  globalAchievements?.achivementsGlobalData ?? {
-                    achievementpercentages: { achievements: [] },
-                  }
-                }
-                playerCount={
-                  globalAchievements?.playersNowData ?? {
-                    response: { player_count: 0, result: 0 },
-                  }
-                }
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-8">
+      {showAllContent && (
+        <div className="z-50 px-4 md:px-6 py-8 w-full max-w-7xl mx-auto space-y-8">
           <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-            <Trophy className="text-primary w-5 h-5 " />
-            Conquistas do Jogador
+            <Info className="text-primary w-5 h-5 " />
+            Sobre o Jogo
           </h2>
-          <AchivementsList
-            achievements={achievements ?? []}
-            friends={friends ?? []}
-          />
+          <GameDescription game={game} />
+
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-stretch">
+            <div className="lg:col-span-2 flex flex-col gap-8">
+              <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+                <Images className="text-primary w-5 h-5 " />
+                Galeria de Imagens
+              </h2>
+              <div className="flex-1">
+                <GalleryCards game={game} />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-8">
+              <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+                <Play className="text-primary w-5 h-5 " />
+                Jogar Agora
+              </h2>
+              <div className="flex-1">
+                <PlayerCard game={game} />
+              </div>
+            </div>
+          </div>
+          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+            <Cpu className="text-primary w-5 h-5 " />
+            Requisitos do Sistema
+          </h2>
+          <SystemRequirements game={game} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <div className="flex flex-col gap-8">
+              <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+                <ChartColumnIncreasing className="text-primary w-5 h-5 " />
+                Estatísticas do Jogador
+              </h2>
+              <div className="flex-1">
+                <StatisticUser
+                  game={gameBySteamIdAppId}
+                  achievements={achievements ?? []}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-8">
+              <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+                <Globe className="text-primary w-5 h-5 " />
+                Estatísticas Globais
+              </h2>
+              <div className="flex-1">
+                <StatisticGlobal
+                  globalAchievements={
+                    globalAchievements?.achivementsGlobalData ?? {
+                      achievementpercentages: { achievements: [] },
+                    }
+                  }
+                  playerCount={
+                    globalAchievements?.playersNowData ?? {
+                      response: { player_count: 0, result: 0 },
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-8">
+            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+              <Trophy className="text-primary w-5 h-5 " />
+              Conquistas do Jogador
+            </h2>
+            <AchivementsList
+              achievements={achievements ?? []}
+              friends={friends ?? []}
+              game={game}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </main>
   );
 }

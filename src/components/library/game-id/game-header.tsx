@@ -15,12 +15,14 @@ interface GameDetailsViewProps {
   game: SteamGameData;
   steamId: string;
   playedFriends: GetPlayedFriendsResponse | null;
+  playerId: string | null;
 }
 
 export default function GameDetailsView({
   game,
   steamId,
   playedFriends,
+  playerId,
 }: GameDetailsViewProps) {
   const visibleCategories = game.categories.slice(0, 4);
   const remainingCategories = game.categories.slice(4);
@@ -116,7 +118,7 @@ export default function GameDetailsView({
                   </TooltipProvider>
                 )}
               </div>
-              {totalFriendsCount > 0 && (
+              {!playerId && totalFriendsCount > 0 && (
                 <div className="flex flex-col md:items-end gap-2 group cursor-pointer mt-2 md:mt-0">
                   <Link
                     href={`/${steamId}/friends/?gameId=${gameId}`}
