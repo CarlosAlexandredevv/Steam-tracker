@@ -1,6 +1,8 @@
 import { Skeleton } from '@/components/ui/skeleton';
+import { logLoading } from '@/lib/action-logger';
 
 export default function GamePageLoading() {
+  logLoading('library/[gameId]');
   return (
     <main className="flex w-full flex-col text-foreground min-h-screen">
       {/* Hero header skeleton (GameDetailsView ~ min-h-[450px]) */}

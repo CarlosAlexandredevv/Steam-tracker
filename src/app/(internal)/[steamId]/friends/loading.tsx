@@ -1,32 +1,37 @@
 import { Skeleton } from '@/components/ui/skeleton';
+import { logLoading } from '@/lib/action-logger';
 
 export default function FriendsLoading() {
+  logLoading('friends');
   return (
-    <main className="flex w-full flex-col bg-background text-foreground min-h-screen px-4 md:px-6 py-8 md:py-10">
-      <div className="w-full max-w-7xl mx-auto space-y-8">
-        {/* Header skeleton (HeaderFriends style) */}
+    <main className="flex w-full flex-col bg-background text-foreground min-h-screen">
+      <div className="px-4 md:px-6 w-full max-w-7xl mx-auto py-6 md:py-10 space-y-6 md:space-y-10">
+        {/* Header skeleton - espelha HeaderFriends (Amigos Steam + subtítulo, 2 inputs) */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 border-b border-white/10 pb-5 md:pb-8">
           <div className="space-y-1.5">
-            <Skeleton className="h-9 w-56 bg-white/10 rounded" />
-            <Skeleton className="h-4 w-40 bg-white/10 rounded" />
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-8 w-8 shrink-0 rounded bg-white/10" />
+              <Skeleton className="h-9 w-40 bg-white/10 rounded" />
+            </div>
+            <Skeleton className="h-4 w-56 bg-white/10 rounded" />
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Skeleton className="h-10 w-full sm:w-48 bg-white/10 rounded-lg" />
-            <Skeleton className="h-10 w-full sm:w-32 bg-white/10 rounded-lg" />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-3">
+            <Skeleton className="h-10 w-full sm:w-64 rounded-lg bg-white/10" />
+            <Skeleton className="h-10 w-full sm:w-48 rounded-lg bg-white/10" />
           </div>
         </div>
 
-        {/* Friends grid skeleton */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-          {Array.from({ length: 8 }, (_, i) => i).map((i) => (
+        {/* Grid skeleton - mesmo grid da friends (2-6 cols) e FriendCard (avatar central h-20 w-20, nome, status) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5">
+          {Array.from({ length: 12 }, (_, i) => i).map((i) => (
             <div
               key={i}
-              className="flex items-center gap-4 p-4 rounded-lg border border-white/10 bg-white/5"
+              className="rounded-lg border border-white/10 overflow-hidden bg-card p-4 flex flex-col items-center gap-3"
             >
-              <Skeleton className="h-14 w-14 rounded-full shrink-0 bg-white/10" />
-              <div className="space-y-2 flex-1 min-w-0">
-                <Skeleton className="h-5 w-3/4 bg-white/10 rounded" />
-                <Skeleton className="h-4 w-1/2 bg-white/10 rounded" />
+              <Skeleton className="h-20 w-20 rounded-full shrink-0 bg-white/10" />
+              <div className="w-full space-y-2 flex flex-col items-center">
+                <Skeleton className="h-4 w-20 bg-white/10 rounded" />
+                <Skeleton className="h-3 w-14 bg-white/10 rounded" />
               </div>
             </div>
           ))}

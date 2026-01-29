@@ -2,8 +2,9 @@
 
 import { env } from '@/env';
 import { SteamGetFriendsListResponse, SteamPlayer } from '@/types/steam';
-import { getPlayerById } from './get-player-by-id';
+import { getPlayersByIds } from './get-player-by-id';
 import { safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchAllFriendsPlayer(steamId: string) {
   try {
@@ -15,25 +16,17 @@ async function fetchAllFriendsPlayer(steamId: string) {
     const data = await safeJsonParse<SteamGetFriendsListResponse>(response);
 
     const friends = data?.friendslist?.friends ?? [];
-
-    const playersData = friends.map(async (friend) => {
-      try {
-        const player = await getPlayerById(friend.steamid);
-        return player;
-      } catch {
-        return null;
-      }
-    });
-
-    const players: (SteamPlayer | null)[] = await Promise.all(playersData);
-
-    return players.filter((player): player is SteamPlayer => player !== null);
+    const steamIds = friends.map((f) => f.steamid);
+    const players = await getPlayersByIds(steamIds);
+    return players;
   } catch (error: unknown) {
-    console.error(error);
+    logActionFailure('getAllFriendsPlayer', { steamId }, error);
     return [];
   }
 }
 
 export async function getAllFriendsPlayer(steamId: string) {
-  return fetchAllFriendsPlayer(steamId);
+  return withActionLog('getAllFriendsPlayer', { steamId }, () =>
+    fetchAllFriendsPlayer(steamId),
+  );
 }

@@ -5,6 +5,7 @@ import type {
   SteamGetGlobalAchievementPercentagesForAppResponse,
 } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchStatisticsGlobalsByGameId(appId: string) {
   try {
@@ -12,14 +13,19 @@ async function fetchStatisticsGlobalsByGameId(appId: string) {
       `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${appId}`,
       { cache: 'no-store' },
     );
-    const playersNowData = await safeJsonParse<SteamCurrentPlayersResponse>(playersNow);
+    const playersNowData = await safeJsonParse<SteamCurrentPlayersResponse>(
+      playersNow,
+    );
 
     const achivementsGlobal = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?gameid=${appId}&l=portuguese`,
       { cache: 'no-store' },
     );
 
-    const achivementsGlobalData = await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(achivementsGlobal);
+    const achivementsGlobalData =
+      await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(
+        achivementsGlobal,
+      );
 
     if (!playersNowData || !achivementsGlobalData) {
       return null;
@@ -30,11 +36,13 @@ async function fetchStatisticsGlobalsByGameId(appId: string) {
       achivementsGlobalData,
     };
   } catch (error) {
-    console.error(error);
+    logActionFailure('statisticsGlobalsByGameId', { appId }, error);
     return null;
   }
 }
 
 export async function statisticsGlobalsByGameId(appId: string) {
-  return fetchStatisticsGlobalsByGameId(appId);
+  return withActionLog('statisticsGlobalsByGameId', { appId }, () =>
+    fetchStatisticsGlobalsByGameId(appId),
+  );
 }

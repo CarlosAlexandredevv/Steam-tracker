@@ -8,6 +8,7 @@ import {
   SteamGetGlobalAchievementPercentagesForAppResponse,
 } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchAchivementsById(
   id: string,
@@ -68,7 +69,7 @@ async function fetchAchivementsById(
 
     return withImages;
   } catch (error) {
-    console.error(error);
+    logActionFailure('getAchivementsById', { id, appId }, error);
     return null;
   }
 }
@@ -77,5 +78,7 @@ export async function getAchivementsById(
   id: string,
   appId: string,
 ): Promise<SteamPlayerAchievement[] | null> {
-  return fetchAchivementsById(id, appId);
+  return withActionLog('getAchivementsById', { id, appId }, () =>
+    fetchAchivementsById(id, appId),
+  );
 }

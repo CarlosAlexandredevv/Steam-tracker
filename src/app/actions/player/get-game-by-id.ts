@@ -2,6 +2,7 @@
 
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
 import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
+import { withActionLog, logActionFailure } from '@/lib/action-logger';
 
 async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   try {
@@ -39,7 +40,7 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
 
     return removeImagesContainsHtml;
   } catch (error) {
-    console.error(error);
+    logActionFailure('getGameById', { gameId }, error);
     return null;
   }
 }
@@ -47,5 +48,5 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
 export async function getGameById(
   gameId: string,
 ): Promise<SteamGameData | null> {
-  return fetchGameById(gameId);
+  return withActionLog('getGameById', { gameId }, () => fetchGameById(gameId));
 }
