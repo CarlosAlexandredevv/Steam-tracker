@@ -56,7 +56,11 @@ export function HeaderFriends({ friends }: HeaderFriendsProps) {
         <p className="text-muted-foreground text-sm">
           {isFiltering ? (
             <span className="flex items-center gap-1 flex-wrap">
-              Jogos encontrados em sua coleção para a pesquisa:
+              {friends?.length ?? 0}{' '}
+              {friends?.length === 1
+                ? 'amigo encontrado'
+                : 'amigos encontrados'}{' '}
+              em sua lista de amigos para a pesquisa:
               {search && (
                 <span className="text-white font-bold italic">
                   &quot;{search}&quot;

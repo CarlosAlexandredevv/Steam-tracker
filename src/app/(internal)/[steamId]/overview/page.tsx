@@ -7,10 +7,17 @@ import { SteamIdRouteParams } from '@/types/route-params';
 
 interface OverviewProps {
   params: SteamIdRouteParams;
+  searchParams: Promise<{
+    q?: string;
+  }>;
 }
 
-export default async function Overview({ params }: OverviewProps) {
+export default async function Overview({
+  params,
+  searchParams,
+}: OverviewProps) {
   const { steamId } = await params;
+  const { q } = await searchParams;
   const player = await getPlayerById(steamId);
 
   if (!player) {
@@ -23,10 +30,18 @@ export default async function Overview({ params }: OverviewProps) {
 
   const games = await getAllGames(player.steamid);
 
+  const gamesFiltered = games?.filter((game) =>
+    game.name.toLowerCase().includes(q?.toLowerCase() ?? ''),
+  );
+
   return (
     <main className="flex w-full flex-col bg-background text-foreground gap-4 overflow-x-hidden max-w-full">
       <OverviewHeader player={player} games={games ?? []} />
-      <GamesSection games={games ?? []} player={player} />
+      <GamesSection
+        games={gamesFiltered ?? []}
+        player={player}
+        searchQuery={q}
+      />
     </main>
   );
 }

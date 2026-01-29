@@ -8,10 +8,16 @@ import { Badge } from '../../ui/badge';
 interface GamesSectionProps {
   games: SteamOwnedGame[];
   player: SteamPlayer | null;
+  searchQuery?: string | null;
 }
 
-export function GamesSection({ games, player }: GamesSectionProps) {
+export function GamesSection({
+  games,
+  player,
+  searchQuery,
+}: GamesSectionProps) {
   const hasGames = games && games.length > 0;
+  const isFiltering = searchQuery && searchQuery.trim();
 
   return (
     <section className="w-full overflow-x-hidden">
@@ -22,7 +28,20 @@ export function GamesSection({ games, player }: GamesSectionProps) {
               <Gamepad2 className="w-8 h-8 text-primary shrink-0" /> Biblioteca
             </h2>
             <p className="text-muted-foreground text-sm">
-              Seus jogos mais recentes e destaques da coleção.
+              {isFiltering ? (
+                <>
+                  {games?.length ?? 0}{' '}
+                  {games?.length === 1
+                    ? 'jogo encontrado'
+                    : 'jogos encontrados'}{' '}
+                  para a pesquisa{' '}
+                  <span className="text-white font-medium italic">
+                    &quot;{searchQuery}&quot;
+                  </span>
+                </>
+              ) : (
+                <>Seus jogos mais recentes e destaques da coleção.</>
+              )}
             </p>
           </div>
 

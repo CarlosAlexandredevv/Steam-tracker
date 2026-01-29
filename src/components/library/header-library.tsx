@@ -1,13 +1,14 @@
 'use client';
 
 import { SteamOwnedGame } from '@/types/steam';
-import { LayoutGrid, Search } from 'lucide-react';
+import { LayoutGrid, Search, X } from 'lucide-react';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '../ui/input-group';
 import { debounce, parseAsString, useQueryState } from 'nuqs';
+import { Button } from '../ui/button';
 
 interface HeaderLibraryProps {
   games: SteamOwnedGame[] | null;
@@ -39,7 +40,9 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
         <p className="text-muted-foreground text-sm">
           {search ? (
             <>
-              Jogos encontrados em sua coleção para a pesquisa{' '}
+              {games?.length ?? 0}{' '}
+              {games?.length === 1 ? 'jogo encontrado' : 'jogos encontrados'} em
+              sua coleção para a pesquisa{' '}
               <span className="text-white font-medium italic">
                 &quot;{search}&quot;
               </span>
@@ -50,8 +53,8 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
         </p>
       </div>
 
-      <div className="min-w-[300px]">
-        <InputGroup>
+      <div className="flex items-center gap-2 min-w-[300px]">
+        <InputGroup className="flex-1">
           <InputGroupInput
             placeholder="Buscar jogo..."
             value={search ?? ''}
@@ -61,6 +64,19 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
             <Search className="w-4 h-4 text-muted-foreground" />
           </InputGroupAddon>
         </InputGroup>
+
+        {search && search.trim() && (
+          <Button
+            size="icon"
+            variant="secondary"
+            onClick={() => {
+              setSearch('');
+            }}
+            className="hover:bg-primary duration-300 ease-out cursor-pointer"
+          >
+            <X className="size-4" />
+          </Button>
+        )}
       </div>
     </div>
   );
