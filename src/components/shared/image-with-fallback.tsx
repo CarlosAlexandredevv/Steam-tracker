@@ -16,7 +16,6 @@ interface ImageWithFallbackProps {
   loading?: 'lazy' | 'eager';
 }
 
-/** Exibe fallback quando a URL (ex.: CDN Steam) retorna 404 ou erro. */
 export function ImageWithFallback({
   src,
   alt,
@@ -37,7 +36,7 @@ export function ImageWithFallback({
       sizes={sizes}
       className={className}
       priority={priority}
-      loading={loading}
+      {...(priority ? {} : { loading })}
       onError={() => setFailed(true)}
     />
   );

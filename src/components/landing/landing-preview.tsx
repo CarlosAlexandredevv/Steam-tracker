@@ -1,4 +1,13 @@
-import { MonitorPlay, Trophy, Users } from 'lucide-react';
+import Link from 'next/link';
+import { MonitorPlay, Trophy, Users, Gamepad2, Clock } from 'lucide-react';
+import { getPlayerById } from '@/app/actions/player/get-player-by-id';
+import { getAllGames } from '@/app/actions/player/get-all-games';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ImageWithFallback } from '@/components/shared/image-with-fallback';
+import { CarrouselGames } from '@/components/overview/games-section/carrousel-games';
+
+const PREVIEW_VANITY = '76561199441912879';
+const PREVIEW_GAMES_SHOW = 3;
 
 const HIGHLIGHTS = [
   {
@@ -14,7 +23,37 @@ const HIGHLIGHTS = [
   },
 ] as const;
 
-export function LandingPreview() {
+function PreviewCardSkeleton() {
+  return (
+    <div className="w-full max-w-sm bg-card border border-white/10 rounded-2xl p-4 md:p-5 shadow-xl">
+      <div className="flex items-center gap-3 md:gap-4">
+        <div className="size-14 md:size-16 rounded-xl bg-secondary shrink-0" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="h-5 w-28 bg-white/10 rounded" />
+          <div className="h-4 w-20 bg-white/5 rounded" />
+        </div>
+      </div>
+      <div className="mt-4 flex gap-2">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-16 w-14 rounded-lg bg-white/5 flex-1" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export async function LandingPreview() {
+  const player = await getPlayerById(PREVIEW_VANITY);
+  const games = player ? await getAllGames(player.steamid) : null;
+  const previewGames = (games ?? []).slice(0, PREVIEW_GAMES_SHOW);
+  const gamesCount = games?.length ?? 0;
+  const totalHours =
+    games?.reduce((acc, g) => acc + (g.playtime_forever ?? 0), 0) ?? 0;
+  const totalHoursFormatted =
+    totalHours > 0
+      ? `${Math.round(totalHours / 60).toLocaleString('pt-BR')}h`
+      : null;
+
   return (
     <section id="preview" className="py-16 md:py-24 bg-card/30 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -50,37 +89,68 @@ export function LandingPreview() {
             </div>
           </div>
 
-          <div className="md:w-1/2 relative perspective-1000">
-            <div className="relative z-10 bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transform md:rotate-y-[-8deg] transition-transform duration-500 hover:rotate-0">
-              <div className="h-40 bg-linear-to-r from-primary/20 to-card relative">
-                <div className="absolute bottom-0 left-0 w-full h-24 bg-linear-to-t from-background to-transparent opacity-90" />
-                <div className="absolute -bottom-10 left-6 flex items-end gap-4">
-                  <div className="w-24 h-24 bg-secondary rounded-xl border-4 border-background shadow-lg" />
-                  <div className="mb-12">
-                    <div className="h-6 w-32 bg-white/10 rounded mb-2" />
-                    <div className="flex gap-2">
-                      <div className="h-4 w-16 bg-primary/20 rounded" />
-                      <div className="h-4 w-16 bg-primary/20 rounded" />
+          <div className="md:w-1/2 w-full flex justify-center md:justify-end relative">
+            {!player ? (
+              <div className="w-full max-w-sm">
+                <PreviewCardSkeleton />
+              </div>
+            ) : (
+              <Link
+                href={`/${PREVIEW_VANITY}/overview`}
+                className="block w-full max-w-sm group"
+              >
+                <div className="relative bg-card border border-white/10 rounded-2xl p-4 md:p-5 shadow-xl transition-all duration-300 group-hover:ring-2 group-hover:ring-primary/30 group-hover:shadow-2xl">
+                  <div className="absolute -inset-1 bg-primary/10 rounded-2xl blur-xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <Avatar className="!size-14 md:!size-16 !rounded-xl border-2 border-white/10 shrink-0">
+                      <AvatarImage
+                        src={player.avatarmedium ?? player.avatarfull}
+                        alt={player.personaname}
+                        className="rounded-xl"
+                      />
+                      <AvatarFallback className="rounded-xl bg-secondary text-sm font-bold text-foreground">
+                        {player.personaname.slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-bold text-foreground truncate">
+                        {player.personaname}
+                      </p>
+                      <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Gamepad2 className="size-3.5" />
+                          {gamesCount} {gamesCount === 1 ? 'jogo' : 'jogos'}
+                        </span>
+                        {totalHoursFormatted && (
+                          <span className="flex items-center gap-1">
+                            <Clock className="size-3.5" />
+                            {totalHoursFormatted}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
+
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    Ver perfil completo →
+                  </p>
                 </div>
-              </div>
-              <div className="p-5 md:p-6 pt-14 md:pt-16 bg-background min-h-[300px]">
-                <div className="grid grid-cols-3 gap-3 md:gap-4 mb-5 md:mb-6">
-                  <div className="h-32 bg-card border border-white/5 rounded-xl" />
-                  <div className="h-32 bg-card border border-white/5 rounded-xl" />
-                  <div className="h-32 bg-card border border-white/5 rounded-xl" />
-                </div>
-                <div className="h-4 w-1/3 bg-white/10 rounded mb-3 md:mb-4" />
-                <div className="space-y-2.5 md:space-y-3">
-                  <div className="h-12 w-full bg-card/50 rounded-lg border border-white/5" />
-                  <div className="h-12 w-full bg-card/50 rounded-lg border border-white/5" />
-                </div>
-              </div>
-            </div>
-            <div className="absolute -inset-4 bg-primary/20 rounded-2xl blur-2xl -z-10" />
+              </Link>
+            )}
           </div>
         </div>
+
+        {player && (games ?? []).length > 0 && (
+          <div className="mt-12 md:mt-16 w-full">
+            <div className="flex items-center gap-2 mb-4 md:mb-6">
+              <Gamepad2 className="size-6 md:size-8 text-primary shrink-0" />
+              <h3 className="text-xl md:text-2xl font-bold tracking-tight">
+                Jogos
+              </h3>
+            </div>
+            <CarrouselGames games={games ?? []} player={player} />
+          </div>
+        )}
       </div>
     </section>
   );

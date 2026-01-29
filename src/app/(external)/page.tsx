@@ -9,6 +9,8 @@ import {
 } from '@/components/landing';
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, SITE_IMAGE } from '@/lib/seo';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: { absolute: SITE_NAME },
   description: SITE_DESCRIPTION,
