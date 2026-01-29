@@ -14,10 +14,6 @@ export async function Header({ params }: HeaderProps) {
   const { steamId } = await params;
   const player = await getPlayerById(steamId);
 
-  if (!player) {
-    return null;
-  }
-
   if (!steamId) {
     return (
       <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
