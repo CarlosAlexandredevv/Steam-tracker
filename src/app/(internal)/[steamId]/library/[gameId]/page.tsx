@@ -3,12 +3,21 @@ import { GalleryCards } from '@/components/library/game-id/gallery-cards';
 import { PlayerCard } from '@/components/library/game-id/player-card';
 import GameDetailsView from '@/components/library/game-id/game-header';
 import { NotFoundGames } from '@/components/shared/not-found-games';
-import { Info, Images, Play, Cpu, ChartColumnIncreasing } from 'lucide-react';
+import {
+  Info,
+  Images,
+  Play,
+  Cpu,
+  ChartColumnIncreasing,
+  Globe,
+} from 'lucide-react';
 import { SystemRequirements } from '@/components/library/game-id/system-requirements';
 import { GameDescription } from '@/components/library/game-id/game-description';
 import { getGameBySteamIdAppId } from '@/app/actions/player/get-game-by-steam-id-app-id';
 import { StatisticUser } from '@/components/library/game-id/statistic-user';
 import { getAchivementsById } from '@/app/actions/player/get-achivements-by-id';
+import { statisticsGlobalsByGameId } from '@/app/actions/player/statistics-globals-by-game-id';
+import { StatisticGlobal } from '@/components/library/game-id/statistic-global';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -20,6 +29,21 @@ export default async function GamePage({ params }: GamePageProps) {
 
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
   const achievements = await getAchivementsById(steamId, gameId);
+  const globalAchievements = await statisticsGlobalsByGameId(gameId);
+
+  const translationsByApiName = new Map(
+    (achievements ?? [])
+      .filter((a) => a.apiname && a.name)
+      .map((a) => [a.apiname, a.name] as const),
+  );
+
+  const achivementsTranslate =
+    globalAchievements?.achivementsGlobalData.achievementpercentages.achievements.map(
+      (a) => ({
+        ...a,
+        translatedName: translationsByApiName.get(a.name) ?? a.name,
+      }),
+    ) ?? [];
 
   if (!game)
     return (
@@ -65,7 +89,7 @@ export default async function GamePage({ params }: GamePageProps) {
           Requisitos do Sistema
         </h2>
         <SystemRequirements game={game} />
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
               <ChartColumnIncreasing className="text-primary w-5 h-5 " />
@@ -74,6 +98,24 @@ export default async function GamePage({ params }: GamePageProps) {
             <StatisticUser
               game={gameBySteamIdAppId}
               achievements={achievements ?? []}
+            />
+          </div>
+          <div className="flex flex-col gap-6">
+            <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+              <Globe className="text-primary w-5 h-5 " />
+              Estatísticas Globais
+            </h2>
+            <StatisticGlobal
+              globalAchievements={
+                globalAchievements?.achivementsGlobalData ?? {
+                  achievementpercentages: { achievements: [] },
+                }
+              }
+              playerCount={
+                globalAchievements?.playersNowData ?? {
+                  response: { player_count: 0, result: 0 },
+                }
+              }
             />
           </div>
         </div>

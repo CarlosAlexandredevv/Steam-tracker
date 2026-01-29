@@ -56,6 +56,26 @@ export interface SteamGetFriendsListResponse {
   friendslist: SteamFriendsList;
 }
 
+export interface SteamCurrentPlayersResponse {
+  response: {
+    player_count: number;
+    result: number;
+  };
+}
+
+export interface SteamGlobalAchievementPercentage {
+  name: string;
+  percent: number | string;
+}
+
+export interface SteamAchievementPercentages {
+  achievements: SteamGlobalAchievementPercentage[];
+}
+
+export interface SteamGetGlobalAchievementPercentagesForAppResponse {
+  achievementpercentages: SteamAchievementPercentages;
+}
+
 export interface SteamGameDataResponse {
   success: boolean;
   data: SteamGameData;

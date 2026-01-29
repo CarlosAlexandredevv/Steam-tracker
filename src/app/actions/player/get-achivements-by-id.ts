@@ -23,7 +23,6 @@ export async function getAchivementsById(
     const data2: SteamGetSchemaForGameResponse = await response2.json();
 
     const data: SteamGetPlayerAchievementsResponse = await response.json();
-
     const schemaAchievements =
       data2.game.availableGameStats?.achievements ?? [];
 
