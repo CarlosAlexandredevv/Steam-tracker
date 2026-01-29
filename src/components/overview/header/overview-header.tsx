@@ -16,14 +16,18 @@ export function OverviewHeader({ player, games }: OverviewHeaderProps) {
 
   return (
     <header
-      className={cn('relative min-h-96 w-full flex flex-col overflow-hidden')}
+      className={cn(
+        'relative min-h-96 w-full flex flex-col justify-end overflow-hidden',
+      )}
     >
       <BackgroundHeader
         heroUrl={gameBiggerplaytime?.hero}
         alt={gameBiggerplaytime?.name ?? 'Game banner'}
       />
 
-      <PlayerHeader player={player as SteamPlayer} games={games} />
+      <div>
+        <PlayerHeader player={player as SteamPlayer} games={games} />
+      </div>
     </header>
   );
 }

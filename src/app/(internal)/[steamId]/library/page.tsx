@@ -20,8 +20,10 @@ export default async function Library({ params, searchParams }: LibraryProps) {
 
   if (!player) {
     return (
-      <main className="flex items-center justify-center h-full px-4">
-        <NotFoundPlayer />
+      <main className="flex items-center justify-center h-full">
+        <div className="px-4 md:px-6 w-full max-w-7xl mx-auto">
+          <NotFoundPlayer />
+        </div>
       </main>
     );
   }
@@ -33,30 +35,32 @@ export default async function Library({ params, searchParams }: LibraryProps) {
   );
 
   return (
-    <main className="flex w-full flex-col bg-background text-foreground min-h-screen p-4 md:p-8 gap-8">
-      {games ? (
-        <HeaderLibrary games={gamesFiltered ?? []} />
-      ) : (
-        <div className="flex h-full items-center justify-center py-10 px-4">
-          <NotFoundGames />
-        </div>
-      )}
+    <main className="flex w-full flex-col bg-background text-foreground min-h-screen gap-8">
+      <div className="px-4 md:px-6 w-full max-w-7xl mx-auto space-y-8 pt-4 md:pt-8">
+        {games ? (
+          <HeaderLibrary games={gamesFiltered ?? []} />
+        ) : (
+          <div className="flex h-full items-center justify-center py-10">
+            <NotFoundGames />
+          </div>
+        )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {gamesFiltered?.map((game) => (
-          <GameCard
-            key={game.appid}
-            game={game}
-            steamId={player.steamid}
-            showFallback={true}
-          />
-        ))}
-      </div>
-      {gamesFiltered?.length === 0 && (
-        <div className="flex items-center justify-center py-10 px-4">
-          <NotFoundGames />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {gamesFiltered?.map((game) => (
+            <GameCard
+              key={game.appid}
+              game={game}
+              steamId={player.steamid}
+              showFallback={true}
+            />
+          ))}
         </div>
-      )}
+        {gamesFiltered?.length === 0 && (
+          <div className="flex items-center justify-center py-10">
+            <NotFoundGames />
+          </div>
+        )}
+      </div>
     </main>
   );
 }

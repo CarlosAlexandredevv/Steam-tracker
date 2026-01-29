@@ -36,7 +36,7 @@ export default function GameDetailsView({
         <BackgroundHeader heroUrl={game.imgHero} alt={game.name} />
         <div className="absolute inset-0 bg-linear-to-t from-[#0b0e14] via-[#0b0e14]/40 to-transparent" />
 
-        <div className="relative z-50 px-6 md:px-12 py-12 w-full max-w-7xl mx-auto">
+        <div className="relative z-50 px-4 md:px-6 py-12 w-full max-w-7xl mx-auto">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <Badge className="bg-primary text-black font-bold uppercase tracking-widest text-[10px]">

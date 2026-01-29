@@ -15,8 +15,10 @@ export default async function Overview({ params }: OverviewProps) {
 
   if (!player) {
     return (
-      <main className="flex items-center justify-center h-full px-4">
-        <NotFoundPlayer />
+      <main className="flex items-center justify-center h-full">
+        <div className="px-4 md:px-6 w-full max-w-7xl mx-auto">
+          <NotFoundPlayer />
+        </div>
       </main>
     );
   }

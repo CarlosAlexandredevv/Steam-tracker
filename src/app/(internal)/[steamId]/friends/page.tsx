@@ -40,35 +40,39 @@ export default async function Friends({ params, searchParams }: FriendsProps) {
 
   if (!friends || friends.length === 0) {
     return (
-      <main className="flex w-full flex-col bg-background text-foreground min-h-screen p-4 md:p-8">
-        <div className="flex h-full items-center justify-center py-10 px-4">
-          <NotFoundFriends />
+      <main className="flex w-full flex-col bg-background text-foreground min-h-screen">
+        <div className="px-4 md:px-6 w-full max-w-7xl mx-auto pt-4 md:pt-8">
+          <div className="flex h-full items-center justify-center py-10">
+            <NotFoundFriends />
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="flex w-full flex-col bg-background text-foreground min-h-screen p-4 md:p-8 gap-8">
-      <HeaderFriends friends={friendsFiltered} />
+    <main className="flex w-full flex-col bg-background text-foreground min-h-screen gap-8">
+      <div className="px-4 md:px-6 w-full max-w-7xl mx-auto space-y-8 pt-4 md:pt-8">
+        <HeaderFriends friends={friendsFiltered} />
 
-      {friendsFiltered.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {friendsFiltered.map((friend) => (
-            <FriendCard key={friend.steamid} friend={friend} />
-          ))}
-        </div>
-      ) : (
-        <div className="flex items-center justify-center py-10 px-4">
-          <NotFoundFriends
-            message={
-              (q && q.trim()) || (gameId && gameId.trim())
-                ? 'Não foi encontrado nenhum amigo para o filtro buscado.'
-                : undefined
-            }
-          />
-        </div>
-      )}
+        {friendsFiltered.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {friendsFiltered.map((friend) => (
+              <FriendCard key={friend.steamid} friend={friend} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center py-10">
+            <NotFoundFriends
+              message={
+                (q && q.trim()) || (gameId && gameId.trim())
+                  ? 'Não foi encontrado nenhum amigo para o filtro buscado.'
+                  : undefined
+              }
+            />
+          </div>
+        )}
+      </div>
     </main>
   );
 }

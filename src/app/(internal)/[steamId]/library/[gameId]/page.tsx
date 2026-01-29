@@ -51,7 +51,7 @@ export default async function GamePage({ params }: GamePageProps) {
         playedFriends={playedFriends}
       />
 
-      <div className="z-50 px-6 md:px-12 py-8 w-full max-w-7xl mx-auto space-y-8">
+      <div className="z-50 px-4 md:px-6 py-8 w-full max-w-7xl mx-auto space-y-8">
         <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
           <Info className="text-primary w-5 h-5 " />
           Sobre o Jogo
