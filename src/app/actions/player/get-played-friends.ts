@@ -82,11 +82,12 @@ async function fetchPlayedFriends(
     for (let i = 0; i < playedIds.length; i += BATCH_SIZE) {
       const chunk = playedIds.slice(i, i + BATCH_SIZE);
       const summariesRes = await fetchSteamApi(
-        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=${chunk.join(',')}`,
+        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
+          env.STEAM_API_KEY
+        }&steamids=${chunk.join(',')}`,
       );
-      const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(
-        summariesRes,
-      );
+      const summariesData =
+        await safeJsonParse<SteamGetPlayerSummariesResponse>(summariesRes);
       if (summariesData?.response?.players?.length) {
         players.push(...(summariesData.response.players as SteamPlayer[]));
       }
