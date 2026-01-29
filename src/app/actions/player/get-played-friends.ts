@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import {
   GetPlayedFriendsResponse,
@@ -25,7 +26,7 @@ async function chunkedMap<T, R>(
   return results;
 }
 
-export async function getPlayedFriends(
+async function fetchPlayedFriends(
   steamId: string,
   appId: string,
 ): Promise<GetPlayedFriendsResponse | null> {
@@ -94,4 +95,18 @@ export async function getPlayedFriends(
     console.error(error);
     return null;
   }
+}
+
+export async function getPlayedFriends(
+  steamId: string,
+  appId: string,
+): Promise<GetPlayedFriendsResponse | null> {
+  return unstable_cache(
+    async () => fetchPlayedFriends(steamId, appId),
+    [`played-friends-${steamId}-${appId}`],
+    {
+      revalidate: 300, // 5 minutos
+      tags: [`played-friends-${steamId}-${appId}`],
+    },
+  )();
 }

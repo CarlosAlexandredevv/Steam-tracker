@@ -1,8 +1,9 @@
 'use server';
+import { unstable_cache } from 'next/cache';
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
 import { getImageUrlWithFallback } from '@/lib/utils';
 
-export async function getGameById(
+async function fetchGameById(
   gameId: string,
 ): Promise<SteamGameData | null> {
   try {
@@ -36,4 +37,17 @@ export async function getGameById(
     console.error(error);
     return null;
   }
+}
+
+export async function getGameById(
+  gameId: string,
+): Promise<SteamGameData | null> {
+  return unstable_cache(
+    async () => fetchGameById(gameId),
+    [`game-${gameId}`],
+    {
+      revalidate: 3600, // 1 hora (dados do jogo mudam muito pouco)
+      tags: [`game-${gameId}`],
+    },
+  )();
 }

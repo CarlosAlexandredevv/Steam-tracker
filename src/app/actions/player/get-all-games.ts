@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { getImageUrlWithFallback } from '@/lib/utils';
@@ -11,7 +12,7 @@ export interface SteamOwnedGamesApiResponse {
   };
 }
 
-export async function getAllGames(
+async function fetchAllGames(
   steamId: string,
 ): Promise<SteamOwnedGame[] | null> {
   try {
@@ -57,4 +58,17 @@ export async function getAllGames(
     console.error(error);
     return null;
   }
+}
+
+export async function getAllGames(
+  steamId: string,
+): Promise<SteamOwnedGame[] | null> {
+  return unstable_cache(
+    async () => fetchAllGames(steamId),
+    [`games-${steamId}`],
+    {
+      revalidate: 600, // 10 minutos
+      tags: [`games-${steamId}`],
+    },
+  )();
 }

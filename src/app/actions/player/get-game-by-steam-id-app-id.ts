@@ -1,9 +1,10 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 
-export async function getGameBySteamIdAppId(steamId: string, appId: string) {
+async function fetchGameBySteamIdAppId(steamId: string, appId: string) {
   try {
     const response = await fetch(
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&appids=${appId}&include_played_free_games=1
@@ -20,4 +21,15 @@ export async function getGameBySteamIdAppId(steamId: string, appId: string) {
     console.error(error);
     return null;
   }
+}
+
+export async function getGameBySteamIdAppId(steamId: string, appId: string) {
+  return unstable_cache(
+    async () => fetchGameBySteamIdAppId(steamId, appId),
+    [`game-user-${steamId}-${appId}`],
+    {
+      revalidate: 300, // 5 minutos
+      tags: [`game-user-${steamId}-${appId}`],
+    },
+  )();
 }

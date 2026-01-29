@@ -1,11 +1,12 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import type {
   SteamCurrentPlayersResponse,
   SteamGetGlobalAchievementPercentagesForAppResponse,
 } from '@/types/steam';
 
-export async function statisticsGlobalsByGameId(appId: string) {
+async function fetchStatisticsGlobalsByGameId(appId: string) {
   try {
     const playersNow = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${appId}`,
@@ -27,4 +28,15 @@ export async function statisticsGlobalsByGameId(appId: string) {
     console.error(error);
     return null;
   }
+}
+
+export async function statisticsGlobalsByGameId(appId: string) {
+  return unstable_cache(
+    async () => fetchStatisticsGlobalsByGameId(appId),
+    [`statistics-global-${appId}`],
+    {
+      revalidate: 60, // 1 minuto (estatísticas globais mudam frequentemente)
+      tags: [`statistics-global-${appId}`],
+    },
+  )();
 }

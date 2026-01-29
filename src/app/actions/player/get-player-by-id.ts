@@ -1,9 +1,10 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamPlayer } from '@/types/steam';
 
-export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
+async function fetchPlayerById(id: string): Promise<SteamPlayer | null> {
   try {
     const [directUserRes, vanityRes] = await Promise.all([
       fetch(
@@ -46,4 +47,11 @@ export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
     console.error(error);
     return null;
   }
+}
+
+export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
+  return unstable_cache(async () => fetchPlayerById(id), [`player-${id}`], {
+    revalidate: 300, // 5 minutos
+    tags: [`player-${id}`],
+  })();
 }

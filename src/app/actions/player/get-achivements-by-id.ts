@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import {
   SteamGetPlayerAchievementsResponse,
@@ -8,7 +9,7 @@ import {
   SteamGetGlobalAchievementPercentagesForAppResponse,
 } from '@/types/steam';
 
-export async function getAchivementsById(
+async function fetchAchivementsById(
   id: string,
   appId: string,
 ): Promise<SteamPlayerAchievement[] | null> {
@@ -60,4 +61,18 @@ export async function getAchivementsById(
     console.error(error);
     return null;
   }
+}
+
+export async function getAchivementsById(
+  id: string,
+  appId: string,
+): Promise<SteamPlayerAchievement[] | null> {
+  return unstable_cache(
+    async () => fetchAchivementsById(id, appId),
+    [`achievements-${id}-${appId}`],
+    {
+      revalidate: 300, // 5 minutos
+      tags: [`achievements-${id}-${appId}`],
+    },
+  )();
 }
