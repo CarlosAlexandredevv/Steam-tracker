@@ -75,20 +75,26 @@ async function fetchPlayedFriends(
       return { count: 0, friends: [] };
     }
 
-    const summariesRes = await fetchSteamApi(
-      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
-        env.STEAM_API_KEY
-      }&steamids=${played.map((p) => p.steamid).join(',')}`,
-    );
+    // GetPlayerSummaries aceita no máximo 100 steamids por request — buscar em batches.
+    const BATCH_SIZE = 100;
+    const playedIds = played.map((p) => p.steamid);
+    const players: SteamPlayer[] = [];
+    for (let i = 0; i < playedIds.length; i += BATCH_SIZE) {
+      const chunk = playedIds.slice(i, i + BATCH_SIZE);
+      const summariesRes = await fetchSteamApi(
+        `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=${chunk.join(',')}`,
+      );
+      const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(
+        summariesRes,
+      );
+      if (summariesData?.response?.players?.length) {
+        players.push(...(summariesData.response.players as SteamPlayer[]));
+      }
+    }
 
-    const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(
-      summariesRes,
-    );
-
-    if (!summariesData) {
+    if (players.length === 0) {
       return null;
     }
-    const players = (summariesData?.response?.players ?? []) as SteamPlayer[];
     const playerById = new Map(players.map((p) => [p.steamid, p] as const));
 
     const friendsPlayed: PlayedFriend[] = played

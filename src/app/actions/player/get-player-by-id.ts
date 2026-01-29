@@ -84,25 +84,44 @@ async function fetchPlayerById(
   }
 }
 
+/** GetPlayerSummaries aceita no máximo 100 steamids por request. */
 const STEAM_IDS_BATCH_SIZE = 100;
+
+async function fetchOneBatchOfPlayers(
+  steamIds: string[],
+): Promise<SteamPlayer[]> {
+  if (steamIds.length === 0) return [];
+  const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
+    env.STEAM_API_KEY
+  }&steamids=${steamIds.join(',')}`;
+  const res = await fetchSteamApi(url);
+  if (!res.ok) return [];
+  const data = await safeJsonParse<{
+    response: { players?: SteamPlayer[] };
+  }>(res);
+  return (data?.response?.players ?? []) as SteamPlayer[];
+}
 
 async function fetchPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
   if (ids.length === 0) return [];
-  const unique = [...new Set(ids)].slice(0, STEAM_IDS_BATCH_SIZE);
-  try {
-    const url = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
-      env.STEAM_API_KEY
-    }&steamids=${unique.join(',')}`;
-    const res = await fetchSteamApi(url);
-    if (!res.ok) return [];
-    const data = await safeJsonParse<{
-      response: { players?: SteamPlayer[] };
-    }>(res);
-    return (data?.response?.players ?? []) as SteamPlayer[];
-  } catch (error) {
-    logActionFailure('getPlayersByIds', { count: unique.length }, error);
-    return [];
+  const unique = [...new Set(ids)];
+  const allPlayers: SteamPlayer[] = [];
+
+  for (let i = 0; i < unique.length; i += STEAM_IDS_BATCH_SIZE) {
+    const chunk = unique.slice(i, i + STEAM_IDS_BATCH_SIZE);
+    try {
+      const players = await fetchOneBatchOfPlayers(chunk);
+      allPlayers.push(...players);
+    } catch (error) {
+      logActionFailure(
+        'getPlayersByIds',
+        { chunkSize: chunk.length, offset: i },
+        error,
+      );
+    }
   }
+
+  return allPlayers;
 }
 
 /** Deduplica por request: layout, header, page e metadata compartilham o mesmo fetch. */
