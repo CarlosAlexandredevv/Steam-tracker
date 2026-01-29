@@ -1,9 +1,12 @@
+import type { Metadata } from 'next';
 import { SteamIdRouteParams } from '@/types/route-params';
 import { NotFoundFriends } from '@/components/shared/not-found-friends';
 import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player';
 import { FriendCard } from '@/components/friends/friend-card';
 import { HeaderFriends } from '@/components/friends/header-friends';
 import { getPlayedFriends } from '@/app/actions/player/get-played-friends';
+import { getPlayerById } from '@/app/actions/player/get-player-by-id';
+import { buildTitle } from '@/lib/seo';
 
 interface FriendsProps {
   params: SteamIdRouteParams;
@@ -11,6 +14,21 @@ interface FriendsProps {
     q?: string;
     gameId?: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: SteamIdRouteParams;
+}): Promise<Metadata> {
+  const { steamId } = await params;
+  const player = await getPlayerById(steamId);
+  if (!player)
+    return { title: buildTitle('Perfil não encontrado'), robots: { index: false } };
+  return {
+    title: buildTitle(`Amigos - ${player.personaname}`),
+    description: `Lista de amigos Steam de ${player.personaname}. Filtre por nome ou por jogo.`,
+  };
 }
 
 export default async function Friends({ params, searchParams }: FriendsProps) {

@@ -12,7 +12,7 @@ export function LandingCta() {
           transformadas em insights visuais.
         </p>
 
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-xl mx-auto relative group mt-10 md:mt-12">
           <InputSearch />
         </div>
       </div>

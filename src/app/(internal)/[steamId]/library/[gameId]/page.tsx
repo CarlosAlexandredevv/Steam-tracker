@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getGameById } from '@/app/actions/player/get-game-by-id';
 import { GalleryCards } from '@/components/library/game-id/gallery-cards';
 import { PlayerCard } from '@/components/library/game-id/player-card';
@@ -23,10 +24,55 @@ import { AchivementsList } from '@/components/library/game-id/achivements-list';
 import { getPlayedFriends } from '@/app/actions/player/get-played-friends';
 import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
+import { buildTitle, SITE_URL } from '@/lib/seo';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
   searchParams: Promise<{ playerId: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ steamId: string; gameId: string }>;
+}): Promise<Metadata> {
+  const { steamId, gameId } = await params;
+  const [game, player] = await Promise.all([
+    getGameById(gameId),
+    getPlayerById(steamId),
+  ]);
+
+  if (!game)
+    return {
+      title: buildTitle('Jogo não encontrado'),
+      robots: { index: false },
+    };
+
+  const gameName = game.name;
+  const playerName = player?.personaname ?? 'Perfil';
+  const description =
+    game.short_description?.replace(/<[^>]*>/g, '').slice(0, 160) ??
+    `Detalhes do jogo ${gameName} na biblioteca Steam de ${playerName}. Conquistas, estatísticas e requisitos.`;
+
+  return {
+    title: buildTitle(`${gameName} - ${playerName}`),
+    description,
+    openGraph: {
+      title: `${gameName} | Steam Track`,
+      description: description.slice(0, 200),
+      url: `${SITE_URL}/${steamId}/library/${gameId}`,
+      type: 'website',
+      images: game.header_image
+        ? [{ url: game.header_image, width: 460, height: 215, alt: gameName }]
+        : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${gameName} | Steam Track`,
+      description: description.slice(0, 200),
+      images: game.header_image ? [game.header_image] : undefined,
+    },
+  };
 }
 
 export default async function GamePage({

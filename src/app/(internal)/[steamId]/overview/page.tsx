@@ -1,15 +1,32 @@
+import type { Metadata } from 'next';
 import { getAllGames } from '@/app/actions/player/get-all-games';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { OverviewHeader } from '@/components/overview/header/overview-header';
 import { GamesSection } from '@/components/overview/games-section/games-section';
 import { NotFoundPlayer } from '@/components/shared/not-found-player';
 import { SteamIdRouteParams } from '@/types/route-params';
+import { buildTitle } from '@/lib/seo';
 
 interface OverviewProps {
   params: SteamIdRouteParams;
   searchParams: Promise<{
     q?: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: SteamIdRouteParams;
+}): Promise<Metadata> {
+  const { steamId } = await params;
+  const player = await getPlayerById(steamId);
+  if (!player)
+    return { title: buildTitle('Perfil não encontrado'), robots: { index: false } };
+  return {
+    title: buildTitle(`Overview - ${player.personaname}`),
+    description: `Overview do perfil Steam de ${player.personaname}. Biblioteca, horas jogadas e jogos em destaque.`,
+  };
 }
 
 export default async function Overview({

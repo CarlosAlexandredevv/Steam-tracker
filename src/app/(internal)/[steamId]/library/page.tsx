@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { SteamIdRouteParams } from '@/types/route-params';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { getAllGames } from '@/app/actions/player/get-all-games';
@@ -5,12 +6,28 @@ import { NotFoundPlayer } from '@/components/shared/not-found-player';
 import { GameCard } from '@/components/shared/game-card';
 import { HeaderLibrary } from '@/components/library/header-library';
 import { NotFoundGames } from '@/components/shared/not-found-games';
+import { buildTitle } from '@/lib/seo';
 
 interface LibraryProps {
   params: SteamIdRouteParams;
   searchParams: Promise<{
     q?: string;
   }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: SteamIdRouteParams;
+}): Promise<Metadata> {
+  const { steamId } = await params;
+  const player = await getPlayerById(steamId);
+  if (!player)
+    return { title: buildTitle('Perfil não encontrado'), robots: { index: false } };
+  return {
+    title: buildTitle(`Biblioteca - ${player.personaname}`),
+    description: `Biblioteca de jogos Steam de ${player.personaname}. Busque e filtre jogos da coleção.`,
+  };
 }
 
 export default async function Library({ params, searchParams }: LibraryProps) {
