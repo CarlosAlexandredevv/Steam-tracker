@@ -13,7 +13,9 @@ function extractSteamId(input: string): string {
   if (idMatch) return idMatch[1].trim();
 
   // https://steamcommunity.com/profiles/76561198358463565/ ou https://steamcommunity.com/profiles/76561198358463565
-  const profilesMatch = trimmed.match(/steamcommunity\.com\/profiles\/([^/?#]+)/i);
+  const profilesMatch = trimmed.match(
+    /steamcommunity\.com\/profiles\/([^/?#]+)/i,
+  );
   if (profilesMatch) return profilesMatch[1].trim();
 
   // Já é um ID ou custom URL digitado direto
@@ -39,15 +41,16 @@ export function InputSearch() {
       <input
         type="text"
         placeholder="Cole seu Steam ID ou URL do perfil..."
-        className="flex-1 bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:ring-0 focus:outline-none px-3 md:px-4 py-3 md:py-3.5"
+        className="min-w-0 flex-1 bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:ring-0 focus:outline-none px-3 md:px-4 py-3 md:py-3.5"
         value={value}
         onChange={handleChange}
         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
       />
       <button
+        type="button"
         disabled={!value.trim()}
         onClick={handleSubmit}
-        className="bg-primary hover:bg-primary/90 text-primary-foreground px-5 md:px-6 py-3 md:py-3.5 rounded-lg font-bold uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        className="shrink-0 whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-3 md:px-6 md:py-3.5 rounded-lg font-bold uppercase tracking-wider text-sm md:text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
         Analisar
       </button>
