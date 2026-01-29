@@ -1,6 +1,7 @@
 import { SteamOwnedGame, SteamPlayerAchievement } from '@/types/steam';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { NotFoundStatistics } from '@/components/shared/not-found-statistics';
 import { Clock, Calendar, Trophy, Activity } from 'lucide-react';
 
 interface StatisticUserProps {
@@ -10,7 +11,7 @@ interface StatisticUserProps {
 
 export function StatisticUser({ game, achievements }: StatisticUserProps) {
   if (!game) {
-    return null;
+    return <NotFoundStatistics />;
   }
 
   const hoursTotal = Math.floor(game?.playtime_forever / 60);
