@@ -78,19 +78,27 @@ export function StatisticUser({ game, achievements }: StatisticUserProps) {
           <div className="flex items-start gap-4">
             <Trophy className="text-primary mt-1 shrink-0" size={20} />
             <div className="flex-1 space-y-2">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">
-                  Conquistas desbloqueadas
+              {totalAchievements === 0 ? (
+                <p className="text-xs text-white/50">
+                  Sem dados de conquistas para este jogo.
                 </p>
-                <span className="text-sm font-black text-white italic">
-                  {achievedAchievements} / {totalAchievements} (
-                  {progressPercentage.toFixed(0)}%)
-                </span>
-              </div>
-              <Progress
-                value={progressPercentage}
-                className="h-1.5 bg-white/5"
-              />
+              ) : (
+                <>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">
+                      Conquistas desbloqueadas
+                    </p>
+                    <span className="text-sm font-black text-white italic">
+                      {achievedAchievements} / {totalAchievements} (
+                      {progressPercentage.toFixed(0)}%)
+                    </span>
+                  </div>
+                  <Progress
+                    value={progressPercentage}
+                    className="h-1.5 bg-white/5"
+                  />
+                </>
+              )}
             </div>
           </div>
 

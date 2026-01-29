@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { NotFoundAchievements } from '@/components/shared/not-found-achievements';
 
 interface AchivementsListProps {
   achievements: SteamPlayerAchievement[];
@@ -24,6 +25,10 @@ export function AchivementsList({ achievements }: AchivementsListProps) {
   const total = achievements.length;
   const completed = achievements.filter((a) => a.achieved === 1).length;
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  if (total === 0) {
+    return <NotFoundAchievements />;
+  }
 
   // Ordenar: Concluídas primeiro
   const sortedAchievements = [...achievements].sort(

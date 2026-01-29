@@ -78,18 +78,36 @@ export function StatisticGlobal({
           <div className="flex items-start gap-4">
             <Award className="text-primary mt-1 shrink-0" size={20} />
             <div className="flex-1 space-y-2">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">
-                  Média Global de Conquistas
-                </p>
-                <span className="text-sm font-black text-white italic">
-                  {globalAverageProgress.toFixed(1)}%
-                </span>
-              </div>
-              <Progress
-                value={globalAverageProgress}
-                className="h-1.5 bg-white/5"
-              />
+              {achievementsList.length === 0 ? (
+                <>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">
+                      Média Global de Conquistas
+                    </p>
+                    <span className="text-sm font-black text-white italic">
+                      —
+                    </span>
+                  </div>
+                  <p className="text-xs text-white/50">
+                    Sem dados de conquistas para este jogo.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">
+                      Média Global de Conquistas
+                    </p>
+                    <span className="text-sm font-black text-white italic">
+                      {globalAverageProgress.toFixed(1)}%
+                    </span>
+                  </div>
+                  <Progress
+                    value={globalAverageProgress}
+                    className="h-1.5 bg-white/5"
+                  />
+                </>
+              )}
             </div>
           </div>
 
