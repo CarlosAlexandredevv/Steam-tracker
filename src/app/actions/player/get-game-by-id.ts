@@ -3,9 +3,7 @@ import { unstable_cache } from 'next/cache';
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
 import { getImageUrlWithFallback } from '@/lib/utils';
 
-async function fetchGameById(
-  gameId: string,
-): Promise<SteamGameData | null> {
+async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   try {
     const response = await fetch(
       `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese`,
@@ -42,12 +40,8 @@ async function fetchGameById(
 export async function getGameById(
   gameId: string,
 ): Promise<SteamGameData | null> {
-  return unstable_cache(
-    async () => fetchGameById(gameId),
-    [`game-${gameId}`],
-    {
-      revalidate: 3600, // 1 hora (dados do jogo mudam muito pouco)
-      tags: [`game-${gameId}`],
-    },
-  )();
+  return unstable_cache(async () => fetchGameById(gameId), [`game-${gameId}`], {
+    revalidate: 3600, // 1 hora (dados do jogo mudam muito pouco)
+    tags: [`game-${gameId}`],
+  })();
 }
