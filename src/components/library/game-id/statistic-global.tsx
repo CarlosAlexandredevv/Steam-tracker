@@ -53,7 +53,7 @@ export function StatisticGlobal({
                   <p className="text-3xl font-black text-white italic">
                     {currentPlayers.toLocaleString('pt-BR')}
                   </p>
-                  <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 uppercase tracking-widest">
+                  <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20 uppercase tracking-widest">
                     Live
                   </span>
                 </div>
