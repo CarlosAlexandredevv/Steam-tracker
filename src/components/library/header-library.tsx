@@ -35,12 +35,22 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
           <LayoutGrid className="w-8 h-8 text-primary" />
           Biblioteca de Jogos
         </h1>
+
         <p className="text-muted-foreground text-sm">
-          Explorar todos os {games?.length} jogos da sua coleção.
+          {search ? (
+            <>
+              Jogos encontrados em sua coleção para a pesquisa{' '}
+              <span className="text-white font-medium italic">
+                &quot;{search}&quot;
+              </span>
+            </>
+          ) : (
+            <>Explorar todos os {games?.length ?? 0} jogos da sua coleção.</>
+          )}
         </p>
       </div>
 
-      <div>
+      <div className="min-w-[300px]">
         <InputGroup>
           <InputGroupInput
             placeholder="Buscar jogo..."
@@ -48,7 +58,7 @@ export function HeaderLibrary({ games }: HeaderLibraryProps) {
             onChange={handleSearchUpdate}
           />
           <InputGroupAddon>
-            <Search />
+            <Search className="w-4 h-4 text-muted-foreground" />
           </InputGroupAddon>
         </InputGroup>
       </div>

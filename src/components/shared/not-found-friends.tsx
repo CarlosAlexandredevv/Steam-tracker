@@ -7,7 +7,11 @@ import {
 } from '@/components/ui/empty';
 import { Users } from 'lucide-react';
 
-export function NotFoundFriends() {
+interface NotFoundFriendsProps {
+  message?: string;
+}
+
+export function NotFoundFriends({ message }: NotFoundFriendsProps) {
   return (
     <Empty className="border border-dashed border-white/10 max-w-xl">
       <EmptyHeader>
@@ -16,8 +20,8 @@ export function NotFoundFriends() {
         </EmptyMedia>
         <EmptyTitle>Nenhum amigo encontrado</EmptyTitle>
         <EmptyDescription>
-          Este jogador não possui amigos públicos ou a lista de amigos está
-          privada. Verifique as configurações de privacidade do perfil Steam.
+          {message ||
+            'Este jogador não possui amigos públicos ou a lista de amigos está privada. Verifique as configurações de privacidade do perfil Steam.'}
         </EmptyDescription>
       </EmptyHeader>
     </Empty>

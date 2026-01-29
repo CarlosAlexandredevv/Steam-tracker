@@ -119,7 +119,7 @@ export default function GameDetailsView({
               {totalFriendsCount > 0 && (
                 <div className="flex flex-col md:items-end gap-2 group cursor-pointer mt-2 md:mt-0">
                   <Link
-                    href={`/${steamId}/friends`}
+                    href={`/${steamId}/friends/?gameId=${gameId}`}
                     className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-white transition-colors"
                   >
                     <Users className="size-4" />
@@ -164,7 +164,7 @@ export default function GameDetailsView({
 
                       {remainingCount > 0 && (
                         <Link
-                          href={`/${steamId}/friends/${gameId}`}
+                          href={`/${steamId}/friends/?gameId=${gameId}`}
                           className="relative z-0 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border-2 border-background bg-zinc-800 text-xs font-bold text-zinc-300 transition-transform hover:scale-110 hover:z-20 hover:bg-zinc-700 hover:text-white"
                         >
                           +{remainingCount}

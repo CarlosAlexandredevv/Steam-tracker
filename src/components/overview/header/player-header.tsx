@@ -80,7 +80,7 @@ export async function PlayerHeader({ player, games }: PlayerHeaderProps) {
 
         <div className="flex flex-1 flex-col justify-end gap-3 pb-1 min-w-0 max-w-full">
           <div className="flex items-center gap-3 min-w-0 max-w-full">
-            <h1 className="text-4xl font-bold text-white drop-shadow-md md:text-6xl text-left break-words overflow-hidden max-w-full">
+            <h1 className="text-4xl font-bold text-white drop-shadow-md md:text-6xl text-left break-words max-w-full">
               {player?.personaname ?? 'Desconhecido'}
             </h1>
             {player?.profileurl && (
