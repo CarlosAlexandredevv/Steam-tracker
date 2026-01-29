@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  const response = await fetch(`${urlBase}${steamId}`);
+  const response = await fetch(`${urlBase}${steamId}`, { cache: 'no-store' });
   const data = await safeJsonParse<SteamGetPlayerSummariesResponse>(response);
 
   if (!data?.response?.players?.[0]) {

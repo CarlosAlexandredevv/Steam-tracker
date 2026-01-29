@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
 import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
@@ -18,6 +17,7 @@ async function fetchAllGames(
   try {
     const response = await fetch(
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&include_played_free_games=1`,
+      { cache: 'no-store' },
     );
     const data = await safeJsonParse<SteamOwnedGamesApiResponse>(response);
 
@@ -67,12 +67,5 @@ async function fetchAllGames(
 export async function getAllGames(
   steamId: string,
 ): Promise<SteamOwnedGame[] | null> {
-  return unstable_cache(
-    async () => fetchAllGames(steamId),
-    [`games-${steamId}`],
-    {
-      revalidate: 600, // 10 minutos
-      tags: [`games-${steamId}`],
-    },
-  )();
+  return fetchAllGames(steamId);
 }

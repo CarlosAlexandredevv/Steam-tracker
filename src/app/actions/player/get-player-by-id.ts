@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamPlayer } from '@/types/steam';
 import { safeJsonParse } from '@/lib/utils';
@@ -97,8 +96,5 @@ async function fetchPlayerById(
 }
 
 export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
-  return unstable_cache(async () => fetchPlayerById(id), [`player-${id}`], {
-    revalidate: 300, // 5 minutos
-    tags: [`player-${id}`],
-  })();
+  return fetchPlayerById(id);
 }

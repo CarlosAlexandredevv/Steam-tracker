@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import {
   GetPlayedFriendsResponse,
@@ -34,6 +33,7 @@ async function fetchPlayedFriends(
   try {
     const friends = await fetch(
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&relationship=friend`,
+      { cache: 'no-store' },
     );
 
     const friendsData = await safeJsonParse<SteamGetFriendsListResponse>(friends);
@@ -72,6 +72,7 @@ async function fetchPlayedFriends(
       `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${
         env.STEAM_API_KEY
       }&steamids=${played.map((p) => p.steamid).join(',')}`,
+      { cache: 'no-store' },
     );
 
     const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(summariesRes);
@@ -109,12 +110,5 @@ export async function getPlayedFriends(
   steamId: string,
   appId: string,
 ): Promise<GetPlayedFriendsResponse | null> {
-  return unstable_cache(
-    async () => fetchPlayedFriends(steamId, appId),
-    [`played-friends-${steamId}-${appId}`],
-    {
-      revalidate: 300, // 5 minutos
-      tags: [`played-friends-${steamId}-${appId}`],
-    },
-  )();
+  return fetchPlayedFriends(steamId, appId);
 }

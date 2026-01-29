@@ -1,5 +1,5 @@
 'use server';
-import { unstable_cache } from 'next/cache';
+
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
 import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
 
@@ -7,6 +7,7 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   try {
     const response = await fetch(
       `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese`,
+      { cache: 'no-store' },
     );
 
     const jsonData = await safeJsonParse<Record<string, SteamGameDataResponse>>(
@@ -46,8 +47,5 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
 export async function getGameById(
   gameId: string,
 ): Promise<SteamGameData | null> {
-  return unstable_cache(async () => fetchGameById(gameId), [`game-${gameId}`], {
-    revalidate: 3600, // 1 hora (dados do jogo mudam muito pouco)
-    tags: [`game-${gameId}`],
-  })();
+  return fetchGameById(gameId);
 }

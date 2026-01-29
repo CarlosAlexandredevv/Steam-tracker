@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamGetFriendsListResponse, SteamPlayer } from '@/types/steam';
 import { getPlayerById } from './get-player-by-id';
@@ -10,6 +9,7 @@ async function fetchAllFriendsPlayer(steamId: string) {
   try {
     const response = await fetch(
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&relationship=friend`,
+      { cache: 'no-store' },
     );
 
     const data = await safeJsonParse<SteamGetFriendsListResponse>(response);
@@ -35,12 +35,5 @@ async function fetchAllFriendsPlayer(steamId: string) {
 }
 
 export async function getAllFriendsPlayer(steamId: string) {
-  return unstable_cache(
-    async () => fetchAllFriendsPlayer(steamId),
-    [`friends-${steamId}`],
-    {
-      revalidate: 300, // 5 minutos
-      tags: [`friends-${steamId}`],
-    },
-  )();
+  return fetchAllFriendsPlayer(steamId);
 }

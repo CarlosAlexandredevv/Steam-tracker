@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
 import type {
   SteamCurrentPlayersResponse,
   SteamGetGlobalAchievementPercentagesForAppResponse,
@@ -11,11 +10,13 @@ async function fetchStatisticsGlobalsByGameId(appId: string) {
   try {
     const playersNow = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${appId}`,
+      { cache: 'no-store' },
     );
     const playersNowData = await safeJsonParse<SteamCurrentPlayersResponse>(playersNow);
 
     const achivementsGlobal = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?gameid=${appId}&l=portuguese`,
+      { cache: 'no-store' },
     );
 
     const achivementsGlobalData = await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(achivementsGlobal);
@@ -35,12 +36,5 @@ async function fetchStatisticsGlobalsByGameId(appId: string) {
 }
 
 export async function statisticsGlobalsByGameId(appId: string) {
-  return unstable_cache(
-    async () => fetchStatisticsGlobalsByGameId(appId),
-    [`statistics-global-${appId}`],
-    {
-      revalidate: 60, // 1 minuto (estatísticas globais mudam frequentemente)
-      tags: [`statistics-global-${appId}`],
-    },
-  )();
+  return fetchStatisticsGlobalsByGameId(appId);
 }

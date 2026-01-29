@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import {
   SteamGetPlayerAchievementsResponse,
@@ -17,14 +16,17 @@ async function fetchAchivementsById(
   try {
     const response = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1//?key=${env.STEAM_API_KEY}&steamid=${id}&appid=${appId}&l=portuguese`,
+      { cache: 'no-store' },
     );
 
     const response2 = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=${env.STEAM_API_KEY}&steamid=${id}&appid=${appId}&l=portuguese`,
+      { cache: 'no-store' },
     );
 
     const response3 = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?gameid=${appId}&l=portuguese`,
+      { cache: 'no-store' },
     );
 
     const data2 = await safeJsonParse<SteamGetSchemaForGameResponse>(response2);
@@ -75,12 +77,5 @@ export async function getAchivementsById(
   id: string,
   appId: string,
 ): Promise<SteamPlayerAchievement[] | null> {
-  return unstable_cache(
-    async () => fetchAchivementsById(id, appId),
-    [`achievements-${id}-${appId}`],
-    {
-      revalidate: 300, // 5 minutos
-      tags: [`achievements-${id}-${appId}`],
-    },
-  )();
+  return fetchAchivementsById(id, appId);
 }

@@ -32,6 +32,7 @@ export async function getImageUrlWithFallback(
   try {
     const response = await fetch(imageUrl, {
       method: 'GET',
+      cache: 'no-store',
       signal: AbortSignal.timeout(5000),
       headers: {
         Range: 'bytes=0-1024',
