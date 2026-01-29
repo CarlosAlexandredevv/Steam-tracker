@@ -241,6 +241,7 @@ export interface SteamPlayerAchievement {
   description: string;
   icon?: string;
   icongray?: string;
+  percent?: number | string;
 }
 
 export interface SteamPlayerStats {

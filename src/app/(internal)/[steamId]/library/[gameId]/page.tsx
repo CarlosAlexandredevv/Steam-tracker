@@ -10,6 +10,7 @@ import {
   Cpu,
   ChartColumnIncreasing,
   Globe,
+  Trophy,
 } from 'lucide-react';
 import { SystemRequirements } from '@/components/library/game-id/system-requirements';
 import { GameDescription } from '@/components/library/game-id/game-description';
@@ -18,6 +19,7 @@ import { StatisticUser } from '@/components/library/game-id/statistic-user';
 import { getAchivementsById } from '@/app/actions/player/get-achivements-by-id';
 import { statisticsGlobalsByGameId } from '@/app/actions/player/statistics-globals-by-game-id';
 import { StatisticGlobal } from '@/components/library/game-id/statistic-global';
+import { AchivementsList } from '@/components/library/game-id/achivements-list';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -30,20 +32,6 @@ export default async function GamePage({ params }: GamePageProps) {
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
   const achievements = await getAchivementsById(steamId, gameId);
   const globalAchievements = await statisticsGlobalsByGameId(gameId);
-
-  const translationsByApiName = new Map(
-    (achievements ?? [])
-      .filter((a) => a.apiname && a.name)
-      .map((a) => [a.apiname, a.name] as const),
-  );
-
-  const achivementsTranslate =
-    globalAchievements?.achivementsGlobalData.achievementpercentages.achievements.map(
-      (a) => ({
-        ...a,
-        translatedName: translationsByApiName.get(a.name) ?? a.name,
-      }),
-    ) ?? [];
 
   if (!game)
     return (
@@ -118,6 +106,13 @@ export default async function GamePage({ params }: GamePageProps) {
               }
             />
           </div>
+        </div>
+        <div className="flex flex-col gap-6">
+          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+            <Trophy className="text-primary w-5 h-5 " />
+            Conquistas do Jogador
+          </h2>
+          <AchivementsList achievements={achievements ?? []} />
         </div>
       </div>
     </main>
