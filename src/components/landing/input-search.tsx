@@ -8,17 +8,14 @@ function extractSteamId(input: string): string {
   const trimmed = input.trim();
   if (!trimmed) return '';
 
-  // https://steamcommunity.com/id/Blood777x ou https://steamcommunity.com/id/Blood777x/
   const idMatch = trimmed.match(/steamcommunity\.com\/id\/([^/?#]+)/i);
   if (idMatch) return idMatch[1].trim();
 
-  // https://steamcommunity.com/profiles/76561198358463565/ ou https://steamcommunity.com/profiles/76561198358463565
   const profilesMatch = trimmed.match(
     /steamcommunity\.com\/profiles\/([^/?#]+)/i,
   );
   if (profilesMatch) return profilesMatch[1].trim();
 
-  // Já é um ID ou custom URL digitado direto
   return trimmed;
 }
 

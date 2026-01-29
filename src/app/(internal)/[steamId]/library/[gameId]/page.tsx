@@ -130,8 +130,6 @@ export default async function GamePage({
         steamId={steamId}
         playedFriends={playedFriends}
         playerId={playerId}
-        playerName={player?.personaname}
-        secondPlayerName={secondPlayer?.personaname}
       />
 
       {showAllContent && (

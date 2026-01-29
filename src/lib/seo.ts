@@ -1,8 +1,3 @@
-/**
- * Constantes e helpers para SEO (Metadata, Open Graph, Twitter).
- * Ajuste SITE_URL em produção para a URL real do site.
- */
-
 export const SITE_NAME = 'Steam Track';
 export const SITE_DESCRIPTION =
   'Analise sua biblioteca Steam: perfis, jogos, conquistas e estatísticas. Compare com amigos e domine seus dados de jogador.';

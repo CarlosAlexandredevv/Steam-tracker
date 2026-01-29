@@ -16,8 +16,6 @@ interface GameDetailsViewProps {
   steamId: string;
   playedFriends: GetPlayedFriendsResponse | null;
   playerId: string | null;
-  playerName?: string | null;
-  secondPlayerName?: string | null;
 }
 
 export default function GameDetailsView({
@@ -25,8 +23,6 @@ export default function GameDetailsView({
   steamId,
   playedFriends,
   playerId,
-  playerName,
-  secondPlayerName,
 }: GameDetailsViewProps) {
   const visibleCategories = game.categories.slice(0, 4);
   const remainingCategories = game.categories.slice(4);

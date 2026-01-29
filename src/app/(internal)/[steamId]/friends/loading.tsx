@@ -4,7 +4,6 @@ export default function FriendsLoading() {
   return (
     <main className="flex w-full flex-col bg-background text-foreground min-h-screen">
       <div className="px-4 md:px-6 w-full max-w-7xl mx-auto py-6 md:py-10 space-y-6 md:space-y-10">
-        {/* Header skeleton - espelha HeaderFriends (Amigos Steam + subtítulo, 2 inputs) */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 border-b border-white/10 pb-5 md:pb-8">
           <div className="space-y-1.5">
             <div className="flex items-center gap-3">
@@ -19,7 +18,6 @@ export default function FriendsLoading() {
           </div>
         </div>
 
-        {/* Grid skeleton - mesmo grid da friends (2-6 cols) e FriendCard (avatar central h-20 w-20, nome, status) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5">
           {Array.from({ length: 12 }, (_, i) => i).map((i) => (
             <div

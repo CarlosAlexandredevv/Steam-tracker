@@ -3,7 +3,6 @@ import { MonitorPlay, Trophy, Users, Gamepad2, Clock } from 'lucide-react';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { getAllGames } from '@/app/actions/player/get-all-games';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ImageWithFallback } from '@/components/shared/image-with-fallback';
 import { CarrouselGames } from '@/components/overview/games-section/carrousel-games';
 
 const PREVIEW_VANITY = '76561199441912879';

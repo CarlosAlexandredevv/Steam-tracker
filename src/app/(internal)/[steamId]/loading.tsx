@@ -3,7 +3,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function Loading() {
   return (
     <div className="flex w-full flex-col bg-background text-foreground gap-6 md:gap-8 overflow-x-hidden max-w-full">
-      {/* Header skeleton - igual ao overview (avatar, nome, badges, amigos) */}
       <header className="relative min-h-96 w-full overflow-hidden">
         <Skeleton className="absolute inset-0 bg-white/5 rounded-none" />
         <div className="relative z-10 flex items-end px-4 md:px-6 py-6 md:py-8 w-full max-w-7xl mx-auto">
@@ -38,7 +37,6 @@ export default function Loading() {
         </div>
       </header>
 
-      {/* Seção Biblioteca skeleton - título + Badge + carrossel */}
       <section className="w-full overflow-x-hidden py-6 md:py-8">
         <div className="px-4 md:px-6 w-full max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 md:gap-6 border-b border-white/10 pb-5 md:pb-6">

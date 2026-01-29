@@ -47,11 +47,9 @@ async function fetchPlayedFriends(
     const allFriendIds =
       friendsData?.friendslist?.friends?.map((f) => f.steamid) ?? [];
 
-    // Limita quantos amigos verificamos para evitar dezenas de chamadas à API Steam.
     const MAX_FRIENDS_TO_CHECK = 30;
     const friendIds = allFriendIds.slice(0, MAX_FRIENDS_TO_CHECK);
 
-    // Consulta jogos por amigo em chunks pra não explodir rate limit.
     const gamesByFriendId = await chunkedMap(
       friendIds,
       10,
@@ -74,7 +72,6 @@ async function fetchPlayedFriends(
       return { count: 0, friends: [] };
     }
 
-    // GetPlayerSummaries aceita no máximo 100 steamids por request — buscar em batches.
     const BATCH_SIZE = 100;
     const playedIds = played.map((p) => p.steamid);
     const players: SteamPlayer[] = [];

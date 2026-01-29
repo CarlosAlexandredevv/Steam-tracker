@@ -80,7 +80,6 @@ async function fetchPlayerById(
   }
 }
 
-/** GetPlayerSummaries aceita no máximo 100 steamids por request. */
 const STEAM_IDS_BATCH_SIZE = 100;
 
 async function fetchOneBatchOfPlayers(
@@ -108,15 +107,12 @@ async function fetchPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
     try {
       const players = await fetchOneBatchOfPlayers(chunk);
       allPlayers.push(...players);
-    } catch {
-      // chunk falhou; continuar com os demais
-    }
+    } catch {}
   }
 
   return allPlayers;
 }
 
-/** Deduplica por request: layout, header, page e metadata compartilham o mesmo fetch. */
 const getPlayerByIdCached = cache(
   (id: string): Promise<SteamPlayer | null> => fetchPlayerById(id),
 );
@@ -125,10 +121,6 @@ export async function getPlayerById(id: string): Promise<SteamPlayer | null> {
   return getPlayerByIdCached(id);
 }
 
-/**
- * Busca vários jogadores em uma única chamada à API (até 100).
- * Use em getAllFriendsPlayer para evitar N chamadas getPlayerById.
- */
 export async function getPlayersByIds(ids: string[]): Promise<SteamPlayer[]> {
   if (ids.length === 0) return [];
   return fetchPlayersByIds(ids);

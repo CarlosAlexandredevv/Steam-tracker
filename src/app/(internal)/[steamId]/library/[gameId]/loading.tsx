@@ -3,7 +3,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function GamePageLoading() {
   return (
     <main className="flex w-full flex-col text-foreground min-h-screen">
-      {/* Hero header skeleton (GameDetailsView ~ min-h-[450px]) */}
       <header className="relative min-h-[450px] w-full flex flex-col justify-end overflow-hidden">
         <Skeleton className="absolute inset-0 bg-white/5 rounded-none" />
         <div className="relative z-50 px-4 md:px-6 py-12 w-full max-w-7xl mx-auto">
@@ -22,7 +21,6 @@ export default function GamePageLoading() {
         </div>
       </header>
 
-      {/* Content skeleton */}
       <div className="z-50 px-4 md:px-6 py-8 md:py-10 w-full max-w-7xl mx-auto space-y-8 md:space-y-10">
         <div className="space-y-4">
           <Skeleton className="h-8 w-40 bg-white/10 rounded" />

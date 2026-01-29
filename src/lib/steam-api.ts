@@ -1,9 +1,3 @@
-/**
- * Helper centralizado para chamadas à API Steam.
- * - Timeout para evitar requests travados
- * - Reuso em todas as server actions
- */
-
 const FETCH_TIMEOUT_MS = 15_000;
 
 export function fetchSteamApi(
@@ -18,12 +12,11 @@ export function fetchSteamApi(
   }).finally(() => clearTimeout(timeoutId));
 }
 
-/** TTLs em segundos para unstable_cache — reduz hits na API Steam e respeita rate limits */
 export const CACHE_REVALIDATE = {
-  player: 120, // 2 min — perfil muda pouco
-  games: 300, // 5 min — biblioteca muda pouco
-  gameDetails: 600, // 10 min — dados da loja
-  friends: 60, // 1 min — lista de amigos
-  achievements: 300,
-  statistics: 120,
+  player: 120, // 2 min
+  games: 300, // 5 min
+  gameDetails: 600, // 10 min
+  friends: 60, // 1 min
+  achievements: 300, // 5 min
+  statistics: 120, // 2 min
 } as const;

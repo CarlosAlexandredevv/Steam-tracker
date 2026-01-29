@@ -13,7 +13,6 @@ export interface SteamOwnedGamesApiResponse {
   };
 }
 
-/** URLs do CDN Steam são estáveis por appid — sem verificar cada uma (evita N×4 requests). */
 function getSteamCdnUrls(appid: number) {
   const base = `https://cdn.akamai.steamstatic.com/steam/apps/${appid}`;
   return {

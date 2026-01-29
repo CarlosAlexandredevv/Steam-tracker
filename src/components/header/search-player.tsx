@@ -12,7 +12,6 @@ import { SteamPlayer } from '@/types/steam';
 import { Popover, PopoverAnchor } from '@/components/ui/popover';
 import { PlayerPopoverContent } from './player-popover-content';
 import { Button } from '../ui/button';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 export function SearchPlayer() {
   const [player, setPlayer] = useState<SteamPlayer | null>(null);
@@ -20,7 +19,6 @@ export function SearchPlayer() {
   const [notFound, setNotFound] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isMobile = useIsMobile();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -75,7 +73,6 @@ export function SearchPlayer() {
 
   return (
     <>
-      {/* Botão de busca para mobile - sempre visível no mobile */}
       <Button
         variant="ghost"
         size="icon"
