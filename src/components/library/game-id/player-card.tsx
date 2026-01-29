@@ -33,7 +33,7 @@ export function PlayerCard({ game }: { game: SteamGameData }) {
               {game?.is_free ? 'GRÁTIS' : price}
             </span>
             <div className="text-white/20">
-              {game?.platforms.windows && <Monitor size={20} />}
+              {game?.platforms?.windows && <Monitor size={20} />}
             </div>
           </div>
 
@@ -51,13 +51,13 @@ export function PlayerCard({ game }: { game: SteamGameData }) {
             <div className="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider">
               <span className="text-white/30 tracking-widest">Estúdio</span>
               <span className="text-white/90 truncate ml-4">
-                {game?.developers[0]}
+                {game?.developers?.[0] ?? 'N/A'}
               </span>
             </div>
             <div className="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider">
               <span className="text-white/30 tracking-widest">Gênero</span>
               <span className="text-white/90">
-                {game?.genres[0].description}
+                {game?.genres?.[0]?.description ?? 'N/A'}
               </span>
             </div>
           </div>
