@@ -19,9 +19,16 @@ import Link from 'next/link';
 interface VersusAchivementsProps {
   friends: SteamPlayer[];
   game: SteamGameData;
+  steamId: string;
+  showButton?: boolean;
 }
 
-export function VersusAchivements({ friends, game }: VersusAchivementsProps) {
+export function VersusAchivements({
+  friends,
+  game,
+  steamId,
+  showButton = true,
+}: VersusAchivementsProps) {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [player, setPlayer] = useState<SteamPlayer | null>(null);
@@ -65,13 +72,15 @@ export function VersusAchivements({ friends, game }: VersusAchivementsProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Button
-        variant="outline"
-        className="hover:bg-primary/10 hover:text-primary duration-300 cursor-pointer"
-        onClick={() => setOpen(true)}
-      >
-        Comparar com outro jogador <Swords className="ml-2 h-4 w-4" />
-      </Button>
+      {showButton && (
+        <Button
+          variant="outline"
+          className="hover:bg-primary/10 hover:text-primary duration-300 cursor-pointer"
+          onClick={() => setOpen(true)}
+        >
+          Comparar com outro jogador <Swords className="ml-2 h-4 w-4" />
+        </Button>
+      )}
 
       <CommandDialog
         open={open}
@@ -102,7 +111,7 @@ export function VersusAchivements({ friends, game }: VersusAchivementsProps) {
               <>
                 {friends.length > 0 && (
                   <CommandGroup heading="Amigos">
-                    {friends.slice(0, 10).map((friend) => (
+                    {friends.map((friend) => (
                       <CommandItem
                         key={friend.steamid}
                         value={`${friend.personaname} ${friend.steamid}`}
@@ -110,7 +119,7 @@ export function VersusAchivements({ friends, game }: VersusAchivementsProps) {
                         className="flex items-center gap-3 p-2 cursor-pointer"
                       >
                         <Link
-                          href={`/${friend.steamid}/library/${game.steam_appid}?playerId=${friend.steamid}`}
+                          href={`/${steamId}/library/${game.steam_appid}?playerId=${friend.steamid}`}
                           className="flex items-center gap-3  cursor-pointer"
                         >
                           <Avatar className="h-8 w-8">

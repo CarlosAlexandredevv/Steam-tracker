@@ -22,6 +22,7 @@ import { StatisticGlobal } from '@/components/library/game-id/statistic-global';
 import { AchivementsList } from '@/components/library/game-id/achivements-list';
 import { getPlayedFriends } from '@/app/actions/player/get-played-friends';
 import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player';
+import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -37,11 +38,17 @@ export default async function GamePage({
 
   const game = await getGameById(gameId);
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
-  const achievements = await getAchivementsById(steamId, gameId);
+
   const globalAchievements = await statisticsGlobalsByGameId(gameId);
 
   const playedFriends = await getPlayedFriends(steamId, gameId);
   const friends = await getAllFriendsPlayer(steamId);
+
+  const player = await getPlayerById(steamId);
+  const secondPlayer = await getPlayerById(playerId);
+
+  const PlayerAchievements = await getAchivementsById(steamId, gameId);
+  const SecondPlayerAchievements = await getAchivementsById(playerId, gameId);
 
   const showAllContent = !playerId;
 
@@ -104,7 +111,7 @@ export default async function GamePage({
               <div className="flex-1">
                 <StatisticUser
                   game={gameBySteamIdAppId}
-                  achievements={achievements ?? []}
+                  achievements={PlayerAchievements ?? []}
                 />
               </div>
             </div>
@@ -135,9 +142,37 @@ export default async function GamePage({
               Conquistas do Jogador
             </h2>
             <AchivementsList
-              achievements={achievements ?? []}
+              achievements={PlayerAchievements ?? []}
               friends={friends ?? []}
               game={game}
+              steamId={steamId}
+            />
+          </div>
+        </div>
+      )}
+
+      {!showAllContent && (
+        <div className="z-50 px-4 md:px-6 py-8 w-full max-w-7xl mx-auto space-y-8">
+          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
+            <Trophy className="text-primary w-5 h-5 " />
+            Conquistas do{' '}
+            <span className="text-primary">{player?.personaname}</span> vs{' '}
+            <span className="text-primary">{secondPlayer?.personaname}</span>
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <AchivementsList
+              achievements={PlayerAchievements ?? []}
+              friends={friends ?? []}
+              game={game}
+              steamId={steamId}
+              showButton={false}
+            />
+            <AchivementsList
+              achievements={SecondPlayerAchievements ?? []}
+              friends={friends ?? []}
+              game={game}
+              steamId={playerId}
+              showButton={false}
             />
           </div>
         </div>

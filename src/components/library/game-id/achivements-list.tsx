@@ -23,12 +23,16 @@ interface AchivementsListProps {
   achievements: SteamPlayerAchievement[];
   friends: SteamPlayer[];
   game: SteamGameData;
+  steamId: string;
+  showButton?: boolean;
 }
 
 export function AchivementsList({
   achievements,
   friends,
   game,
+  steamId,
+  showButton = true,
 }: AchivementsListProps) {
   const total = achievements.length;
   const completed = achievements.filter((a) => a.achieved === 1).length;
@@ -55,7 +59,12 @@ export function AchivementsList({
             </CardDescription>
           </div>
           <div className="w-full md:w-auto">
-            <VersusAchivements friends={friends} game={game} />
+            <VersusAchivements
+              friends={friends}
+              game={game}
+              steamId={steamId}
+              showButton={showButton}
+            />
           </div>
         </div>
         <Progress value={percentage} className="h-2 mt-4" />
