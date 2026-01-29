@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Gamepad2, Github, Linkedin } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
+import { Logo } from '@/components/shared/logo';
 
 export function LandingFooter() {
   return (
@@ -7,8 +8,10 @@ export function LandingFooter() {
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-10">
           <Link href="/" className="flex items-center gap-2">
-            <Gamepad2 className="w-5 h-5 text-primary" />
-            <span className="font-bold text-foreground">Steam Track</span>
+            <Logo size="sm" />
+            <span className="font-bold text-foreground">
+              Steam<span className="text-primary">Tracker</span>
+            </span>
           </Link>
 
           <div className="text-sm text-muted-foreground text-center md:text-left">

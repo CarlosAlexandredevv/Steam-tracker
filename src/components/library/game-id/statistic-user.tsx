@@ -9,10 +9,10 @@ interface StatisticUserProps {
 }
 
 export function StatisticUser({ game, achievements }: StatisticUserProps) {
-  const hoursTotal = Math.floor(game.playtime_forever / 60);
-  const minutesTotal = game.playtime_forever % 60;
-  const hoursTwoWeeks = game.playtime_2weeks
-    ? Math.floor(game.playtime_2weeks / 60)
+  const hoursTotal = Math.floor(game?.playtime_forever / 60);
+  const minutesTotal = game?.playtime_forever % 60;
+  const hoursTwoWeeks = game?.playtime_2weeks
+    ? Math.floor(game?.playtime_2weeks / 60)
     : 0;
 
   const formatDate = (timestamp: number) => {
@@ -24,13 +24,13 @@ export function StatisticUser({ game, achievements }: StatisticUserProps) {
     }).format(new Date(timestamp * 1000));
   };
 
-  const lastPlayedDate = new Date(game.rtime_last_played * 1000);
+  const lastPlayedDate = new Date(game?.rtime_last_played * 1000);
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
   const isAbandoned =
-    game.rtime_last_played > 0 && lastPlayedDate < threeMonthsAgo;
-  const isRecentlyPlayed = (game.playtime_2weeks || 0) > 0;
+    game?.rtime_last_played > 0 && lastPlayedDate < threeMonthsAgo;
+  const isRecentlyPlayed = (game?.playtime_2weeks || 0) > 0;
 
   const totalAchievements = achievements?.length || 0;
   const achievedAchievements =
@@ -53,9 +53,9 @@ export function StatisticUser({ game, achievements }: StatisticUserProps) {
                 Tempo jogado total
               </p>
               <p className="text-3xl font-black text-white italic">
-                {hoursTotal}h{' '}
+                {hoursTotal || 0}h{' '}
                 <span className="text-sm font-medium not-italic text-white/50">
-                  {minutesTotal}m
+                  {minutesTotal || 0}m
                 </span>
               </p>
             </div>
@@ -68,7 +68,7 @@ export function StatisticUser({ game, achievements }: StatisticUserProps) {
                 Última vez jogado
               </p>
               <p className="text-lg font-bold text-white/90">
-                {formatDate(game.rtime_last_played)}
+                {formatDate(game?.rtime_last_played)}
               </p>
             </div>
           </div>

@@ -1,7 +1,7 @@
 'use server';
 import { unstable_cache } from 'next/cache';
 import { SteamGameDataResponse, SteamGameData } from '@/types/steam';
-import { getImageUrlWithFallback } from '@/lib/utils';
+import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
 
 async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   try {
@@ -9,8 +9,12 @@ async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
       `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese`,
     );
 
-    const jsonData: Record<string, SteamGameDataResponse> =
-      await response?.json();
+    const jsonData = await safeJsonParse<Record<string, SteamGameDataResponse>>(response);
+    
+    if (!jsonData) {
+      return null;
+    }
+    
     const gameData = jsonData[gameId];
 
     if (!gameData?.success || !gameData?.data) {

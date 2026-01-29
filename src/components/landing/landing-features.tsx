@@ -32,7 +32,7 @@ const FEATURES: FeatureConfig[] = [
       'Compare suas conquistas diretamente com amigos. Descubra quem é o verdadeiro completista em jogos específicos.',
     icon: Swords,
     ctaLabel: 'Ver Exemplo',
-    ctaHref: '/',
+    ctaHref: '76561198354798459/library/730?playerId=76561198137531424',
   },
 ];
 

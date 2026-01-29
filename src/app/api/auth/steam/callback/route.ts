@@ -5,6 +5,7 @@ import { randomUUID } from 'crypto';
 import { cookies } from 'next/headers';
 import { generateUserAccessToken } from '@/lib/jwt';
 import { SteamGetPlayerSummariesResponse } from '@/types/steam';
+import { safeJsonParse } from '@/lib/utils';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -30,7 +31,12 @@ export async function GET(request: NextRequest) {
   });
 
   const response = await fetch(`${urlBase}${steamId}`);
-  const data: SteamGetPlayerSummariesResponse = await response.json();
+  const data = await safeJsonParse<SteamGetPlayerSummariesResponse>(response);
+
+  if (!data?.response?.players?.[0]) {
+    throw new Error('Player data not found');
+  }
+
   const player = data.response.players[0];
 
   if (!user) {

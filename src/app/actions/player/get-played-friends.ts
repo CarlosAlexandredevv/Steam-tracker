@@ -11,6 +11,7 @@ import {
   SteamPlayer,
 } from '@/types/steam';
 import { getGameBySteamIdAppId } from './get-game-by-steam-id-app-id';
+import { safeJsonParse } from '@/lib/utils';
 
 async function chunkedMap<T, R>(
   items: readonly T[],
@@ -35,7 +36,11 @@ async function fetchPlayedFriends(
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&relationship=friend`,
     );
 
-    const friendsData: SteamGetFriendsListResponse = await friends.json();
+    const friendsData = await safeJsonParse<SteamGetFriendsListResponse>(friends);
+    
+    if (!friendsData) {
+      return null;
+    }
 
     const friendIds =
       friendsData?.friendslist?.friends?.map((f) => f.steamid) ?? [];
@@ -53,7 +58,7 @@ async function fetchPlayedFriends(
     );
 
     const played = gamesByFriendId
-      .filter(({ game }) => !!game && (game.playtime_forever ?? 0) > 0)
+      .filter(({ game }) => !!game && (game?.playtime_forever ?? 0) > 0)
       .map(({ steamid, game }) => ({
         steamid,
         playtime_forever: (game?.playtime_forever ?? 0) as number,
@@ -69,8 +74,11 @@ async function fetchPlayedFriends(
       }&steamids=${played.map((p) => p.steamid).join(',')}`,
     );
 
-    const summariesData: SteamGetPlayerSummariesResponse =
-      await summariesRes.json();
+    const summariesData = await safeJsonParse<SteamGetPlayerSummariesResponse>(summariesRes);
+    
+    if (!summariesData) {
+      return null;
+    }
     const players = (summariesData?.response?.players ?? []) as SteamPlayer[];
     const playerById = new Map(players.map((p) => [p.steamid, p] as const));
 

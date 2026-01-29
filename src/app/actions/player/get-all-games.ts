@@ -3,7 +3,7 @@
 import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamOwnedGame } from '@/types/steam';
-import { getImageUrlWithFallback } from '@/lib/utils';
+import { getImageUrlWithFallback, safeJsonParse } from '@/lib/utils';
 
 export interface SteamOwnedGamesApiResponse {
   response: {
@@ -19,10 +19,14 @@ async function fetchAllGames(
     const response = await fetch(
       `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&include_appinfo=true&include_played_free_games=1`,
     );
-    const data: SteamOwnedGamesApiResponse = await response?.json();
+    const data = await safeJsonParse<SteamOwnedGamesApiResponse>(response);
+
+    if (!data?.response?.games) {
+      return null;
+    }
 
     const gamesWithVerifiedImages = await Promise.all(
-      data?.response?.games?.map(async (game) => {
+      data.response.games.map(async (game) => {
         const heroUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/library_hero.jpg`;
         const bannerUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/header.jpg`;
         const horizontalUrl = `https://cdn.akamai.steamstatic.com/steam/apps/${game.appid}/capsule_616x353.jpg`;

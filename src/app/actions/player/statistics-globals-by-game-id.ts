@@ -5,20 +5,24 @@ import type {
   SteamCurrentPlayersResponse,
   SteamGetGlobalAchievementPercentagesForAppResponse,
 } from '@/types/steam';
+import { safeJsonParse } from '@/lib/utils';
 
 async function fetchStatisticsGlobalsByGameId(appId: string) {
   try {
     const playersNow = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${appId}`,
     );
-    const playersNowData: SteamCurrentPlayersResponse = await playersNow.json();
+    const playersNowData = await safeJsonParse<SteamCurrentPlayersResponse>(playersNow);
 
     const achivementsGlobal = await fetch(
       `https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?gameid=${appId}&l=portuguese`,
     );
 
-    const achivementsGlobalData: SteamGetGlobalAchievementPercentagesForAppResponse =
-      await achivementsGlobal.json();
+    const achivementsGlobalData = await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(achivementsGlobal);
+
+    if (!playersNowData || !achivementsGlobalData) {
+      return null;
+    }
 
     return {
       playersNowData,

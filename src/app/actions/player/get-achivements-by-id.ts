@@ -8,6 +8,7 @@ import {
   SteamGetSchemaForGameResponse,
   SteamGetGlobalAchievementPercentagesForAppResponse,
 } from '@/types/steam';
+import { safeJsonParse } from '@/lib/utils';
 
 async function fetchAchivementsById(
   id: string,
@@ -26,11 +27,13 @@ async function fetchAchivementsById(
       `https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?gameid=${appId}&l=portuguese`,
     );
 
-    const data2: SteamGetSchemaForGameResponse = await response2.json();
-    const data3: SteamGetGlobalAchievementPercentagesForAppResponse =
-      await response3.json();
+    const data2 = await safeJsonParse<SteamGetSchemaForGameResponse>(response2);
+    const data3 = await safeJsonParse<SteamGetGlobalAchievementPercentagesForAppResponse>(response3);
+    const data = await safeJsonParse<SteamGetPlayerAchievementsResponse>(response);
 
-    const data: SteamGetPlayerAchievementsResponse = await response.json();
+    if (!data || !data2) {
+      return null;
+    }
     const schemaAchievements =
       data2.game.availableGameStats?.achievements ?? [];
 

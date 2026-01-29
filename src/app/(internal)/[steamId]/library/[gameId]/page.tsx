@@ -25,6 +25,9 @@ import { getPlayedFriends } from '@/app/actions/player/get-played-friends';
 import { getAllFriendsPlayer } from '@/app/actions/player/get-all-friends-player';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { buildTitle, SITE_URL } from '@/lib/seo';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+const STEAM_PROFILE_URL = 'https://steamcommunity.com/profiles';
 
 interface GamePageProps {
   params: Promise<{ steamId: string; gameId: string }>;
@@ -199,11 +202,49 @@ export default async function GamePage({
 
       {!showAllContent && (
         <div className="z-50 px-4 md:px-6 py-8 md:py-10 w-full max-w-7xl mx-auto space-y-8 md:space-y-10">
-          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-2">
-            <Trophy className="text-primary w-5 h-5 " />
-            Conquistas do{' '}
-            <span className="text-primary">{player?.personaname}</span> vs{' '}
-            <span className="text-primary">{secondPlayer?.personaname}</span>
+          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter flex items-center gap-3 flex-wrap">
+            <Trophy className="text-primary w-5 h-5 shrink-0" />
+            <span className="text-white">Conquistas do</span>
+            <a
+              href={`${STEAM_PROFILE_URL}/${steamId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded"
+            >
+              <Avatar className="h-8 w-8 border-2 border-primary/50 shrink-0">
+                <AvatarImage
+                  src={player?.avatarfull}
+                  alt={player?.personaname ?? ''}
+                />
+                <AvatarFallback className="bg-zinc-700 text-zinc-300 text-xs">
+                  {player?.personaname?.slice(0, 2).toUpperCase() ?? '?'}
+                </AvatarFallback>
+              </Avatar>
+              <span>{player?.personaname}</span>
+            </a>
+            <span className="text-white">vs</span>
+            <a
+              href={`${STEAM_PROFILE_URL}/${playerId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded"
+            >
+              <Avatar className="h-8 w-8 border-2 border-primary/50 shrink-0">
+                <AvatarImage
+                  src={secondPlayer?.avatarfull}
+                  alt={secondPlayer?.personaname ?? 'Perfil Steam'}
+                />
+                <AvatarFallback
+                  className="bg-zinc-700 text-zinc-300 text-xs"
+                  title="Perfil não carregado (timeout ou indisponível)"
+                >
+                  {secondPlayer?.personaname?.slice(0, 2).toUpperCase() ??
+                    playerId?.slice(-2) ??
+                    '?'}
+                </AvatarFallback>
+              </Avatar>
+              <span>{secondPlayer?.personaname ?? 'Perfil Steam'}</span>
+            </a>
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             <AchivementsList

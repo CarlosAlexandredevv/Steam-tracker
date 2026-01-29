@@ -3,20 +3,40 @@
 import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamPlayer } from '@/types/steam';
+import { safeJsonParse } from '@/lib/utils';
 
-async function fetchPlayerById(id: string): Promise<SteamPlayer | null> {
+const FETCH_TIMEOUT_MS = 15_000;
+
+function fetchWithTimeout(
+  url: string,
+  timeoutMs = FETCH_TIMEOUT_MS,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, {
+    cache: 'no-store',
+    signal: controller.signal,
+  }).finally(() => clearTimeout(timeoutId));
+}
+
+async function fetchPlayerById(
+  id: string,
+  retry = true,
+): Promise<SteamPlayer | null> {
   try {
     const [directUserRes, vanityRes] = await Promise.all([
-      fetch(
+      fetchWithTimeout(
         `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=${id}`,
       ),
-      fetch(
+      fetchWithTimeout(
         `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${env.STEAM_API_KEY}&vanityurl=${id}`,
       ),
     ]);
 
     if (directUserRes.ok) {
-      const userData = await directUserRes.json();
+      const userData = await safeJsonParse<{
+        response: { players?: SteamPlayer[] };
+      }>(directUserRes);
       const player = userData?.response?.players?.[0];
       if (player) {
         return player as SteamPlayer;
@@ -24,16 +44,20 @@ async function fetchPlayerById(id: string): Promise<SteamPlayer | null> {
     }
 
     if (vanityRes.ok) {
-      const vanityData = await vanityRes.json();
+      const vanityData = await safeJsonParse<{
+        response: { steamid?: string };
+      }>(vanityRes);
       const resolvedId = vanityData?.response?.steamid as string | undefined;
 
       if (resolvedId) {
-        const resolvedUserRes = await fetch(
+        const resolvedUserRes = await fetchWithTimeout(
           `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${env.STEAM_API_KEY}&steamids=${resolvedId}`,
         );
 
         if (resolvedUserRes.ok) {
-          const resolvedUserData = await resolvedUserRes.json();
+          const resolvedUserData = await safeJsonParse<{
+            response: { players?: SteamPlayer[] };
+          }>(resolvedUserRes);
           const player = resolvedUserData?.response?.players?.[0];
           if (player) {
             return player as SteamPlayer;
@@ -44,7 +68,14 @@ async function fetchPlayerById(id: string): Promise<SteamPlayer | null> {
 
     return null;
   } catch (error: unknown) {
-    console.error(error);
+    const isTimeout =
+      error instanceof Error &&
+      (error.name === 'AbortError' ||
+        (error as { code?: string }).code === 'UND_ERR_CONNECT_TIMEOUT');
+    if (isTimeout && retry) {
+      return fetchPlayerById(id, false);
+    }
+    console.error('[getPlayerById]', id, error);
     return null;
   }
 }

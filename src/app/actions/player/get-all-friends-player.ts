@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 import { env } from '@/env';
 import { SteamGetFriendsListResponse, SteamPlayer } from '@/types/steam';
 import { getPlayerById } from './get-player-by-id';
+import { safeJsonParse } from '@/lib/utils';
 
 async function fetchAllFriendsPlayer(steamId: string) {
   try {
@@ -11,7 +12,7 @@ async function fetchAllFriendsPlayer(steamId: string) {
       `https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=${env.STEAM_API_KEY}&steamid=${steamId}&relationship=friend`,
     );
 
-    const data: SteamGetFriendsListResponse | null = await response?.json();
+    const data = await safeJsonParse<SteamGetFriendsListResponse>(response);
 
     const friends = data?.friendslist?.friends ?? [];
 
