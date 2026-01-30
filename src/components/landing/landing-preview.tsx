@@ -64,8 +64,8 @@ export async function LandingPreview() {
               Detalhes que fazem a diferença
             </h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              Cada página foi desenhada para destacar o que importa: a arte dos
-              jogos e suas estatísticas. Do Hero Banner dinâmico às barras de
+              Cada página destaca o que importa: a arte dos jogos e as
+              estatísticas. Do banner dinâmico do jogo em destaque às barras de
               progresso de conquistas com raridade global.
             </p>
 
