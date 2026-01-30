@@ -21,7 +21,7 @@ function getSteamCdnUrls(appid: number) {
 
 async function fetchRecentlyPlayedGames(
   steamId: string,
-  count = 10,
+  count = 20,
 ): Promise<SteamRecentlyPlayedGame[] | null> {
   try {
     const response = await fetchSteamApi(
