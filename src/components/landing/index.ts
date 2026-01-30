@@ -5,5 +5,6 @@ export { LandingStats } from './landing-stats';
 export { LandingFeatureCard } from './landing-feature-card';
 export { LandingFeatures } from './landing-features';
 export { LandingPreview } from './landing-preview';
+export { LandingFaq } from './landing-faq';
 export { LandingCta } from './landing-cta';
 export { LandingFooter } from './landing-footer';

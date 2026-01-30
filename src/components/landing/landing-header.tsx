@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Logo } from '@/components/shared/logo';
+import { LandingMobileMenu } from './landing-mobile-menu';
 
 export function LandingHeader() {
   return (
@@ -32,6 +33,10 @@ export function LandingHeader() {
             Sobre
           </a>
         </nav>
+
+        <div className="md:hidden">
+          <LandingMobileMenu />
+        </div>
       </div>
     </header>
   );

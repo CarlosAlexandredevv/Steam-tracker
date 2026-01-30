@@ -4,6 +4,7 @@ import {
   LandingHero,
   LandingFeatures,
   LandingPreview,
+  LandingFaq,
   LandingCta,
   LandingFooter,
 } from '@/components/landing';
@@ -43,6 +44,7 @@ export default function LandingPage() {
         <LandingHero />
         <LandingFeatures />
         <LandingPreview />
+        <LandingFaq />
         <LandingCta />
       </main>
 
