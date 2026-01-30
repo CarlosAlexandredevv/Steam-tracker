@@ -11,7 +11,8 @@ const getHeroUrl = (gameId: string) =>
 async function fetchGameById(gameId: string): Promise<SteamGameData | null> {
   try {
     const response = await fetchSteamApi(
-      `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese`,
+      `https://store.steampowered.com/api/appdetails?appids=${gameId}&l=portuguese&cc=br`
+,
     );
 
     const jsonData = await safeJsonParse<Record<string, SteamGameDataResponse>>(
