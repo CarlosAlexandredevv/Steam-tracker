@@ -101,7 +101,6 @@ export default async function GamePage({
   const { playerId } = await searchParams;
 
   const game = await getGameById(gameId);
-  console.log('jogo3',game)
   const gameBySteamIdAppId = await getGameBySteamIdAppId(steamId, gameId);
 
   const globalAchievements = await statisticsGlobalsByGameId(gameId);
