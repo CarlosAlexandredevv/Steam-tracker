@@ -5,12 +5,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { SteamOwnedGame } from '@/types/steam';
-import { SteamPlayer } from '@/types/steam';
+import { SteamOwnedGame, SteamPlayer, SteamRecentlyPlayedGame } from '@/types/steam';
 import { GameCard } from '@/components/shared/game-card';
 
 interface CarrouselGamesProps {
-  games: SteamOwnedGame[];
+  games: (SteamOwnedGame | SteamRecentlyPlayedGame)[];
   player: SteamPlayer | null;
 }
 

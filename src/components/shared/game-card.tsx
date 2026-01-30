@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { Gamepad2 } from 'lucide-react';
-import { SteamOwnedGame } from '@/types/steam';
+import { SteamOwnedGame, SteamRecentlyPlayedGame } from '@/types/steam';
 import { ImageWithFallback } from './image-with-fallback';
 
 interface GameCardProps {
-  game: SteamOwnedGame;
+  game: SteamOwnedGame | SteamRecentlyPlayedGame;
   steamId: string;
   showFallback?: boolean;
   className?: string;

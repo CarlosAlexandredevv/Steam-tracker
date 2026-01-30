@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getAllGames } from '@/app/actions/player/get-all-games';
+import { getRecentlyPlayedGames } from '@/app/actions/player/get-recents-played';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { OverviewHeader } from '@/components/overview/header/overview-header';
 import { GamesSection } from '@/components/overview/games-section/games-section';
@@ -9,9 +10,6 @@ import { buildTitle } from '@/lib/seo';
 
 interface OverviewProps {
   params: SteamIdRouteParams;
-  searchParams: Promise<{
-    q?: string;
-  }>;
 }
 
 export async function generateMetadata({
@@ -22,19 +20,18 @@ export async function generateMetadata({
   const { steamId } = await params;
   const player = await getPlayerById(steamId);
   if (!player)
-    return { title: buildTitle('Perfil não encontrado'), robots: { index: false } };
+    return {
+      title: buildTitle('Perfil não encontrado'),
+      robots: { index: false },
+    };
   return {
     title: buildTitle(`Overview - ${player.personaname}`),
     description: `Overview do perfil Steam de ${player.personaname}. Biblioteca, horas jogadas e jogos em destaque.`,
   };
 }
 
-export default async function Overview({
-  params,
-  searchParams,
-}: OverviewProps) {
+export default async function Overview({ params }: OverviewProps) {
   const { steamId } = await params;
-  const { q } = await searchParams;
   const player = await getPlayerById(steamId);
 
   if (!player) {
@@ -46,19 +43,12 @@ export default async function Overview({
   }
 
   const games = await getAllGames(player.steamid);
-
-  const gamesFiltered = games?.filter((game) =>
-    game.name.toLowerCase().includes(q?.toLowerCase() ?? ''),
-  );
+  const recentGames = await getRecentlyPlayedGames(player.steamid);
 
   return (
     <main className="flex w-full flex-col bg-background text-foreground gap-6 md:gap-8 overflow-x-hidden max-w-full">
       <OverviewHeader player={player} games={games ?? []} />
-      <GamesSection
-        games={gamesFiltered ?? []}
-        player={player}
-        searchQuery={q}
-      />
+      <GamesSection recentGames={recentGames ?? []} player={player} />
     </main>
   );
 }

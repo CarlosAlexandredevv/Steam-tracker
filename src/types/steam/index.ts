@@ -1,6 +1,10 @@
 export type { SteamPlayer, SteamGetPlayerSummariesResponse } from './player';
 export type { SteamOwnedGame } from './owned-game';
 export type {
+  SteamRecentlyPlayedGame,
+  SteamRecentlyPlayedApiResponse,
+} from './recently-played';
+export type {
   SteamFriend,
   SteamFriendsList,
   SteamGetFriendsListResponse,

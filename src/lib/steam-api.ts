@@ -15,6 +15,7 @@ export function fetchSteamApi(
 export const CACHE_REVALIDATE = {
   player: 120, // 2 min
   games: 300, // 5 min
+  recentlyPlayed: 300, // 5 min
   gameDetails: 600, // 10 min
   friends: 60, // 1 min
   achievements: 300, // 5 min
