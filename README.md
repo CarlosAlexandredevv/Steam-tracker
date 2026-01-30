@@ -50,11 +50,12 @@ Todas as páginas abaixo usam o **Steam ID** na URL: `/{steamId}/...`
 - **Estatísticas globais**: dados globais do jogo (ex.: jogadores online, percentuais de conquistas).
 - **Conquistas do jogador**: lista de conquistas com progresso.
 
-#### Modo Versus (`/{steamId}/library/[gameId]?playerId={outroSteamId}`)
+#### Modo Versus (`/{steamId}/library/[gameId]/versus/[playerId]`)
 
-- Comparação de **conquistas** entre dois jogadores no mesmo jogo.
+- Página dedicada para comparar **conquistas** entre dois jogadores no mesmo jogo.
 - Exibição lado a lado das conquistas de cada um (avatares e nomes no cabeçalho).
 - Útil para ver quem está mais próximo de “completar” o jogo.
+- Desacoplada da página do jogo para evitar re-renders e carregar apenas o necessário.
 
 ### Navegação e header interno
 

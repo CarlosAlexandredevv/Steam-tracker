@@ -16,7 +16,7 @@ export function LandingFaq() {
             Sobre
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base">
-            Perguntas frequentes sobre o SteamTrack e como usar a ferramenta.
+            Perguntas frequentes sobre o SteamTracker e como usar a ferramenta.
           </p>
         </div>
 

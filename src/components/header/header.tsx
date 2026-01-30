@@ -21,7 +21,7 @@ export async function Header({ params }: HeaderProps) {
           <Link href="/" className="flex items-center gap-2">
             <Logo size="md" priority />
             <span className="text-xl font-bold italic tracking-tight text-foreground">
-              Steam<span className="text-primary">Track</span>
+              Steam<span className="text-primary">Tracker</span>
             </span>
           </Link>
           <SearchPlayer />

@@ -14,7 +14,7 @@ import { SteamGameData, SteamPlayer } from '@/types/steam';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface VersusAchivementsProps {
   friends: SteamPlayer[];
@@ -23,16 +23,24 @@ interface VersusAchivementsProps {
   showButton?: boolean;
 }
 
+const versusUrl = (
+  ownerSteamId: string,
+  gameAppId: number,
+  otherSteamId: string,
+) => `/${ownerSteamId}/library/${gameAppId}/versus/${otherSteamId}`;
+
 export function VersusAchivements({
   friends,
   game,
   steamId,
   showButton = true,
 }: VersusAchivementsProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [player, setPlayer] = useState<SteamPlayer | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     const searchPlayer = async () => {
@@ -60,14 +68,12 @@ export function VersusAchivements({
     searchPlayer();
   }, [searchValue]);
 
-  async function handleSelectPlayer(steamId: string) {
-    const playerData = await getPlayerById(steamId);
-
-    if (playerData) {
-      setPlayer(playerData);
-      setOpen(false);
-      setSearchValue('');
-    }
+  function handleCompareWith(otherSteamId: string) {
+    setIsNavigating(true);
+    setOpen(false);
+    setSearchValue('');
+    setPlayer(null);
+    router.push(versusUrl(steamId, game.steam_appid, otherSteamId));
   }
 
   return (
@@ -76,9 +82,22 @@ export function VersusAchivements({
         <Button
           variant="outline"
           className="hover:bg-primary/10 hover:text-primary duration-300 cursor-pointer"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            setOpen(true);
+            setIsNavigating(false);
+          }}
+          disabled={isNavigating}
         >
-          Comparar com outro jogador <Swords className="ml-2 h-4 w-4" />
+          {isNavigating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Carregando comparação...
+            </>
+          ) : (
+            <>
+              Comparar com outro jogador <Swords className="ml-2 h-4 w-4" />
+            </>
+          )}
         </Button>
       )}
 
@@ -90,6 +109,7 @@ export function VersusAchivements({
             setSearchValue('');
             setPlayer(null);
             setIsLoading(false);
+            setIsNavigating(false);
           }
         }}
       >
@@ -115,32 +135,28 @@ export function VersusAchivements({
                       <CommandItem
                         key={friend.steamid}
                         value={`${friend.personaname} ${friend.steamid}`}
-                        onSelect={() => handleSelectPlayer(friend.steamid)}
+                        onSelect={() => handleCompareWith(friend.steamid)}
+                        disabled={isNavigating}
                         className="flex items-center gap-3 p-2 cursor-pointer"
                       >
-                        <Link
-                          href={`/${steamId}/library/${game.steam_appid}?playerId=${friend.steamid}`}
-                          className="flex items-center gap-3  cursor-pointer"
-                        >
-                          <Avatar className="h-8 w-8">
-                            <AvatarImage
-                              src={friend.avatarfull}
-                              alt={friend.personaname}
-                            />
-                            <AvatarFallback>
-                              {friend.personaname.substring(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage
+                            src={friend.avatarfull}
+                            alt={friend.personaname}
+                          />
+                          <AvatarFallback>
+                            {friend.personaname.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
 
-                          <div className="flex flex-col">
-                            <span className="font-medium text-sm leading-none">
-                              {friend.personaname}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              ID: {friend.steamid}
-                            </span>
-                          </div>
-                        </Link>
+                        <div className="flex flex-col">
+                          <span className="font-medium text-sm leading-none">
+                            {friend.personaname}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            ID: {friend.steamid}
+                          </span>
+                        </div>
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -150,32 +166,28 @@ export function VersusAchivements({
                     <CommandItem
                       key={player?.steamid}
                       value={`${player?.personaname} ${player?.steamid}`}
-                      onSelect={() => handleSelectPlayer(player.steamid)}
+                      onSelect={() => handleCompareWith(player.steamid)}
+                      disabled={isNavigating}
                       className="flex items-center gap-3 p-2 cursor-pointer"
                     >
-                      <Link
-                        href={`/${player?.steamid}/library/${game.steam_appid}?playerId=${player?.steamid}`}
-                        className="flex items-center gap-3  cursor-pointer"
-                      >
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage
-                            src={player?.avatarfull}
-                            alt={player?.personaname}
-                          />
-                          <AvatarFallback>
-                            {player?.personaname.substring(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage
+                          src={player?.avatarfull}
+                          alt={player?.personaname}
+                        />
+                        <AvatarFallback>
+                          {player?.personaname.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
 
-                        <div className="flex flex-col">
-                          <span className="font-medium text-sm leading-none">
-                            {player?.personaname}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            ID: {player?.steamid}
-                          </span>
-                        </div>
-                      </Link>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-sm leading-none">
+                          {player?.personaname}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          ID: {player?.steamid}
+                        </span>
+                      </div>
                     </CommandItem>
                   </CommandGroup>
                 )}
