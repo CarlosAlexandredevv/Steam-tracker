@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 const LOGO_SRC = '/logo2.png';
-const LOGO_ALT = 'Steam Track';
+const LOGO_ALT = 'Steam Tracker';
 
 type LogoSize = 'sm' | 'md' | 'lg';
 

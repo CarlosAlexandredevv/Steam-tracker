@@ -1,4 +1,4 @@
-# Steam Track
+# Steam Tracker
 
 Aplicação web para **analisar perfis Steam**, visualizar bibliotecas de jogos, comparar conquistas com amigos e explorar estatísticas da sua conta em uma interface moderna e responsiva.
 
@@ -104,7 +104,7 @@ Todas as páginas abaixo usam o **Steam ID** na URL: `/{steamId}/...`
 
    ```bash
    git clone <url-do-repo>
-   cd Steam-track
+   cd Steam-tracker
    npm install
    ```
 
@@ -116,7 +116,7 @@ Todas as páginas abaixo usam o **Steam ID** na URL: `/{steamId}/...`
 
 3. **Configure o Prisma** (schema em `prisma/schema.prisma`):
 
-   - Defina `DATABASE_URL` no `.env` (ex.: `postgresql://postgres:postgres@localhost:5432/steam-track`).
+   - Defina `DATABASE_URL` no `.env` (ex.: `postgresql://postgres:postgres@localhost:5432/steam-tracker`).
    - Rode as migrações:
 
    ```bash
@@ -126,7 +126,7 @@ Todas as páginas abaixo usam o **Steam ID** na URL: `/{steamId}/...`
 4. **Variáveis de ambiente** (exemplo em `.env`):
 
    ```env
-   DATABASE_URL="postgresql://postgres:postgres@localhost:5432/steam-track"
+   DATABASE_URL="postgresql://postgres:postgres@localhost:5432/steam-tracker"
    STEAM_API_KEY="sua-chave-steam-api"
    NEXT_PUBLIC_APP_URL="http://localhost:3000"
    ```

@@ -1,11 +1,11 @@
 services:
   postgres:
     image: postgres:17
-    container_name: steam-track-postgres
+    container_name: steam-tracker-postgres
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: steam-track
+      POSTGRES_DB: steam-tracker

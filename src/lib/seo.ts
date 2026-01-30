@@ -1,8 +1,8 @@
-export const SITE_NAME = 'Steam Track';
+export const SITE_NAME = 'Steam Tracker';
 export const SITE_DESCRIPTION =
   'Analise sua biblioteca Steam: perfis, jogos, conquistas e estatísticas. Compare com amigos e domine seus dados de jogador.';
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://steam-track.vercel.app';
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://steam-tracker.vercel.app';
 export const SITE_IMAGE = `${SITE_URL}/logo.png`;
 
 export const defaultOpenGraph = {

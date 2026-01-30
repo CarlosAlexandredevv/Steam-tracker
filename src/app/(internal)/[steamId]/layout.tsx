@@ -31,7 +31,7 @@ export async function generateMetadata({
     title: buildTitle(title),
     description,
     openGraph: {
-      title: `${player.personaname} | Steam Track`,
+      title: `${player.personaname} | Steam Tracker`,
       description,
       url: `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/${steamId}/overview`,
       type: 'profile',
@@ -41,7 +41,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary',
-      title: `${player.personaname} | Steam Track`,
+      title: `${player.personaname} | Steam Tracker`,
       description,
     },
   };

@@ -37,7 +37,7 @@ export async function Header({ params }: HeaderProps) {
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <Logo size="md" priority />
             <span className="text-xl font-bold italic tracking-tight text-foreground hidden sm:inline">
-              Steam<span className="text-primary">Track</span>
+              Steam<span className="text-primary">Tracker</span>
             </span>
           </Link>
           <NavLinks steamId={steamId} />

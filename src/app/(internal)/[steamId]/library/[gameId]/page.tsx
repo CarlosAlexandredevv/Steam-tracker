@@ -58,7 +58,7 @@ export async function generateMetadata({
     title: buildTitle(`${gameName} - ${playerName}`),
     description,
     openGraph: {
-      title: `${gameName} | Steam Track`,
+      title: `${gameName} | Steam Tracker`,
       description: description.slice(0, 200),
       url: `${SITE_URL}/${steamId}/library/${gameId}`,
       type: 'website',
@@ -68,7 +68,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${gameName} | Steam Track`,
+      title: `${gameName} | Steam Tracker`,
       description: description.slice(0, 200),
       images: game.header_image ? [game.header_image] : undefined,
     },
