@@ -176,6 +176,7 @@ export default function GameDetailsView({
                     </div>
                   </div>
                 )}
+
                 <VersusAchivements
                   friends={playedFriends?.friends || []}
                   game={game}
