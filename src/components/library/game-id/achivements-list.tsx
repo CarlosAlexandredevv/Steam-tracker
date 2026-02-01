@@ -58,14 +58,6 @@ export function AchivementsList({
               {completed} de {total} desbloqueadas ({percentage}%)
             </CardDescription>
           </div>
-          <div className="w-full md:w-auto">
-            <VersusAchivements
-              friends={friends}
-              game={game}
-              steamId={steamId}
-              showButton={showButton}
-            />
-          </div>
         </div>
         <Progress value={percentage} className="h-2 mt-4" />
       </CardHeader>

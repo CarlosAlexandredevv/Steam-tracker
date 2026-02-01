@@ -69,14 +69,19 @@ export default async function VersusPage({ params }: VersusPageProps) {
 
   const game = await getGameById(gameId);
 
-  const [player, secondPlayer, friends, PlayerAchievements, SecondPlayerAchievements] =
-    await Promise.all([
-      getPlayerById(steamId),
-      getPlayerById(playerId),
-      getAllFriendsPlayer(steamId),
-      getAchivementsById(steamId, gameId),
-      getAchivementsById(playerId, gameId),
-    ]);
+  const [
+    player,
+    secondPlayer,
+    friends,
+    PlayerAchievements,
+    SecondPlayerAchievements,
+  ] = await Promise.all([
+    getPlayerById(steamId),
+    getPlayerById(playerId),
+    getAllFriendsPlayer(steamId),
+    getAchivementsById(steamId, gameId),
+    getAchivementsById(playerId, gameId),
+  ]);
 
   if (!game)
     return (
@@ -87,12 +92,7 @@ export default async function VersusPage({ params }: VersusPageProps) {
 
   return (
     <main className="flex w-full flex-col text-foreground min-h-screen">
-      <GameDetailsView
-        game={game}
-        steamId={steamId}
-        playedFriends={null}
-        playerId={null}
-      />
+      <GameDetailsView game={game} steamId={steamId} playedFriends={null} />
 
       <div className="z-50 px-4 md:px-6 py-8 md:py-10 w-full max-w-7xl mx-auto space-y-8 md:space-y-10">
         <Link

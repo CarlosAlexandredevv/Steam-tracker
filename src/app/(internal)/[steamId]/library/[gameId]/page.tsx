@@ -102,6 +102,7 @@ export default async function GamePage({ params }: GamePageProps) {
         steamId={steamId}
         playedFriends={playedFriends}
         playerId={null}
+        friends={friends ?? []}
       />
 
       <div className="z-50 px-4 md:px-6 py-8 md:py-10 w-full max-w-7xl mx-auto space-y-8 md:space-y-10">

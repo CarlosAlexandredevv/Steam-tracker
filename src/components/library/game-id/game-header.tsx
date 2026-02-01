@@ -10,19 +10,18 @@ import {
 import { ExternalLink, Plus, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { VersusAchivements } from '@/components/library/game-id/versus-achivements';
 
 interface GameDetailsViewProps {
   game: SteamGameData;
   steamId: string;
   playedFriends: GetPlayedFriendsResponse | null;
-  playerId: string | null;
 }
 
 export default function GameDetailsView({
   game,
   steamId,
   playedFriends,
-  playerId,
 }: GameDetailsViewProps) {
   const visibleCategories = game.categories.slice(0, 4);
   const remainingCategories = game.categories.slice(4);
@@ -118,64 +117,71 @@ export default function GameDetailsView({
                   </TooltipProvider>
                 )}
               </div>
-              {!playerId && totalFriendsCount > 0 && (
-                <div className="flex flex-col md:items-end gap-2 group cursor-pointer mt-2 md:mt-0">
-                  <Link
-                    href={`/${steamId}/friends/?gameId=${gameId}`}
-                    className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-white transition-colors"
-                  >
-                    <Users className="size-4" />
-                    <span className="font-medium">
-                      Jogado também por: ({totalFriendsCount})
-                    </span>
-                  </Link>
+              <div className="flex flex-col md:items-end gap-3 mt-2 md:mt-0">
+                {totalFriendsCount > 0 && (
+                  <div className="flex flex-col gap-2 group cursor-pointer">
+                    <Link
+                      href={`/${steamId}/friends/?gameId=${gameId}`}
+                      className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-white transition-colors"
+                    >
+                      <Users className="size-4" />
+                      <span className="font-medium">
+                        Jogado também por: ({totalFriendsCount})
+                      </span>
+                    </Link>
 
-                  <div className="flex items-center md:pl-2">
-                    <div className="flex items-center -space-x-3 hover:space-x-1 transition-all duration-300 ease-out py-1">
-                      <TooltipProvider delayDuration={400}>
-                        {displayFriends.map((friend) => (
-                          <Tooltip key={friend.steamid}>
-                            <TooltipTrigger asChild>
-                              <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-all duration-300 ease-out hover:scale-110 hover:z-20 hover:border-primary/50">
-                                <Link
-                                  href={`/${friend.steamid}/library/${gameId}`}
-                                >
-                                  <Avatar className="h-full w-full">
-                                    <AvatarImage
-                                      src={friend.avatarfull}
-                                      alt={friend.personaname}
-                                    />
-                                    <AvatarFallback className="bg-zinc-700 text-[10px] text-zinc-300">
-                                      {friend.personaname
-                                        .substring(0, 2)
-                                        .toUpperCase()}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                </Link>
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent
-                              side="bottom"
-                              className="text-xs font-bold"
-                            >
-                              <p>{friend.personaname}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        ))}
-                      </TooltipProvider>
+                    <div className="flex items-center md:pl-2">
+                      <div className="flex items-center -space-x-3 hover:space-x-1 transition-all duration-300 ease-out py-1">
+                        <TooltipProvider delayDuration={400}>
+                          {displayFriends.map((friend) => (
+                            <Tooltip key={friend.steamid}>
+                              <TooltipTrigger asChild>
+                                <div className="relative h-10 w-10 md:h-12 md:w-12 rounded-full border-2 border-background bg-zinc-800 transition-all duration-300 ease-out hover:scale-110 hover:z-20 hover:border-primary/50">
+                                  <Link
+                                    href={`/${friend.steamid}/library/${gameId}`}
+                                  >
+                                    <Avatar className="h-full w-full">
+                                      <AvatarImage
+                                        src={friend.avatarfull}
+                                        alt={friend.personaname}
+                                      />
+                                      <AvatarFallback className="bg-zinc-700 text-[10px] text-zinc-300">
+                                        {friend.personaname
+                                          .substring(0, 2)
+                                          .toUpperCase()}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                  </Link>
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent
+                                side="bottom"
+                                className="text-xs font-bold"
+                              >
+                                <p>{friend.personaname}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          ))}
+                        </TooltipProvider>
 
-                      {remainingCount > 0 && (
-                        <Link
-                          href={`/${steamId}/friends/?gameId=${gameId}`}
-                          className="relative z-0 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border-2 border-background bg-zinc-800 text-xs font-bold text-zinc-300 transition-transform hover:scale-110 hover:z-20 hover:bg-zinc-700 hover:text-white"
-                        >
-                          +{remainingCount}
-                        </Link>
-                      )}
+                        {remainingCount > 0 && (
+                          <Link
+                            href={`/${steamId}/friends/?gameId=${gameId}`}
+                            className="relative z-0 h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border-2 border-background bg-zinc-800 text-xs font-bold text-zinc-300 transition-transform hover:scale-110 hover:z-20 hover:bg-zinc-700 hover:text-white"
+                          >
+                            +{remainingCount}
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+                <VersusAchivements
+                  friends={playedFriends?.friends || []}
+                  game={game}
+                  steamId={steamId}
+                />
+              </div>
             </div>
           </div>
         </div>

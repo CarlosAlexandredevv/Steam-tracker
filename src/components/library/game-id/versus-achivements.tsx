@@ -10,14 +10,14 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { Swords, Loader2 } from 'lucide-react';
-import { SteamGameData, SteamPlayer } from '@/types/steam';
+import { PlayedFriend, SteamGameData, SteamPlayer } from '@/types/steam';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState, useEffect } from 'react';
 import { getPlayerById } from '@/app/actions/player/get-player-by-id';
 import { useRouter } from 'next/navigation';
 
 interface VersusAchivementsProps {
-  friends: SteamPlayer[];
+  friends: PlayedFriend[] | null;
   game: SteamGameData;
   steamId: string;
   showButton?: boolean;
@@ -129,9 +129,11 @@ export function VersusAchivements({
               </div>
             ) : (
               <>
-                {friends.length > 0 && (
-                  <CommandGroup heading="Amigos">
-                    {friends.map((friend) => (
+                {friends && friends.length > 0 && (
+                  <CommandGroup
+                    heading={`Amigos jogados também (${friends.length})`}
+                  >
+                    {friends?.map((friend) => (
                       <CommandItem
                         key={friend.steamid}
                         value={`${friend.personaname} ${friend.steamid}`}
