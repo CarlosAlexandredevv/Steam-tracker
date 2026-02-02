@@ -5,7 +5,7 @@ import { getAllGames } from '@/app/actions/player/get-all-games';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CarrouselGames } from '@/components/overview/games-section/carrousel-games';
 
-const PREVIEW_VANITY = '76561199441912879';
+const PREVIEW_VANITY = '76561198354798459';
 
 const HIGHLIGHTS = [
   {
